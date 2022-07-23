@@ -22,8 +22,8 @@ public class User {
     private String address;
     private String imageUrl;
 
-    @ManyToMany(fetch= FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"),
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roleSet = new HashSet<>();
 
@@ -94,5 +94,13 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Set<Role> getRoleSet() {
+        return roleSet;
+    }
+
+    public void setRoleSet(Set<Role> roleSet) {
+        this.roleSet = roleSet;
     }
 }
