@@ -19,6 +19,17 @@ public class Products {
         return productId;
     }
 
+    public Products() {
+    }
+
+    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available) {
+        this.productId = productId;
+        this.productName = productName;
+        this.imageMain = imageMain;
+        this.imageUrl = imageUrl;
+        this.available = available;
+    }
+
     public void setProductId(Long productId) {
         this.productId = productId;
     }
