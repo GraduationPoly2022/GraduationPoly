@@ -11,11 +11,10 @@ public class Order {
     private Long phoneReciver;
     private String addressReciver;
     private String status;
-    private Double amount;
 
     public Order() {
     }
-    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receiver, Long phoneReciver, String addressReciver, String status, Double amount) {
+    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receiver, Long phoneReciver, String addressReciver, String status) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
@@ -24,7 +23,6 @@ public class Order {
         this.phoneReciver = phoneReciver;
         this.addressReciver = addressReciver;
         this.status = status;
-        this.amount = amount;
     }
 
     public Long getOrderId() {
@@ -89,13 +87,5 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
     }
 }
