@@ -1,8 +1,14 @@
 package com.shop.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "Orders")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
     private Date orderDate;
     private Date deliveryDate;
