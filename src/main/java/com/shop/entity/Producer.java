@@ -10,15 +10,15 @@ public class Producer {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products products;
+    private Products producer_product;
 
     public Producer() {
     }
 
-    public Producer(Long producerId, String name, Products products) {
+    public Producer(Long producerId, String name, Products producer_product) {
         this.producerId = producerId;
         this.name = name;
-        this.products = products;
+        this.producer_product = producer_product;
     }
 
     public Long getProducerId() {
@@ -37,11 +37,11 @@ public class Producer {
         this.name = name;
     }
 
-    public Products getProducts() {
-        return products;
+    public Products getProducer_product() {
+        return producer_product;
     }
 
-    public void setProducts(Products products) {
-        this.products = products;
+    public void setProducer_product(Products producer_product) {
+        this.producer_product = producer_product;
     }
 }

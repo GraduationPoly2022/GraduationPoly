@@ -3,11 +3,10 @@ package com.shop.entity;
 import javax.persistence.*;
 
 @Entity
-@Table("smartPhone")
 public class SmartPhone {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long productId;
+    private Long smartPhoneId;
     private String monitor;
     private String systemOperator;
     private String beforeCamera;
@@ -21,13 +20,13 @@ public class SmartPhone {
     private String connector;
     private String utils;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products products;
+    private Products smartPhone_product;
 
     public SmartPhone() {
     }
 
-    public SmartPhone(Long productId, String monitor, String systemOperator, String beforeCamera, String afterCamera, String cpu, String ram, String disk, String batteryAndCharging, String video, String gpu, String connector, String utils, Products products) {
-        this.productId = productId;
+    public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera, String afterCamera, String cpu, String ram, String disk, String batteryAndCharging, String video, String gpu, String connector, String utils, Products smartPhone_product) {
+        this.smartPhoneId = smartPhoneId;
         this.monitor = monitor;
         this.systemOperator = systemOperator;
         this.beforeCamera = beforeCamera;
@@ -40,15 +39,15 @@ public class SmartPhone {
         this.gpu = gpu;
         this.connector = connector;
         this.utils = utils;
-        this.products = products;
+        this.smartPhone_product = smartPhone_product;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getSmartPhoneId() {
+        return smartPhoneId;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setSmartPhoneId(Long smartPhoneId) {
+        this.smartPhoneId = smartPhoneId;
     }
 
     public String getMonitor() {
@@ -147,11 +146,11 @@ public class SmartPhone {
         this.utils = utils;
     }
 
-    public Products getProducts() {
-        return products;
+    public Products getSmartPhone_product() {
+        return smartPhone_product;
     }
 
-    public void setProducts(Products products) {
-        this.products = products;
+    public void setSmartPhone_product(Products products) {
+        this.smartPhone_product = products;
     }
 }

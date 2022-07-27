@@ -1,13 +1,13 @@
 package com.shop.entity;
 
 import javax.persistence.*;
-import java.time.Year;
+import java.util.Date;
 
 @Entity
 public class Laptop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long product_laptops;
+    private Long laptopId;
     private String monitor;
     private String cpu;
     private String ram;
@@ -18,15 +18,15 @@ public class Laptop {
     private String design;
     private String special;
     private String sizeAndWeight;
-    private Year yearOfManufacture;
+    private Date yearOfManufacture;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products products;
+    private Products product_laptop;
 
     public Laptop() {
     }
 
-    public Laptop(Long product_laptops, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special, String sizeAndWeight, Year yearOfManufacture, Products products) {
-        this.product_laptops = product_laptops;
+    public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special, String sizeAndWeight, Date yearOfManufacture, Products product_laptop) {
+        this.laptopId = laptopId;
         this.monitor = monitor;
         this.cpu = cpu;
         this.ram = ram;
@@ -38,15 +38,15 @@ public class Laptop {
         this.special = special;
         this.sizeAndWeight = sizeAndWeight;
         this.yearOfManufacture = yearOfManufacture;
-        this.products = products;
+        this.product_laptop = product_laptop;
     }
 
-    public Long getProduct_laptops() {
-        return product_laptops;
+    public Long getLaptopId() {
+        return laptopId;
     }
 
-    public void setProduct_laptops(Long product_laptops) {
-        this.product_laptops = product_laptops;
+    public void setLaptopId(Long laptopId) {
+        this.laptopId = laptopId;
     }
 
     public String getMonitor() {
@@ -129,19 +129,19 @@ public class Laptop {
         this.sizeAndWeight = sizeAndWeight;
     }
 
-    public Year getYearOfManufacture() {
+    public Date getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(Year yearOfManufacture) {
+    public void setYearOfManufacture(Date yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 
-    public Products getProducts() {
-        return products;
+    public Products getProduct_laptop() {
+        return product_laptop;
     }
 
-    public void setProducts(Products products) {
-        this.products = products;
+    public void setProduct_laptop(Products product_laptop) {
+        this.product_laptop = product_laptop;
     }
 }
