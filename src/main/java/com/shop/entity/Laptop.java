@@ -1,7 +1,6 @@
 package com.shop.entity;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Laptop {
@@ -18,14 +17,15 @@ public class Laptop {
     private String design;
     private String special;
     private String sizeAndWeight;
-    private Date yearOfManufacture;
+    private Integer yearOfManufacture;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Products product_laptop;
 
     public Laptop() {
     }
 
-    public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special, String sizeAndWeight, Date yearOfManufacture, Products product_laptop) {
+    public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special,
+                  String sizeAndWeight, Integer yearOfManufacture, Products product_laptop) {
         this.laptopId = laptopId;
         this.monitor = monitor;
         this.cpu = cpu;
@@ -129,11 +129,11 @@ public class Laptop {
         this.sizeAndWeight = sizeAndWeight;
     }
 
-    public Date getYearOfManufacture() {
+    public Integer getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(Date yearOfManufacture) {
+    public void setYearOfManufacture(Integer yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 

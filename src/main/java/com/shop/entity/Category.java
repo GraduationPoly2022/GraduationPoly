@@ -12,7 +12,7 @@ public class Category {
     private Long categoryId;
     private String name;
 
-    @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categories_product", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Products> products;
 
