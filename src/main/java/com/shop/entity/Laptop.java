@@ -4,11 +4,10 @@ import javax.persistence.*;
 import java.time.Year;
 
 @Entity
-@Table("laptops")
 public class Laptop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long productId;
+    private Long product_laptops;
     private String monitor;
     private String cpu;
     private String ram;
@@ -26,8 +25,8 @@ public class Laptop {
     public Laptop() {
     }
 
-    public Laptop(Long productId, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special, String sizeAndWeight, Year yearOfManufacture, Products products) {
-        this.productId = productId;
+    public Laptop(Long product_laptops, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special, String sizeAndWeight, Year yearOfManufacture, Products products) {
+        this.product_laptops = product_laptops;
         this.monitor = monitor;
         this.cpu = cpu;
         this.ram = ram;
@@ -42,12 +41,12 @@ public class Laptop {
         this.products = products;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getProduct_laptops() {
+        return product_laptops;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct_laptops(Long product_laptops) {
+        this.product_laptops = product_laptops;
     }
 
     public String getMonitor() {

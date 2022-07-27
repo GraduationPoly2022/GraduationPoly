@@ -3,11 +3,11 @@ package com.shop.entity;
 import javax.persistence.*;
 
 @Entity
-@Table("accessory")
+
 public class Accessory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long productId;
+    private Long product_accessory;
     private String connector;
     private String length;
     private String switches;
@@ -22,8 +22,8 @@ public class Accessory {
     public Accessory() {
     }
 
-    public Accessory(Long productId, String connector, String length, String switches, double typeKeyboard, double sizeKey, String special, double sizeKeyboard, String charging, Products products) {
-        this.productId = productId;
+    public Accessory(Long product_accessory, String connector, String length, String switches, double typeKeyboard, double sizeKey, String special, double sizeKeyboard, String charging, Products products) {
+        this.product_accessory = product_accessory;
         this.connector = connector;
         this.length = length;
         this.switches = switches;
@@ -35,12 +35,12 @@ public class Accessory {
         this.products = products;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getProduct_accessory() {
+        return product_accessory;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct_accessory(Long product_accessory) {
+        this.product_accessory = product_accessory;
     }
 
     public String getConnector() {

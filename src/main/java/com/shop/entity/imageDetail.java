@@ -3,7 +3,6 @@ package com.shop.entity;
 import javax.persistence.*;
 
 @Entity
-@Table("imageDetail")
 public class imageDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

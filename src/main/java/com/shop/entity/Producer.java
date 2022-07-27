@@ -3,7 +3,6 @@ package com.shop.entity;
 import javax.persistence.*;
 
 @Entity
-@Table("producer")
 public class Producer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
