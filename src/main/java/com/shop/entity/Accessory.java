@@ -3,7 +3,6 @@ package com.shop.entity;
 import javax.persistence.*;
 
 @Entity
-
 public class Accessory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,12 +16,12 @@ public class Accessory {
     private double sizeKeyboard;
     private String charging;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products products;
+    private Products product_accessories;
 
     public Accessory() {
     }
 
-    public Accessory(Long product_accessory, String connector, String length, String switches, double typeKeyboard, double sizeKey, String special, double sizeKeyboard, String charging, Products products) {
+    public Accessory(Long product_accessory, String connector, String length, String switches, double typeKeyboard, double sizeKey, String special, double sizeKeyboard, String charging, Products product_accessories) {
         this.product_accessory = product_accessory;
         this.connector = connector;
         this.length = length;
@@ -32,7 +31,7 @@ public class Accessory {
         this.special = special;
         this.sizeKeyboard = sizeKeyboard;
         this.charging = charging;
-        this.products = products;
+        this.product_accessories = product_accessories;
     }
 
     public Long getProduct_accessory() {
@@ -107,11 +106,11 @@ public class Accessory {
         this.charging = charging;
     }
 
-    public Products getProducts() {
-        return products;
+    public Products getProduct_accessories() {
+        return product_accessories;
     }
 
-    public void setProducts(Products products) {
-        this.products = products;
+    public void setProduct_accessories(Products product_accessories) {
+        this.product_accessories = product_accessories;
     }
 }

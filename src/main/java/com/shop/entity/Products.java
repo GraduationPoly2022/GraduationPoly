@@ -18,33 +18,33 @@ public class Products {
     private Long categoryId;
     private Long producerId;
 
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<imageDetail> imageDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Category categories;
+    private Category categories_product;
 
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "producer_product", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Producer> producer;
 
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "smartPhone_product", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<SmartPhone> smartPhone;
 
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_accessories", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Accessory> accessories;
 
-    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_laptop", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Laptop> laptops;
 
     public Products() {
     }
 
-    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Long imageDetailId, Long categoryId, Long producerId, Set<imageDetail> imageDetails, Category categories, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
+    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Long imageDetailId, Long categoryId, Long producerId, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
@@ -54,7 +54,7 @@ public class Products {
         this.categoryId = categoryId;
         this.producerId = producerId;
         this.imageDetails = imageDetails;
-        this.categories = categories;
+        this.categories_product = categories_product;
         this.producer = producer;
         this.smartPhone = smartPhone;
         this.accessories = accessories;
@@ -133,12 +133,12 @@ public class Products {
         this.imageDetails = imageDetails;
     }
 
-    public Category getCategories() {
-        return categories;
+    public Category getCategories_product() {
+        return categories_product;
     }
 
-    public void setCategories(Category categories) {
-        this.categories = categories;
+    public void setCategories_product(Category categories_product) {
+        this.categories_product = categories_product;
     }
 
     public Set<Producer> getProducer() {
