@@ -23,6 +23,8 @@ public class Order {
     public Order() {
     }
 
+
+
     public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receiver, Long phoneReciver, String addressReciver, String status, Double amount) {
         this.orderId = orderId;
         this.orderDate = orderDate;
