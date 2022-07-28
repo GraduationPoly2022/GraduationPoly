@@ -13,7 +13,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+// nyhu cai nay a them roi nhung ma thieu 1 truong neu add têo eclic thi hoi lau VD
     @NotBlank
     private String email;
     private String password;
@@ -30,7 +30,8 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String email, String password, String fullName, String phoneNumber, String address, String imageUrl) {
+    public User(Long id, String email, String password, String fullName,
+                String phoneNumber, String address, String imageUrl) {
         this.id = id;
         this.email = email;
         this.password = password;
