@@ -2,6 +2,7 @@ package com.shop.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Orders")
@@ -13,28 +14,35 @@ public class Order {
     private Date orderDate;
     private Date deliveryDate;
     private Date recipientDate;
-    private String receiver;
-    private Long phoneReciver;
+    private String reciver;
+    private Double phoneReciver;
     private String addressReciver;
     private String status;
+    private Long userId;
+    private Double Amount;
 
-    private Double amount;
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private User user;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private Set<OrderDetail> orderDetails;
+
 
     public Order() {
     }
 
-
-
-    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receiver, Long phoneReciver, String addressReciver, String status, Double amount) {
+    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, Double phoneReciver, String addressReciver, String status, Long userId, Double amount) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.recipientDate = recipientDate;
-        this.receiver = receiver;
+        this.reciver = reciver;
         this.phoneReciver = phoneReciver;
         this.addressReciver = addressReciver;
         this.status = status;
-        this.amount = amount;
+        this.userId = userId;
+        Amount = amount;
     }
 
     public Long getOrderId() {
@@ -69,19 +77,19 @@ public class Order {
         this.recipientDate = recipientDate;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public String getReciver() {
+        return reciver;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setReciver(String reciver) {
+        this.reciver = reciver;
     }
 
-    public Long getPhoneReciver() {
+    public Double getPhoneReciver() {
         return phoneReciver;
     }
 
-    public void setPhoneReciver(Long phoneReciver) {
+    public void setPhoneReciver(Double phoneReciver) {
         this.phoneReciver = phoneReciver;
     }
 
@@ -101,11 +109,19 @@ public class Order {
         this.status = status;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public Double getAmount() {
-        return amount;
+        return Amount;
     }
 
     public void setAmount(Double amount) {
-        this.amount = amount;
+        Amount = amount;
     }
 }
