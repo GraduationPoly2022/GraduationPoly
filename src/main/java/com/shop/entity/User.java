@@ -25,11 +25,11 @@ public class User {
     private String imageUrl;
 
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_comments", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Comment> comment;
+    private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_commentdetails", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
@@ -43,7 +43,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String email, String password, String fullName, String phoneNumber, String address, String imageUrl) {
+    public User(Long id, String email, String password, String fullName, String phoneNumber, String address, String imageUrl, Set<Comment> comments, Set<CommentDetail> commentDetails, Set<Role> roleSet) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -51,7 +51,11 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
+        this.comments = comments;
+        this.commentDetails = commentDetails;
+        this.roleSet = roleSet;
     }
+
 
     public Long getId() {
         return id;
@@ -107,6 +111,22 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Set<CommentDetail> getCommentDetails() {
+        return commentDetails;
+    }
+
+    public void setCommentDetails(Set<CommentDetail> commentDetails) {
+        this.commentDetails = commentDetails;
     }
 
     public Set<Role> getRoleSet() {
