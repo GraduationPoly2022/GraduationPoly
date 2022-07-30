@@ -19,7 +19,7 @@ public class Shipper {
     private User user_shippers;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Order shipper_orders;
+    private Order orders_shipper;
 
     @OneToMany(mappedBy = "shippers_return", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -29,12 +29,12 @@ public class Shipper {
     public Shipper() {
     }
 
-    public Shipper(Long shipperId, Double total, String notes, User user_shippers, Order shipper_orders, Set<Return> returns) {
+    public Shipper(Long shipperId, Double total, String notes, User user_shippers, Order orders_shipper, Set<Return> returns) {
         this.shipperId = shipperId;
         this.total = total;
         this.notes = notes;
         this.user_shippers = user_shippers;
-        this.shipper_orders = shipper_orders;
+        this.orders_shipper = orders_shipper;
         this.returns = returns;
     }
 
@@ -62,13 +62,6 @@ public class Shipper {
         this.notes = notes;
     }
 
-    public Order getShipper_orders() {
-        return shipper_orders;
-    }
-
-    public void setShipper_orders(Order shipper_orders) {
-        this.shipper_orders = shipper_orders;
-    }
 
     public Set<Return> getReturns() {
         return returns;
@@ -84,5 +77,13 @@ public class Shipper {
 
     public void setUser_shippers(User user_shippers) {
         this.user_shippers = user_shippers;
+    }
+
+    public Order getOrders_shipper() {
+        return orders_shipper;
+    }
+
+    public void setOrders_shipper(Order orders_shipper) {
+        this.orders_shipper = orders_shipper;
     }
 }
