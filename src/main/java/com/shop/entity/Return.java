@@ -23,12 +23,10 @@ public class Return {
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
     private Order order_return;
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
     private Shipper shippers_return;
 
     public Return() {
