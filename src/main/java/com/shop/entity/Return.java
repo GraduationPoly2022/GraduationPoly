@@ -11,8 +11,11 @@ public class Return {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long returnId;
+    @Temporal(TemporalType.DATE)
     private Date returnDate;
     private String reason;
+
+    @Column(columnDefinition = "varchar(3000)")
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
