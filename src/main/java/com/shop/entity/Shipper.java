@@ -11,7 +11,7 @@ public class Shipper {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long shipperId;
     private Double total;
-    @Column(columnDefinition = "varchar(3000)")
+    @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
