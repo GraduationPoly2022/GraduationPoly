@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "returns")
@@ -25,20 +26,21 @@ public class Return {
     @JsonIgnore
     private Order order_return;
 
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Shipper shipper_return;
+    private Shipper shippers_return;
 
     public Return() {
     }
 
-    public Return(Long returnId, Date returnDate, String reason, String notes, Order order_return, Shipper shipper_return) {
+    public Return(Long returnId, Date returnDate, String reason, String notes, Order order_return, Shipper shippers_return1) {
         this.returnId = returnId;
         this.returnDate = returnDate;
         this.reason = reason;
         this.notes = notes;
         this.order_return = order_return;
-        this.shipper_return = shipper_return;
+        this.shippers_return = shippers_return1;
     }
 
     public Long getReturnId() {
@@ -81,11 +83,11 @@ public class Return {
         this.order_return = order_return;
     }
 
-    public Shipper getShipper_return() {
-        return shipper_return;
+    public Shipper getShippers_return() {
+        return shippers_return;
     }
 
-    public void setShipper_return(Shipper shipper_return) {
-        this.shipper_return = shipper_return;
+    public void setShippers_return(Shipper shippers_return) {
+        this.shippers_return = shippers_return;
     }
 }

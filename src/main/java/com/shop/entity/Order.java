@@ -34,8 +34,6 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private DeviceEnum deviceUse;
 
-
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User users_orders;
 
@@ -43,8 +41,9 @@ public class Order {
     @JsonIgnore
     private Set<OrderDetail> orderDetails;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Shipper shipper_orders;
+    @OneToMany(mappedBy = "orders_shipper", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Shipper> shippers;
 
     @OneToOne(mappedBy = "order_return", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -55,7 +54,7 @@ public class Order {
     }
 
 
-    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, String phoneReciver, String addressReciver, StatusName status, Double amount,PaymentEnum paymentReceived,DeviceEnum deviceUse,User users_orders, Set<OrderDetail> orderDetails, Shipper shipper_orders, Return returns) {
+    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, String phoneReciver, String addressReciver, StatusName status, Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse, User users_orders, Set<OrderDetail> orderDetails, Set<Shipper> shippers, Return returns) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
@@ -69,7 +68,7 @@ public class Order {
         this.deviceUse = deviceUse;
         this.users_orders = users_orders;
         this.orderDetails = orderDetails;
-        this.shipper_orders=shipper_orders;
+        this.shippers = shippers;
         this.returns = returns;
     }
 
@@ -161,14 +160,6 @@ public class Order {
         this.deviceUse = deviceUse;
     }
 
-    public Shipper getShipper_orders() {
-        return shipper_orders;
-    }
-
-    public void setShipper_orders(Shipper shipper_orders) {
-        this.shipper_orders = shipper_orders;
-    }
-
     public Return getReturns() {
         return returns;
     }
@@ -193,6 +184,11 @@ public class Order {
         this.orderDetails = orderDetails;
     }
 
+    public Set<Shipper> getShippers() {
+        return shippers;
+    }
 
-
+    public void setShippers(Set<Shipper> shippers) {
+        this.shippers = shippers;
+    }
 }

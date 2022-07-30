@@ -33,15 +33,15 @@ public class User {
     @JsonIgnore
     private Set<Order> orders;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_shippers", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Shipper shipper_users;
+    private Set<Shipper> shippers;
 
     public User() {
     }
 
     public User(Long id, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl, Set<Order> orders, Shipper shipper_users) {
+                String phoneNumber, String address, String imageUrl, Set<Order> orders, Set<Shipper> shippers) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -50,7 +50,7 @@ public class User {
         this.address = address;
         this.imageUrl = imageUrl;
         this.orders = orders;
-        this.shipper_users = shipper_users;
+        this.shippers = shippers;
     }
 
     public Long getId() {
@@ -125,12 +125,11 @@ public class User {
         this.orders = orders;
     }
 
-
-    public Shipper getShipper_users() {
-        return shipper_users;
+    public Set<Shipper> getShippers() {
+        return shippers;
     }
 
-    public void setShipper_users(Shipper shipper_users) {
-        this.shipper_users = shipper_users;
+    public void setShippers(Set<Shipper> shippers) {
+        this.shippers = shippers;
     }
 }
