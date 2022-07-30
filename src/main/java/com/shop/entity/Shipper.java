@@ -11,13 +11,13 @@ public class Shipper {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long shipperId;
     private Double total;
+
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
-
     @OneToMany(mappedBy = "shipper_users", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Shipper> shippers;
+    private Set<User> users;
 
     @OneToMany(mappedBy = "shipper_orders", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -30,11 +30,11 @@ public class Shipper {
     public Shipper() {
     }
 
-    public Shipper(Long shipperId, Double total, String notes, Set<Shipper> shippers, Set<Order> orders, Set<Return> returns) {
+    public Shipper(Long shipperId, Double total, String notes, Set<User> users, Set<Order> orders, Set<Return> returns) {
         this.shipperId = shipperId;
         this.total = total;
         this.notes = notes;
-        this.shippers = shippers;
+        this.users = users;
         this.orders = orders;
         this.returns = returns;
     }
@@ -81,11 +81,11 @@ public class Shipper {
         this.returns = returns;
     }
 
-    public Set<Shipper> getShippers() {
-        return shippers;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setShippers(Set<Shipper> shippers) {
-        this.shippers = shippers;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }
