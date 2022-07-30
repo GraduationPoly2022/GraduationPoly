@@ -15,13 +15,17 @@ public class Accessory {
     private String special;
     private double sizeKeyboard;
     private String charging;
+    @Column(columnDefinition = "varchar(8000)")
+    private String notes;
+
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Products product_accessories;
 
     public Accessory() {
     }
 
-    public Accessory(Long accessoryId, String connector, String length, String switches, double typeKeyboard, double sizeKey, String special, double sizeKeyboard, String charging, Products product_accessories) {
+    public Accessory(Long accessoryId, String connector, String length, String switches, double typeKeyboard, double sizeKey, String special, double sizeKeyboard, String charging, String notes, Products product_accessories) {
         this.accessoryId = accessoryId;
         this.connector = connector;
         this.length = length;
@@ -31,6 +35,7 @@ public class Accessory {
         this.special = special;
         this.sizeKeyboard = sizeKeyboard;
         this.charging = charging;
+        this.notes = notes;
         this.product_accessories = product_accessories;
     }
 
@@ -112,5 +117,13 @@ public class Accessory {
 
     public void setProduct_accessories(Products product_accessories) {
         this.product_accessories = product_accessories;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

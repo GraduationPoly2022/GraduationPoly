@@ -19,13 +19,15 @@ public class SmartPhone {
     private String gpu;
     private String connector;
     private String utils;
+    @Column(columnDefinition = "varchar(8000)")
+    private String notes;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Products smartPhone_product;
 
     public SmartPhone() {
     }
 
-    public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera, String afterCamera, String cpu, String ram, String disk, String batteryAndCharging, String video, String gpu, String connector, String utils, Products smartPhone_product) {
+    public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera, String afterCamera, String cpu, String ram, String disk, String batteryAndCharging, String video, String gpu, String connector, String utils, String notes, Products smartPhone_product) {
         this.smartPhoneId = smartPhoneId;
         this.monitor = monitor;
         this.systemOperator = systemOperator;
@@ -39,6 +41,7 @@ public class SmartPhone {
         this.gpu = gpu;
         this.connector = connector;
         this.utils = utils;
+        this.notes = notes;
         this.smartPhone_product = smartPhone_product;
     }
 
@@ -152,5 +155,13 @@ public class SmartPhone {
 
     public void setSmartPhone_product(Products products) {
         this.smartPhone_product = products;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
