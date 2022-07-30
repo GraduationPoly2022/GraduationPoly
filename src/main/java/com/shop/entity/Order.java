@@ -16,8 +16,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
+    @Temporal(TemporalType.DATE)
     private Date orderDate;
+    @Temporal(TemporalType.DATE)
     private Date deliveryDate;
+    @Temporal(TemporalType.DATE)
     private Date recipientDate;
     private String reciver;
     private String phoneReciver;
@@ -52,7 +55,7 @@ public class Order {
     }
 
 
-    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, String phoneReciver, String addressReciver, StatusName status, Double amount,PaymentEnum paymentReceived,DeviceEnum deviceUse,User users_orders, Set<OrderDetail> orderDetails, Shipper shipper_orders) {
+    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, String phoneReciver, String addressReciver, StatusName status, Double amount,PaymentEnum paymentReceived,DeviceEnum deviceUse,User users_orders, Set<OrderDetail> orderDetails, Shipper shipper_orders, Return returns) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
@@ -67,6 +70,7 @@ public class Order {
         this.users_orders = users_orders;
         this.orderDetails = orderDetails;
         this.shipper_orders=shipper_orders;
+        this.returns = returns;
     }
 
     public Long getOrderId() {
@@ -188,4 +192,7 @@ public class Order {
     public void setOrderDetails(Set<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
     }
+
+
+
 }
