@@ -25,14 +25,14 @@ public class Return {
     @JsonIgnore
     private Order order_return;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Order shipper_return;
+    private Shipper shipper_return;
 
     public Return() {
     }
 
-    public Return(Long returnId, Date returnDate, String reason, String notes, Order order_return, Order shipper_return) {
+    public Return(Long returnId, Date returnDate, String reason, String notes, Order order_return, Shipper shipper_return) {
         this.returnId = returnId;
         this.returnDate = returnDate;
         this.reason = reason;
@@ -81,11 +81,11 @@ public class Return {
         this.order_return = order_return;
     }
 
-    public Order getShipper_return() {
+    public Shipper getShipper_return() {
         return shipper_return;
     }
 
-    public void setShipper_return(Order shipper_return) {
+    public void setShipper_return(Shipper shipper_return) {
         this.shipper_return = shipper_return;
     }
 }

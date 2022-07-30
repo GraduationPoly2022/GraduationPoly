@@ -45,7 +45,7 @@ public class Products {
     public Products() {
     }
 
-    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
+    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops, Set<OrderDetail> orderDetails) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
@@ -57,6 +57,7 @@ public class Products {
         this.smartPhone = smartPhone;
         this.accessories = accessories;
         this.laptops = laptops;
+        OrderDetails = orderDetails;
     }
 
     public Long getProductId() {
@@ -145,5 +146,13 @@ public class Products {
 
     public void setLaptops(Set<Laptop> laptops) {
         this.laptops = laptops;
+    }
+
+    public Set<OrderDetail> getOrderDetails() {
+        return OrderDetails;
+    }
+
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        OrderDetails = orderDetails;
     }
 }

@@ -15,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-// nyhu cai nay a them roi nhung ma thieu 1 truong neu add têo eclic thi hoi lau VD
+
     @NotBlank
     private String email;
     private String password;
@@ -33,15 +33,15 @@ public class User {
     @JsonIgnore
     private Set<Order> orders;
 
-    @OneToOne(mappedBy = "users_shipper", cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Shipper shippers;
+    private User shipper_users;
 
     public User() {
     }
 
     public User(Long id, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl) {
+                String phoneNumber, String address, String imageUrl, Set<Order> orders, User shipper_users) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -49,6 +49,8 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
+        this.orders = orders;
+        this.shipper_users = shipper_users;
     }
 
     public Long getId() {
@@ -113,5 +115,21 @@ public class User {
 
     public void setRoleSet(Set<Role> roleSet) {
         this.roleSet = roleSet;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public User getShipper_users() {
+        return shipper_users;
+    }
+
+    public void setShipper_users(User shipper_users) {
+        this.shipper_users = shipper_users;
     }
 }
