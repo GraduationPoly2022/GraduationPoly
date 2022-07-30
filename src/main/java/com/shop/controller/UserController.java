@@ -3,7 +3,7 @@ package com.shop.controller;
 import com.shop.dto.ResponseMessage;
 import com.shop.dto.UserDto;
 import com.shop.entity.Role;
-import com.shop.entity.RoleName;
+import com.shop.enumEntity.RoleName;
 import com.shop.entity.User;
 import com.shop.services.Impl.RoleServiceImpl;
 import com.shop.services.Impl.UserServiceImpl;

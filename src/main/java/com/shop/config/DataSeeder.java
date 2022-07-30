@@ -1,7 +1,7 @@
 package com.shop.config;
 
 import com.shop.entity.Role;
-import com.shop.entity.RoleName;
+import com.shop.enumEntity.RoleName;
 import com.shop.services.Impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
