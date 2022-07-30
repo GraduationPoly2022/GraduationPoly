@@ -35,13 +35,13 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private User shipper_users;
+    private Shipper shipper_users;
 
     public User() {
     }
 
     public User(Long id, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl, Set<Order> orders, User shipper_users) {
+                String phoneNumber, String address, String imageUrl, Set<Order> orders, Shipper shipper_users) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -125,11 +125,12 @@ public class User {
         this.orders = orders;
     }
 
-    public User getShipper_users() {
+
+    public Shipper getShipper_users() {
         return shipper_users;
     }
 
-    public void setShipper_users(User shipper_users) {
+    public void setShipper_users(Shipper shipper_users) {
         this.shipper_users = shipper_users;
     }
 }
