@@ -12,7 +12,6 @@ import java.util.Set;
 @Entity
 @Table(name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
@@ -48,7 +47,6 @@ public class Order {
     @OneToOne(mappedBy = "order_return", cascade = CascadeType.ALL)
     @JsonIgnore
     private Return returns;
-
 
     public Order() {
     }

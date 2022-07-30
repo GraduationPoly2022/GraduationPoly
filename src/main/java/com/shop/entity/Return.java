@@ -1,10 +1,7 @@
 package com.shop.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "returns")
@@ -15,17 +12,11 @@ public class Return {
     @Temporal(TemporalType.DATE)
     private Date returnDate;
     private String reason;
-
-
     @Column(columnDefinition = "varchar(5000)")
-
-
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Order order_return;
-
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Shipper shippers_return;
 

@@ -1,13 +1,10 @@
 package com.shop.entity;
 
 
-
 import javax.persistence.*;
 import java.util.Date;
 
-
 @Entity
-
 public class CommentDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,15 +12,12 @@ public class CommentDetail {
     private String ContentReply;
     @Temporal(TemporalType.DATE)
     private Date ContentDateReply;
-
-
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Comment comment_commentDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User user_commentDetails;;
-
+    private User user_commentDetails;
+    ;
 
     public CommentDetail() {
     }
@@ -59,7 +53,6 @@ public class CommentDetail {
     public void setContentDateReply(Date contentDateReply) {
         ContentDateReply = contentDateReply;
     }
-
 
 
     public Comment getComment_commentDetails() {

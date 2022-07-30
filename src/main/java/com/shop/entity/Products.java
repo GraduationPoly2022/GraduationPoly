@@ -22,9 +22,8 @@ public class Products {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category categories_product;
 
-    @OneToMany(mappedBy = "producer_product", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Producer> producer;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Producer product_producer;
 
     @OneToMany(mappedBy = "smartPhone_product", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -41,11 +40,18 @@ public class Products {
     @OneToMany(mappedBy = "products_orderDetail", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<OrderDetail> OrderDetails;
+    @OneToMany(mappedBy = "product_comment", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> commentProduct;
 
     public Products() {
     }
 
-    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops, Set<OrderDetail> orderDetails) {
+    public Products(Long productId, String productName, String imageMain,
+                    String imageUrl, boolean available, Set<imageDetail> imageDetails,
+                    Category categories_product, Producer product_producer,
+                    Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops,
+                    Set<OrderDetail> orderDetails, Set<Comment> commentProduct) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
@@ -53,11 +59,12 @@ public class Products {
         this.available = available;
         this.imageDetails = imageDetails;
         this.categories_product = categories_product;
-        this.producer = producer;
+        this.product_producer = product_producer;
         this.smartPhone = smartPhone;
         this.accessories = accessories;
         this.laptops = laptops;
         OrderDetails = orderDetails;
+        this.commentProduct = commentProduct;
     }
 
     public Long getProductId() {
@@ -116,14 +123,6 @@ public class Products {
         this.categories_product = categories_product;
     }
 
-    public Set<Producer> getProducer() {
-        return producer;
-    }
-
-    public void setProducer(Set<Producer> producer) {
-        this.producer = producer;
-    }
-
     public Set<SmartPhone> getSmartPhone() {
         return smartPhone;
     }
@@ -154,5 +153,21 @@ public class Products {
 
     public void setOrderDetails(Set<OrderDetail> orderDetails) {
         OrderDetails = orderDetails;
+    }
+
+    public Set<Comment> getCommentProduct() {
+        return commentProduct;
+    }
+
+    public void setCommentProduct(Set<Comment> commentProduct) {
+        this.commentProduct = commentProduct;
+    }
+
+    public Producer getProduct_producer() {
+        return product_producer;
+    }
+
+    public void setProduct_producer(Producer product_producer) {
+        this.product_producer = product_producer;
     }
 }

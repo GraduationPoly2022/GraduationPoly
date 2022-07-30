@@ -37,11 +37,19 @@ public class User {
     @JsonIgnore
     private Set<Shipper> shippers;
 
+    @OneToMany(mappedBy = "user_comments", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "user_commentDetails", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<CommentDetail> commentDetails;
+
     public User() {
     }
 
     public User(Long id, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl, Set<Order> orders, Set<Shipper> shippers) {
+                String phoneNumber, String address, String imageUrl, Set<Order> orders, Set<Shipper> shippers, Set<Comment> comments, Set<CommentDetail> commentDetails) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -51,6 +59,8 @@ public class User {
         this.imageUrl = imageUrl;
         this.orders = orders;
         this.shippers = shippers;
+        this.comments = comments;
+        this.commentDetails = commentDetails;
     }
 
     public Long getId() {
@@ -131,5 +141,21 @@ public class User {
 
     public void setShippers(Set<Shipper> shippers) {
         this.shippers = shippers;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Set<CommentDetail> getCommentDetails() {
+        return commentDetails;
+    }
+
+    public void setCommentDetails(Set<CommentDetail> commentDetails) {
+        this.commentDetails = commentDetails;
     }
 }
