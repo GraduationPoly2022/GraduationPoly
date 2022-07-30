@@ -11,6 +11,8 @@ public class Shipper {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long shipperId;
     private Double total;
+    @Column(columnDefinition = "varchar(3000)")
+    private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -27,11 +29,13 @@ public class Shipper {
     public Shipper() {
     }
 
-    public Shipper(Long shipperId, Double total, User users_shipper, Set<Order> orders) {
+    public Shipper(Long shipperId, Double total, String notes, User users_shipper, Set<Order> orders, Return returns) {
         this.shipperId = shipperId;
         this.total = total;
+        this.notes = notes;
         this.users_shipper = users_shipper;
         this.orders = orders;
+        this.returns = returns;
     }
 
     public Long getShipperId() {
@@ -64,5 +68,21 @@ public class Shipper {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Return getReturns() {
+        return returns;
+    }
+
+    public void setReturns(Return returns) {
+        this.returns = returns;
     }
 }
