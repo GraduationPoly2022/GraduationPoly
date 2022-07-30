@@ -14,26 +14,27 @@ public class Shipper {
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "shipper_users", cascade = CascadeType.ALL)
     @JsonIgnore
-    private User users_shipper;
+    private Set<Shipper> shippers;
 
     @OneToMany(mappedBy = "shipper_orders", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Order> orders;
 
-    @OneToOne(mappedBy = "shipper_return", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shipper_return", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Return returns;
+    private Set<Return> returns;
 
     public Shipper() {
     }
 
-    public Shipper(Long shipperId, Double total, String notes, User users_shipper, Set<Order> orders, Return returns) {
+    public Shipper(Long shipperId, Double total, String notes, Set<Shipper> shippers, Set<Order> orders, Set<Return> returns) {
         this.shipperId = shipperId;
         this.total = total;
         this.notes = notes;
-        this.users_shipper = users_shipper;
+        this.shippers = shippers;
         this.orders = orders;
         this.returns = returns;
     }
@@ -54,13 +55,6 @@ public class Shipper {
         this.total = total;
     }
 
-    public User getUsers_shipper() {
-        return users_shipper;
-    }
-
-    public void setUsers_shipper(User users_shipper) {
-        this.users_shipper = users_shipper;
-    }
 
     public Set<Order> getOrders() {
         return orders;
@@ -78,11 +72,20 @@ public class Shipper {
         this.notes = notes;
     }
 
-    public Return getReturns() {
+
+    public Set<Return> getReturns() {
         return returns;
     }
 
-    public void setReturns(Return returns) {
+    public void setReturns(Set<Return> returns) {
         this.returns = returns;
+    }
+
+    public Set<Shipper> getShippers() {
+        return shippers;
+    }
+
+    public void setShippers(Set<Shipper> shippers) {
+        this.shippers = shippers;
     }
 }
