@@ -15,7 +15,10 @@ public class Return {
     private Date returnDate;
     private String reason;
 
+
     @Column(columnDefinition = "varchar(5000)")
+
+
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
