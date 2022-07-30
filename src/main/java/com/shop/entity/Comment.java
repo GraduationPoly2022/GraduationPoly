@@ -16,14 +16,14 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long CommentId;
     private String Content;
+    @Temporal(TemporalType.DATE)
     private Date CommentDate;
-    private Long UserId;
-    private Long ProductId;
 
 
-    @OneToMany(mappedBy = "comment_commendetails", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "comment_commentDetails", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<CommentDetail> commendetails;
+    private Set<CommentDetail> commentDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user_comments;
@@ -32,12 +32,12 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long commentId, String content, Date commentDate, Long userId, Long productId) {
+    public Comment(Long commentId, String content, Date commentDate, Set<CommentDetail> commentDetails, User user_comments) {
         CommentId = commentId;
         Content = content;
         CommentDate = commentDate;
-        UserId = userId;
-        ProductId = productId;
+        this.commentDetails = commentDetails;
+        this.user_comments = user_comments;
     }
 
     public Long getCommentId() {
@@ -64,19 +64,19 @@ public class Comment {
         CommentDate = commentDate;
     }
 
-    public Long getUserId() {
-        return UserId;
+    public Set<CommentDetail> getCommentDetails() {
+        return commentDetails;
     }
 
-    public void setUserId(Long userId) {
-        UserId = userId;
+    public void setCommentDetails(Set<CommentDetail> commentDetails) {
+        this.commentDetails = commentDetails;
     }
 
-    public Long getProductId() {
-        return ProductId;
+    public User getUser_comments() {
+        return user_comments;
     }
 
-    public void setProductId(Long productId) {
-        ProductId = productId;
+    public void setUser_comments(User user_comments) {
+        this.user_comments = user_comments;
     }
 }

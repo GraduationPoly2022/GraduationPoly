@@ -15,26 +15,25 @@ public class CommentDetail {
     private String ContentReply;
     @Temporal(TemporalType.DATE)
     private Date ContentDateReply;
-    private Long CommentId;
-    private Long UserId;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Comment comment_commendetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User user_commentdetails;;
+    private Comment comment_commentDetails;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private User user_commentDetails;;
 
 
     public CommentDetail() {
     }
 
-    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply, Long commentId, Long userId) {
+    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply, Comment comment_commentDetails, User user_commentDetails) {
         CommentDtId = commentDtId;
         ContentReply = contentReply;
         ContentDateReply = contentDateReply;
-        CommentId = commentId;
-        UserId = userId;
+        this.comment_commentDetails = comment_commentDetails;
+        this.user_commentDetails = user_commentDetails;
     }
 
     public Long getCommentDtId() {
@@ -61,19 +60,21 @@ public class CommentDetail {
         ContentDateReply = contentDateReply;
     }
 
-    public Long getCommentId() {
-        return CommentId;
+
+
+    public Comment getComment_commentDetails() {
+        return comment_commentDetails;
     }
 
-    public void setCommentId(Long commentId) {
-        CommentId = commentId;
+    public void setComment_commentDetails(Comment comment_commentDetails) {
+        this.comment_commentDetails = comment_commentDetails;
     }
 
-    public Long getUserId() {
-        return UserId;
+    public User getUser_commentDetails() {
+        return user_commentDetails;
     }
 
-    public void setUserId(Long userId) {
-        UserId = userId;
+    public void setUser_commentDetails(User user_commentDetails) {
+        this.user_commentDetails = user_commentDetails;
     }
 }
