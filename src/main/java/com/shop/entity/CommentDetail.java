@@ -29,14 +29,12 @@ public class CommentDetail {
     public CommentDetail() {
     }
 
-    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply, Long commentId, Long userId, Comment comment_commendetails, User user_commentdetails) {
+    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply, Long commentId, Long userId) {
         CommentDtId = commentDtId;
         ContentReply = contentReply;
         ContentDateReply = contentDateReply;
         CommentId = commentId;
         UserId = userId;
-        this.comment_commendetails = comment_commendetails;
-        this.user_commentdetails = user_commentdetails;
     }
 
     public Long getCommentDtId() {
@@ -77,21 +75,5 @@ public class CommentDetail {
 
     public void setUserId(Long userId) {
         UserId = userId;
-    }
-
-    public Comment getComment_commendetails() {
-        return comment_commendetails;
-    }
-
-    public void setComment_commendetails(Comment comment_commendetails) {
-        this.comment_commendetails = comment_commendetails;
-    }
-
-    public User getUser_commentdetails() {
-        return user_commentdetails;
-    }
-
-    public void setUser_commentdetails(User user_commentdetails) {
-        this.user_commentdetails = user_commentdetails;
     }
 }

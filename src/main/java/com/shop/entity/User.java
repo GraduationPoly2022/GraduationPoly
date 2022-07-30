@@ -31,7 +31,7 @@ public class User {
 
     @OneToMany(mappedBy = "user_commentdetails", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<CommentDetail> commentDetails;
+    private Set<CommentDetail> commentdetails;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
@@ -43,7 +43,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String email, String password, String fullName, String phoneNumber, String address, String imageUrl, Set<Comment> comments, Set<CommentDetail> commentDetails, Set<Role> roleSet) {
+    public User(Long id, String email, String password, String fullName, String phoneNumber, String address, String imageUrl) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -51,11 +51,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
-        this.comments = comments;
-        this.commentDetails = commentDetails;
-        this.roleSet = roleSet;
     }
-
 
     public Long getId() {
         return id;
@@ -111,29 +107,5 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public Set<CommentDetail> getCommentDetails() {
-        return commentDetails;
-    }
-
-    public void setCommentDetails(Set<CommentDetail> commentDetails) {
-        this.commentDetails = commentDetails;
-    }
-
-    public Set<Role> getRoleSet() {
-        return roleSet;
-    }
-
-    public void setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
     }
 }

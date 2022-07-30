@@ -23,7 +23,7 @@ public class Comment {
 
     @OneToMany(mappedBy = "comment_commendetails", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<CommentDetail> commentDetails;
+    private Set<CommentDetail> commendetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user_comments;
@@ -32,14 +32,12 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long commentId, String content, Date commentDate, Long userId, Long productId, Set<CommentDetail> commentDetails, User user_comments) {
+    public Comment(Long commentId, String content, Date commentDate, Long userId, Long productId) {
         CommentId = commentId;
         Content = content;
         CommentDate = commentDate;
         UserId = userId;
         ProductId = productId;
-        this.commentDetails = commentDetails;
-        this.user_comments = user_comments;
     }
 
     public Long getCommentId() {
@@ -80,21 +78,5 @@ public class Comment {
 
     public void setProductId(Long productId) {
         ProductId = productId;
-    }
-
-    public Set<CommentDetail> getCommentDetails() {
-        return commentDetails;
-    }
-
-    public void setCommentDetails(Set<CommentDetail> commentDetails) {
-        this.commentDetails = commentDetails;
-    }
-
-    public User getUser_comments() {
-        return user_comments;
-    }
-
-    public void setUser_comments(User user_comments) {
-        this.user_comments = user_comments;
     }
 }
