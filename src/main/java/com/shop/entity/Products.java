@@ -12,11 +12,7 @@ public class Products {
     private Long productId;
     private String productName;
     private String imageMain;
-    private String imageUrl;
     private boolean available;
-    private Long imageDetailId;
-    private Long categoryId;
-    private Long producerId;
 
 
     @OneToMany(mappedBy = "product_productId", cascade = CascadeType.ALL)
@@ -49,16 +45,22 @@ public class Products {
     public Products() {
     }
 
+<<<<<<< HEAD
     public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Long imageDetailId, Long categoryId, Long producerId, Set<Comment> comments, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
+=======
+    public Products(Long productId, String productName, String imageMain, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
+>>>>>>> 36fac23 (Update ngay 30/7/2022)
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
-        this.imageUrl = imageUrl;
         this.available = available;
+<<<<<<< HEAD
         this.imageDetailId = imageDetailId;
         this.categoryId = categoryId;
         this.producerId = producerId;
         this.comments = comments;
+=======
+>>>>>>> 36fac23 (Update ngay 30/7/2022)
         this.imageDetails = imageDetails;
         this.categories_product = categories_product;
         this.producer = producer;
@@ -91,14 +93,6 @@ public class Products {
         this.imageMain = imageMain;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public boolean isAvailable() {
         return available;
     }
@@ -107,6 +101,7 @@ public class Products {
         this.available = available;
     }
 
+<<<<<<< HEAD
     public Long getImageDetailId() {
         return imageDetailId;
     }
@@ -139,6 +134,8 @@ public class Products {
         this.comments = comments;
     }
 
+=======
+>>>>>>> 36fac23 (Update ngay 30/7/2022)
     public Set<imageDetail> getImageDetails() {
         return imageDetails;
     }
