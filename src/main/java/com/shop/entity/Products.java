@@ -14,9 +14,6 @@ public class Products {
     private String imageMain;
     private String imageUrl;
     private boolean available;
-    private Long imageDetailId;
-    private Long categoryId;
-    private Long producerId;
 
     @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -41,18 +38,19 @@ public class Products {
     @JsonIgnore
     private Set<Laptop> laptops;
 
+    @OneToMany(mappedBy = "products_orderDetail", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<OrderDetail> OrderDetails;
+
     public Products() {
     }
 
-    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Long imageDetailId, Long categoryId, Long producerId, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
+    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
         this.imageUrl = imageUrl;
         this.available = available;
-        this.imageDetailId = imageDetailId;
-        this.categoryId = categoryId;
-        this.producerId = producerId;
         this.imageDetails = imageDetails;
         this.categories_product = categories_product;
         this.producer = producer;
@@ -99,30 +97,6 @@ public class Products {
 
     public void setAvailable(boolean available) {
         this.available = available;
-    }
-
-    public Long getImageDetailId() {
-        return imageDetailId;
-    }
-
-    public void setImageDetailId(Long imageDetailId) {
-        this.imageDetailId = imageDetailId;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Long getProducerId() {
-        return producerId;
-    }
-
-    public void setProducerId(Long producerId) {
-        this.producerId = producerId;
     }
 
     public Set<imageDetail> getImageDetails() {

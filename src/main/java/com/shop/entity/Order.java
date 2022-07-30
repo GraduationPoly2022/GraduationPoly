@@ -1,5 +1,10 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shop.enumEntity.DeviceEnum;
+import com.shop.enumEntity.PaymentEnum;
+import com.shop.enumEntity.StatusName;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -15,24 +20,39 @@ public class Order {
     private Date deliveryDate;
     private Date recipientDate;
     private String reciver;
-    private Double phoneReciver;
+    private String phoneReciver;
     private String addressReciver;
-    private String status;
-    private Long userId;
-    private Double Amount;
+    @Enumerated(EnumType.STRING)
+    private StatusName status;
+    private Double amount;
+    @Enumerated(EnumType.STRING)
+    private PaymentEnum paymentReceived;
 
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private User user;
+    @Enumerated(EnumType.STRING)
+    private DeviceEnum deviceUse;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private User users_orders;
+
+    @OneToMany(mappedBy = "orders_orderDetail", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<OrderDetail> orderDetails;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Shipper shipper_orders;
+
+    @OneToOne(mappedBy = "order_return", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Return returns;
 
 
     public Order() {
     }
 
-    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, Double phoneReciver, String addressReciver, String status, Long userId, Double amount) {
+
+    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, String phoneReciver, String addressReciver, StatusName status, Double amount,PaymentEnum paymentReceived,DeviceEnum deviceUse,User users_orders, Set<OrderDetail> orderDetails, Shipper shipper_orders) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
@@ -41,8 +61,12 @@ public class Order {
         this.phoneReciver = phoneReciver;
         this.addressReciver = addressReciver;
         this.status = status;
-        this.userId = userId;
-        Amount = amount;
+        this.amount = amount;
+        this.paymentReceived = paymentReceived;
+        this.deviceUse = deviceUse;
+        this.users_orders = users_orders;
+        this.orderDetails = orderDetails;
+        this.shipper_orders=shipper_orders;
     }
 
     public Long getOrderId() {
@@ -85,11 +109,11 @@ public class Order {
         this.reciver = reciver;
     }
 
-    public Double getPhoneReciver() {
+    public String getPhoneReciver() {
         return phoneReciver;
     }
 
-    public void setPhoneReciver(Double phoneReciver) {
+    public void setPhoneReciver(String phoneReciver) {
         this.phoneReciver = phoneReciver;
     }
 
@@ -101,27 +125,67 @@ public class Order {
         this.addressReciver = addressReciver;
     }
 
-    public String getStatus() {
+    public StatusName getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusName status) {
         this.status = status;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
     public Double getAmount() {
-        return Amount;
+        return amount;
     }
 
     public void setAmount(Double amount) {
-        Amount = amount;
+        this.amount = amount;
+    }
+
+    public PaymentEnum getPaymentReceived() {
+        return paymentReceived;
+    }
+
+    public void setPaymentReceived(PaymentEnum paymentReceived) {
+        this.paymentReceived = paymentReceived;
+    }
+
+    public DeviceEnum getDeviceUse() {
+        return deviceUse;
+    }
+
+    public void setDeviceUse(DeviceEnum deviceUse) {
+        this.deviceUse = deviceUse;
+    }
+
+    public Shipper getShipper_orders() {
+        return shipper_orders;
+    }
+
+    public void setShipper_orders(Shipper shipper_orders) {
+        this.shipper_orders = shipper_orders;
+    }
+
+    public Return getReturns() {
+        return returns;
+    }
+
+    public void setReturns(Return returns) {
+        this.returns = returns;
+    }
+
+    public User getUsers_orders() {
+        return users_orders;
+    }
+
+    public void setUsers_orders(User users_orders) {
+        this.users_orders = users_orders;
+    }
+
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }

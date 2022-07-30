@@ -2,32 +2,29 @@ package com.shop.entity;
 
 import javax.persistence.*;
 
+@Entity
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderDetailId;
-    private Long productId;
     private Integer qty;
     private Double price;
-    private Long orderId;
 
-    @ManyToOne
-    @JoinColumn(name = "productId")
-    private Products products;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Products products_orderDetail;
 
-    @ManyToOne
-    @JoinColumn(name = "orderId")
-    private Order order;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Order orders_orderDetail;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(Long orderDetailId, Long productId, Integer qty, Double price, Long orderId) {
+    public OrderDetail(Long orderDetailId, Integer qty, Double price, Products products_orderDetail, Order orders_orderDetail) {
         this.orderDetailId = orderDetailId;
-        this.productId = productId;
         this.qty = qty;
         this.price = price;
-        this.orderId = orderId;
+        this.orders_orderDetail = orders_orderDetail;
+        this.products_orderDetail = products_orderDetail;
     }
 
     public Long getOrderDetailId() {
@@ -36,14 +33,6 @@ public class OrderDetail {
 
     public void setOrderDetailId(Long orderDetailId) {
         this.orderDetailId = orderDetailId;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
     }
 
     public Integer getQty() {
@@ -62,11 +51,19 @@ public class OrderDetail {
         this.price = price;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Products getProducts_orderDetail() {
+        return products_orderDetail;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setProducts_orderDetail(Products products_orderDetail) {
+        this.products_orderDetail = products_orderDetail;
+    }
+
+    public Order getOrders_orderDetail() {
+        return orders_orderDetail;
+    }
+
+    public void setOrders_orderDetail(Order orders_orderDetail) {
+        this.orders_orderDetail = orders_orderDetail;
     }
 }

@@ -1,5 +1,7 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
@@ -26,6 +28,14 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roleSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "users_orders", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Order> orders;
+
+    @OneToOne(mappedBy = "users_shipper", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Shipper shippers;
 
     public User() {
     }
