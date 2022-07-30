@@ -1,6 +1,7 @@
 package com.shop.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Laptop {
@@ -13,19 +14,20 @@ public class Laptop {
     private String disk;
     private String gpu;
     private String systemOperator;
-    private String Gateway;
+    private String gateway;
     private String design;
     private String special;
     private String sizeAndWeight;
-    private Integer yearOfManufacture;
+    private Date yearOfManufacture;
+    @Column(columnDefinition = "varchar(8000)")
+    private String notes;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Products product_laptop;
 
     public Laptop() {
     }
 
-    public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special,
-                  String sizeAndWeight, Integer yearOfManufacture, Products product_laptop) {
+    public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special, String sizeAndWeight, Date yearOfManufacture, String notes, Products product_laptop) {
         this.laptopId = laptopId;
         this.monitor = monitor;
         this.cpu = cpu;
@@ -33,11 +35,12 @@ public class Laptop {
         this.disk = disk;
         this.gpu = gpu;
         this.systemOperator = systemOperator;
-        Gateway = gateway;
+        this.gateway = gateway;
         this.design = design;
         this.special = special;
         this.sizeAndWeight = sizeAndWeight;
         this.yearOfManufacture = yearOfManufacture;
+        this.notes = notes;
         this.product_laptop = product_laptop;
     }
 
@@ -98,11 +101,11 @@ public class Laptop {
     }
 
     public String getGateway() {
-        return Gateway;
+        return gateway;
     }
 
     public void setGateway(String gateway) {
-        Gateway = gateway;
+        this.gateway = gateway;
     }
 
     public String getDesign() {
@@ -129,11 +132,11 @@ public class Laptop {
         this.sizeAndWeight = sizeAndWeight;
     }
 
-    public Integer getYearOfManufacture() {
+    public Date getYearOfManufacture() {
         return yearOfManufacture;
     }
 
-    public void setYearOfManufacture(Integer yearOfManufacture) {
+    public void setYearOfManufacture(Date yearOfManufacture) {
         this.yearOfManufacture = yearOfManufacture;
     }
 
@@ -143,5 +146,13 @@ public class Laptop {
 
     public void setProduct_laptop(Products product_laptop) {
         this.product_laptop = product_laptop;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
