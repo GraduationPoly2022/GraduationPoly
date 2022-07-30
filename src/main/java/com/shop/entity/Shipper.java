@@ -15,27 +15,26 @@ public class Shipper {
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
-    @OneToMany(mappedBy = "shipper_users", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<User> users;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private User user_shippers;
 
-    @OneToMany(mappedBy = "shipper_orders", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Order> orders;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Order shipper_orders;
 
-    @OneToMany(mappedBy = "shipper_return", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shippers_return", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Return> returns;
+
 
     public Shipper() {
     }
 
-    public Shipper(Long shipperId, Double total, String notes, Set<User> users, Set<Order> orders, Set<Return> returns) {
+    public Shipper(Long shipperId, Double total, String notes, User user_shippers, Order shipper_orders, Set<Return> returns) {
         this.shipperId = shipperId;
         this.total = total;
         this.notes = notes;
-        this.users = users;
-        this.orders = orders;
+        this.user_shippers = user_shippers;
+        this.shipper_orders = shipper_orders;
         this.returns = returns;
     }
 
@@ -55,15 +54,6 @@ public class Shipper {
         this.total = total;
     }
 
-
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
-
     public String getNotes() {
         return notes;
     }
@@ -72,6 +62,13 @@ public class Shipper {
         this.notes = notes;
     }
 
+    public Order getShipper_orders() {
+        return shipper_orders;
+    }
+
+    public void setShipper_orders(Order shipper_orders) {
+        this.shipper_orders = shipper_orders;
+    }
 
     public Set<Return> getReturns() {
         return returns;
@@ -81,11 +78,11 @@ public class Shipper {
         this.returns = returns;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public User getUser_shippers() {
+        return user_shippers;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUser_shippers(User user_shippers) {
+        this.user_shippers = user_shippers;
     }
 }
