@@ -25,13 +25,13 @@ public class User {
     private String imageUrl;
 
 
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private CommentDetail commentDetail;
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> comment;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Comment> comment;
+    private Set<CommentDetail> commentDetails;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),

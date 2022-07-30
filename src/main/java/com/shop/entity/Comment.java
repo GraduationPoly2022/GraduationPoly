@@ -2,8 +2,11 @@ package com.shop.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 
 @Entity
@@ -18,17 +21,13 @@ public class Comment {
     private Long ProductId;
 
 
-    @OneToOne(mappedBy = "comment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<CommentDetail> commentDetails;
 
-    private CommentDetail commentDetail;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_productId")
-    private Products product;
+    @ManyToOne
+    @JoinColumn(name = "user_UserId")
+    private User users;
 
 
     public Comment() {

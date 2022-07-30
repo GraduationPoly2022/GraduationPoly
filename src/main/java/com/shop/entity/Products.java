@@ -18,9 +18,6 @@ public class Products {
     private Long categoryId;
     private Long producerId;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Comment> comment;
 
     @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
     @JsonIgnore

@@ -17,18 +17,14 @@ public class CommentDetail {
     private Long CommentId;
     private Long UserId;
 
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "comment_CommentId")
     private Comment comment;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @ManyToOne
-    private Products product;
-
-
+    @JoinColumn(name = "user_UserId")
+    private User user;
 
 
     public CommentDetail() {
