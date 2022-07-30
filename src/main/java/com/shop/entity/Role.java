@@ -1,5 +1,6 @@
 package com.shop.entity;
 
+import com.shop.enumEntity.RoleName;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 

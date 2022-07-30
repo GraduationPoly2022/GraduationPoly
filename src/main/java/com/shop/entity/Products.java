@@ -12,6 +12,7 @@ public class Products {
     private Long productId;
     private String productName;
     private String imageMain;
+    private String imageUrl;
     private boolean available;
 
     @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
@@ -37,13 +38,18 @@ public class Products {
     @JsonIgnore
     private Set<Laptop> laptops;
 
+    @OneToMany(mappedBy = "products_orderDetail", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<OrderDetail> OrderDetails;
+
     public Products() {
     }
 
-    public Products(Long productId, String productName, String imageMain, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
+    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops, Set<OrderDetail> orderDetails) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
+        this.imageUrl = imageUrl;
         this.available = available;
         this.imageDetails = imageDetails;
         this.categories_product = categories_product;
@@ -51,6 +57,7 @@ public class Products {
         this.smartPhone = smartPhone;
         this.accessories = accessories;
         this.laptops = laptops;
+        OrderDetails = orderDetails;
     }
 
     public Long getProductId() {
@@ -75,6 +82,14 @@ public class Products {
 
     public void setImageMain(String imageMain) {
         this.imageMain = imageMain;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public boolean isAvailable() {
@@ -131,5 +146,13 @@ public class Products {
 
     public void setLaptops(Set<Laptop> laptops) {
         this.laptops = laptops;
+    }
+
+    public Set<OrderDetail> getOrderDetails() {
+        return OrderDetails;
+    }
+
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        OrderDetails = orderDetails;
     }
 }

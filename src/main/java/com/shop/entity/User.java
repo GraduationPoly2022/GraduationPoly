@@ -24,26 +24,24 @@ public class User {
     private String address;
     private String imageUrl;
 
-
-    @OneToMany(mappedBy = "user_comments", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Comment> comments;
-
-    @OneToMany(mappedBy = "user_commentDetails", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<CommentDetail> commentDetails;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roleSet = new HashSet<>();
 
+    @OneToMany(mappedBy = "users_orders", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Order> orders;
 
+    @OneToMany(mappedBy = "user_shippers", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Shipper> shippers;
 
     public User() {
     }
 
-    public User(Long id, String email, String password, String fullName, String phoneNumber, String address, String imageUrl, Set<Comment> comments, Set<CommentDetail> commentDetails, Set<Role> roleSet) {
+    public User(Long id, String email, String password, String fullName,
+                String phoneNumber, String address, String imageUrl, Set<Order> orders, Set<Shipper> shippers) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -51,9 +49,8 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
-        this.comments = comments;
-        this.commentDetails = commentDetails;
-        this.roleSet = roleSet;
+        this.orders = orders;
+        this.shippers = shippers;
     }
 
     public Long getId() {
@@ -112,27 +109,27 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public Set<CommentDetail> getCommentDetails() {
-        return commentDetails;
-    }
-
-    public void setCommentDetails(Set<CommentDetail> commentDetails) {
-        this.commentDetails = commentDetails;
-    }
-
     public Set<Role> getRoleSet() {
         return roleSet;
     }
 
     public void setRoleSet(Set<Role> roleSet) {
         this.roleSet = roleSet;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Set<Shipper> getShippers() {
+        return shippers;
+    }
+
+    public void setShippers(Set<Shipper> shippers) {
+        this.shippers = shippers;
     }
 }

@@ -1,7 +1,7 @@
 package com.shop.services.Impl;
 
 import com.shop.entity.Role;
-import com.shop.entity.RoleName;
+import com.shop.enumEntity.RoleName;
 import com.shop.repository.RoleRepository;
 import com.shop.services.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;

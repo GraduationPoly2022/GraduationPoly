@@ -1,7 +1,7 @@
 package com.shop.services;
 
 import com.shop.entity.Role;
-import com.shop.entity.RoleName;
+import com.shop.enumEntity.RoleName;
 
 public interface IRoleService {
     Role createRole(Role role);

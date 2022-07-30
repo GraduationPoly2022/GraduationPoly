@@ -1,7 +1,7 @@
 package com.shop.repository;
 
 import com.shop.entity.Role;
-import com.shop.entity.RoleName;
+import com.shop.enumEntity.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
