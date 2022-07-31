@@ -28,16 +28,20 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user_comments;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Products product_productId;
+
 
     public Comment() {
     }
 
-    public Comment(Long commentId, String content, Date commentDate, Set<CommentDetail> commentDetails, User user_comments) {
+    public Comment(Long commentId, String content, Date commentDate, Set<CommentDetail> commentDetails, User user_comments, Products product_productId) {
         CommentId = commentId;
         Content = content;
         CommentDate = commentDate;
         this.commentDetails = commentDetails;
         this.user_comments = user_comments;
+        this.product_productId = product_productId;
     }
 
     public Long getCommentId() {
@@ -78,5 +82,13 @@ public class Comment {
 
     public void setUser_comments(User user_comments) {
         this.user_comments = user_comments;
+    }
+
+    public Products getProduct_productId() {
+        return product_productId;
+    }
+
+    public void setProduct_productId(Products product_productId) {
+        this.product_productId = product_productId;
     }
 }

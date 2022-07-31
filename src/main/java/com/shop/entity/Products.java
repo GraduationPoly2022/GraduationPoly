@@ -19,6 +19,10 @@ public class Products {
     private Long producerId;
 
 
+    @OneToMany(mappedBy = "product_productId", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> comments;
+
     @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<imageDetail> imageDetails;
@@ -45,7 +49,7 @@ public class Products {
     public Products() {
     }
 
-    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Long imageDetailId, Long categoryId, Long producerId, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
+    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Long imageDetailId, Long categoryId, Long producerId, Set<Comment> comments, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
@@ -54,6 +58,7 @@ public class Products {
         this.imageDetailId = imageDetailId;
         this.categoryId = categoryId;
         this.producerId = producerId;
+        this.comments = comments;
         this.imageDetails = imageDetails;
         this.categories_product = categories_product;
         this.producer = producer;
@@ -124,6 +129,14 @@ public class Products {
 
     public void setProducerId(Long producerId) {
         this.producerId = producerId;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public Set<imageDetail> getImageDetails() {
