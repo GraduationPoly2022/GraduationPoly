@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.shop.config.CustomAuthorityDeserializer;
 import com.shop.dto.Authority;
+import com.shop.enumEntity.AuthenticationProvider;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,6 +30,7 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String address;
     private String imageUrl;
+    private AuthenticationProvider authProvider;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
@@ -55,7 +57,7 @@ public class User implements UserDetails {
     }
 
     public User(Long id, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl, Set<Order> orders, Set<Shipper> shippers, Set<Comment> comments, Set<CommentDetail> commentDetails) {
+                String phoneNumber, String address, String imageUrl, AuthenticationProvider authProvider, Set<Order> orders, Set<Shipper> shippers, Set<Comment> comments, Set<CommentDetail> commentDetails) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -63,6 +65,7 @@ public class User implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
+        this.authProvider = authProvider;
         this.orders = orders;
         this.shippers = shippers;
         this.comments = comments;
@@ -195,5 +198,13 @@ public class User implements UserDetails {
 
     public void setCommentDetails(Set<CommentDetail> commentDetails) {
         this.commentDetails = commentDetails;
+    }
+
+    public AuthenticationProvider getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(AuthenticationProvider authProvider) {
+        this.authProvider = authProvider;
     }
 }
