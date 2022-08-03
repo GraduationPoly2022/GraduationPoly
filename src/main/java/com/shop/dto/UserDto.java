@@ -11,9 +11,9 @@ public class UserDto {
     private Long id;
     private String email;
     private String password;
-    private String fullName;
     private String phoneNumber;
     private String address;
+    private String fullName;
     private String imageUrl;
-    private String role;
+    private String authority;
 }
