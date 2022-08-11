@@ -30,6 +30,7 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String address;
     private String imageUrl;
+    @Enumerated(EnumType.STRING)
     private AuthenticationProvider authProvider;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

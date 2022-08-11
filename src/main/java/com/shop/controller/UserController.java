@@ -32,6 +32,7 @@ public class UserController {
     @PostMapping("/")
     public ResponseEntity<ResponseMessage> createUser(@RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
+        User user = new User();
         if (this.userService.findByEmail(userDto.getEmail()) != null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, "Email is already exists", null));
@@ -49,10 +50,14 @@ public class UserController {
                     default -> role.setRoleName(RoleName.CLIENT);
                 }
             }
+            BeanUtils.copyProperties(userDto, user);
+            if (userDto.getImageUrl() == null) {
+                user.setImageUrl("abc.png");
+            } else {
+                user.setImageUrl(userDto.getImageUrl());
+            }
             Set<Role> roles = new HashSet<>();
             roles.add(this.roleService.findByRoleName(role.getRoleName()));
-            User user = new User();
-            BeanUtils.copyProperties(userDto, user);
             user.setAuthProvider(AuthenticationProvider.LOCAL_PROVIDER);
             user.setRoleSet(roles);
             User u = this.userService.createUser(user);
