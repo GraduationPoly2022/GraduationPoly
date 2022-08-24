@@ -2,8 +2,8 @@ package com.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.enumEntity.DeviceEnum;
+import com.shop.enumEntity.OrderStatus;
 import com.shop.enumEntity.PaymentEnum;
-import com.shop.enumEntity.StatusName;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,7 +25,7 @@ public class Order {
     private String phoneReceive;
     private String addressReceive;
     @Enumerated(EnumType.STRING)
-    private StatusName status;
+    private OrderStatus status;
     private Double amount;
     @Enumerated(EnumType.STRING)
     private PaymentEnum paymentReceived;
@@ -53,7 +53,7 @@ public class Order {
 
 
     public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receive,
-                 String phoneReceive, String addressReceive, StatusName status,
+                 String phoneReceive, String addressReceive, OrderStatus status,
                  Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse,
                  User users_orders, Return returns) {
         this.orderId = orderId;
@@ -127,11 +127,11 @@ public class Order {
         this.addressReceive = addressReceive;
     }
 
-    public StatusName getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StatusName status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

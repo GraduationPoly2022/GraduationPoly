@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -53,6 +54,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user_commentDetails", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
+
+    @OneToMany(mappedBy = "userReview", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Reviews> reviewsSet = new LinkedHashSet<>();
+
 
     public User() {
     }
@@ -204,5 +210,13 @@ public class User implements UserDetails {
 
     public void setAuthProvider(AuthenticationProvider authProvider) {
         this.authProvider = authProvider;
+    }
+
+    public Set<Reviews> getReviewsSet() {
+        return reviewsSet;
+    }
+
+    public void setReviewsSet(Set<Reviews> reviewsSet) {
+        this.reviewsSet = reviewsSet;
     }
 }

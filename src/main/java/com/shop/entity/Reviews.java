@@ -4,39 +4,39 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class ProductReviews {
+public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long PRId;
+    private Long RId;
     @Column(columnDefinition = "varchar(500)")
     private String content;
     private Integer rating;
     @Temporal(TemporalType.DATE)
-    private Date dateProductReview;
+    private Date dateReview;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User userProductReview;
+    private User userReview;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Products productReview;
 
-    public ProductReviews() {
+    public Reviews() {
     }
 
-    public ProductReviews(Long PRId, String content, Integer rating, Date dateProductReview,
-                          User userProductReview, Products productReview) {
-        this.PRId = PRId;
+    public Reviews(Long RId, String content, Integer rating, Date dateReview,
+                   User userReview, Products productReview) {
+        this.RId = RId;
         this.content = content;
         this.rating = rating;
-        this.dateProductReview = dateProductReview;
-        this.userProductReview = userProductReview;
+        this.dateReview = dateReview;
+        this.userReview = userReview;
         this.productReview = productReview;
     }
 
-    public Long getPRId() {
-        return PRId;
+    public Long getRId() {
+        return RId;
     }
 
-    public void setPRId(Long PRId) {
-        this.PRId = PRId;
+    public void setRId(Long RId) {
+        this.RId = RId;
     }
 
     public String getContent() {
@@ -55,20 +55,20 @@ public class ProductReviews {
         this.rating = rating;
     }
 
-    public Date getDateProductReview() {
-        return dateProductReview;
+    public Date getDateReview() {
+        return dateReview;
     }
 
-    public void setDateProductReview(Date dateProductReview) {
-        this.dateProductReview = dateProductReview;
+    public void setDateReview(Date dateReview) {
+        this.dateReview = dateReview;
     }
 
-    public User getUserProductReview() {
-        return userProductReview;
+    public User getUserReview() {
+        return userReview;
     }
 
-    public void setUserProductReview(User userProductReview) {
-        this.userProductReview = userProductReview;
+    public void setUserReview(User userReview) {
+        this.userReview = userReview;
     }
 
     public Products getProductReview() {

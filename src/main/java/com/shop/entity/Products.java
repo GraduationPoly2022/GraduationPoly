@@ -47,7 +47,8 @@ public class Products {
     private Set<Comment> commentProduct;
 
     @OneToMany(mappedBy = "productReview", cascade = CascadeType.ALL)
-    private Set<ProductReviews> productReviewsSet = new LinkedHashSet<>();
+    @JsonIgnore
+    private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 
     public Products() {
     }
@@ -177,11 +178,11 @@ public class Products {
         this.warranty = warranty;
     }
 
-    public Set<ProductReviews> getProductReviewsSet() {
-        return productReviewsSet;
+    public Set<Reviews> getProductReviewsSet() {
+        return reviewsSet;
     }
 
-    public void setProductReviewsSet(Set<ProductReviews> productReviewsSet) {
-        this.productReviewsSet = productReviewsSet;
+    public void setProductReviewsSet(Set<Reviews> reviewsSet) {
+        this.reviewsSet = reviewsSet;
     }
 }
