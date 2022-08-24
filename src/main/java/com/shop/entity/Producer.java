@@ -19,10 +19,9 @@ public class Producer {
     public Producer() {
     }
 
-    public Producer(Long producerId, String name, Set<Products> producer_product) {
+    public Producer(Long producerId, String name) {
         this.producerId = producerId;
         this.name = name;
-        this.producer_product = producer_product;
     }
 
     public Long getProducerId() {

@@ -22,7 +22,8 @@ public class CommentDetail {
     public CommentDetail() {
     }
 
-    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply, Comment comment_commentDetails, User user_commentDetails) {
+    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply,
+                         Comment comment_commentDetails, User user_commentDetails) {
         CommentDtId = commentDtId;
         ContentReply = contentReply;
         ContentDateReply = contentDateReply;

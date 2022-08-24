@@ -10,10 +10,10 @@ public class Accessory {
     private String connector;
     private String length;
     private String switches;
-    private double typeKeyboard;
-    private double sizeKey;
+    private Double typeKeyboard;
+    private Double sizeKey;
     private String special;
-    private double sizeKeyboard;
+    private Double sizeKeyboard;
     private String charging;
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
@@ -25,7 +25,9 @@ public class Accessory {
     public Accessory() {
     }
 
-    public Accessory(Long accessoryId, String connector, String length, String switches, double typeKeyboard, double sizeKey, String special, double sizeKeyboard, String charging, String notes, Products product_accessories) {
+    public Accessory(Long accessoryId, String connector, String length, String switches,
+                     Double typeKeyboard, Double sizeKey, String special,
+                     Double sizeKeyboard, String charging, String notes, Products product_accessories) {
         this.accessoryId = accessoryId;
         this.connector = connector;
         this.length = length;
@@ -71,19 +73,19 @@ public class Accessory {
         this.switches = switches;
     }
 
-    public double getTypeKeyboard() {
+    public Double getTypeKeyboard() {
         return typeKeyboard;
     }
 
-    public void setTypeKeyboard(double typeKeyboard) {
+    public void setTypeKeyboard(Double typeKeyboard) {
         this.typeKeyboard = typeKeyboard;
     }
 
-    public double getSizeKey() {
+    public Double getSizeKey() {
         return sizeKey;
     }
 
-    public void setSizeKey(double sizeKey) {
+    public void setSizeKey(Double sizeKey) {
         this.sizeKey = sizeKey;
     }
 
@@ -95,11 +97,11 @@ public class Accessory {
         this.special = special;
     }
 
-    public double getSizeKeyboard() {
+    public Double getSizeKeyboard() {
         return sizeKeyboard;
     }
 
-    public void setSizeKeyboard(double sizeKeyboard) {
+    public void setSizeKeyboard(Double sizeKeyboard) {
         this.sizeKeyboard = sizeKeyboard;
     }
 
