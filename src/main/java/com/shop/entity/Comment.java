@@ -23,18 +23,18 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Products product_comment;
-    
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user_comments;
 
     public Comment() {
     }
 
-    public Comment(Long commentId, String content, Date commentDate, Set<CommentDetail> commentDetails, Products product_comment, User user_comments) {
+    public Comment(Long commentId, String content, Date commentDate,
+                   Products product_comment, User user_comments) {
         CommentId = commentId;
         Content = content;
         CommentDate = commentDate;
-        this.commentDetails = commentDetails;
         this.product_comment = product_comment;
         this.user_comments = user_comments;
     }

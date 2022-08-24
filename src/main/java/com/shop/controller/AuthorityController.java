@@ -35,7 +35,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/auth")
 @CrossOrigin("*")
 public class AuthorityController {
     @Autowired
@@ -126,7 +126,7 @@ public class AuthorityController {
         }
         UserDetails userDetails = this.userDetailServiceImp.loadUserByUsername(user.getUsername());
         String tokens = this.jwtUtil.generateToken(userDetails, payload.getExpirationTimeSeconds());
-        System.out.println(tokens);
+
         User users = (User) this.userDetailServiceImp.loadUserByUsername(this.getNamePrincipal());
         JwtResponse jwtResponse1 = new JwtResponse();
         BeanUtils.copyProperties(users, jwtResponse1);

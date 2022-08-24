@@ -27,7 +27,9 @@ public class Laptop {
     public Laptop() {
     }
 
-    public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu, String systemOperator, String gateway, String design, String special, String sizeAndWeight, Date yearOfManufacture, String notes, Products product_laptop) {
+    public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu,
+                  String systemOperator, String gateway, String design, String special,
+                  String sizeAndWeight, Date yearOfManufacture, String notes, Products product_laptop) {
         this.laptopId = laptopId;
         this.monitor = monitor;
         this.cpu = cpu;

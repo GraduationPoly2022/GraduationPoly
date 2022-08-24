@@ -1,18 +1,24 @@
 package com.shop.enumEntity;
 
 public enum Expired {
-    HOURS(System.currentTimeMillis() + 1000L * 60L * 60L * 2L),
-    DAYS(System.currentTimeMillis() + 1000L * 60L * 60L * 24L * 10L),
-    TIME_MOBILE(System.currentTimeMillis() + 1000L * 60L * 60L * 24L * 30L * 2L);
+    HOURS, DAYS, TIME_MOBILE;
 
-    private final Long time;
-
-
-    Expired(Long date) {
-        this.time = date;
-    }
+    private final Long localTimeMill = System.currentTimeMillis();
 
     public Long getTime() {
-        return this.time;
+        long timeMill;
+        switch (this) {
+            case HOURS -> {
+                timeMill = localTimeMill + (1000L * 60L * 60L * 2L);
+            }
+            case DAYS -> {
+                timeMill = localTimeMill + (1000L * 60L * 60L * 24L * 10L);
+            }
+            default -> {
+                timeMill = localTimeMill + (1000L * 60L * 60L * 24L * 30L * 2L);
+            }
+        }
+
+        return timeMill;
     }
 }

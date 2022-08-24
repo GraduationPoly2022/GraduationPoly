@@ -16,14 +16,14 @@ public class Category {
     @OneToMany(mappedBy = "categories_product", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Products> products;
+
     public Category() {
 
     }
 
-    public Category(Long categoryId, String name, Set<Products> products) {
+    public Category(Long categoryId, String name) {
         this.categoryId = categoryId;
         this.name = name;
-        this.products = products;
     }
 
     public Long getCategoryId() {

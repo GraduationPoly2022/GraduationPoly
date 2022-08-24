@@ -3,6 +3,7 @@ package com.shop.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -13,7 +14,8 @@ public class Products {
     private String productName;
     private String imageMain;
     private String imageUrl;
-    private boolean available;
+    private Boolean available;
+    private Integer warranty;
 
     @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -44,27 +46,23 @@ public class Products {
     @JsonIgnore
     private Set<Comment> commentProduct;
 
+    @OneToMany(mappedBy = "productReview", cascade = CascadeType.ALL)
+    private Set<ProductReviews> productReviewsSet = new LinkedHashSet<>();
+
     public Products() {
     }
 
     public Products(Long productId, String productName, String imageMain,
-                    String imageUrl, boolean available, Set<imageDetail> imageDetails,
-                    Category categories_product, Producer product_producer,
-                    Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops,
-                    Set<OrderDetail> orderDetails, Set<Comment> commentProduct) {
+                    String imageUrl, Boolean available, Integer warranty,
+                    Category categories_product, Producer product_producer) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
         this.imageUrl = imageUrl;
         this.available = available;
-        this.imageDetails = imageDetails;
+        this.warranty = warranty;
         this.categories_product = categories_product;
         this.product_producer = product_producer;
-        this.smartPhone = smartPhone;
-        this.accessories = accessories;
-        this.laptops = laptops;
-        OrderDetails = orderDetails;
-        this.commentProduct = commentProduct;
     }
 
     public Long getProductId() {
@@ -99,11 +97,11 @@ public class Products {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isAvailable() {
+    public Boolean isAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(Boolean available) {
         this.available = available;
     }
 
@@ -169,5 +167,21 @@ public class Products {
 
     public void setProduct_producer(Producer product_producer) {
         this.product_producer = product_producer;
+    }
+
+    public Integer getWarranty() {
+        return warranty;
+    }
+
+    public void setWarranty(Integer warranty) {
+        this.warranty = warranty;
+    }
+
+    public Set<ProductReviews> getProductReviewsSet() {
+        return productReviewsSet;
+    }
+
+    public void setProductReviewsSet(Set<ProductReviews> productReviewsSet) {
+        this.productReviewsSet = productReviewsSet;
     }
 }

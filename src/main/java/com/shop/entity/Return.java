@@ -1,5 +1,7 @@
 package com.shop.entity;
 
+import com.shop.enumEntity.Reason;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,7 +13,8 @@ public class Return {
     private Long returnId;
     @Temporal(TemporalType.DATE)
     private Date returnDate;
-    private String reason;
+    @Enumerated(EnumType.STRING)
+    private Reason reason;
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
@@ -23,7 +26,8 @@ public class Return {
     public Return() {
     }
 
-    public Return(Long returnId, Date returnDate, String reason, String notes, Order order_return, Shipper shippers_return1) {
+    public Return(Long returnId, Date returnDate, Reason reason, String notes,
+                  Order order_return, Shipper shippers_return1) {
         this.returnId = returnId;
         this.returnDate = returnDate;
         this.reason = reason;
@@ -48,11 +52,11 @@ public class Return {
         this.returnDate = returnDate;
     }
 
-    public String getReason() {
+    public Reason getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void setReason(Reason reason) {
         this.reason = reason;
     }
 

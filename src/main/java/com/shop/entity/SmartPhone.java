@@ -27,7 +27,10 @@ public class SmartPhone {
     public SmartPhone() {
     }
 
-    public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera, String afterCamera, String cpu, String ram, String disk, String batteryAndCharging, String video, String gpu, String connector, String utils, String notes, Products smartPhone_product) {
+    public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera,
+                      String afterCamera, String cpu, String ram, String disk, String batteryAndCharging,
+                      String video, String gpu, String connector, String utils,
+                      String notes, Products smartPhone_product) {
         this.smartPhoneId = smartPhoneId;
         this.monitor = monitor;
         this.systemOperator = systemOperator;

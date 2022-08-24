@@ -58,7 +58,8 @@ public class User implements UserDetails {
     }
 
     public User(Long id, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl, AuthenticationProvider authProvider, Set<Order> orders, Set<Shipper> shippers, Set<Comment> comments, Set<CommentDetail> commentDetails) {
+                String phoneNumber, String address, String imageUrl,
+                AuthenticationProvider authProvider) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -67,10 +68,6 @@ public class User implements UserDetails {
         this.address = address;
         this.imageUrl = imageUrl;
         this.authProvider = authProvider;
-        this.orders = orders;
-        this.shippers = shippers;
-        this.comments = comments;
-        this.commentDetails = commentDetails;
     }
 
     public Long getId() {

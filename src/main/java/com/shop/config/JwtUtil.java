@@ -46,12 +46,10 @@ public class JwtUtil {
 
     private <T> String createToken(Map<String, Object> claims, String subject, T expired) {
         Long expiry;
-        if (expired instanceof Expired) {
-            Expired expired1 = (Expired) expired;
-            expiry = expired1.getTime();
-        } else {
-            expiry = (Long) expired;
-        }
+        if (expired instanceof Expired) expiry = ((Expired) expired).getTime();
+        else expiry = System.currentTimeMillis() + ((Long) expired);
+
+        System.out.println(new Date(expiry));
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(expiry))
@@ -63,12 +61,4 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-//    public String generateTokenSocial(UserDetails userDetails, Long expiration) {
-//        Map<String, Object> claims = new HashMap<>();
-//        return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername())
-//                .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-//                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-//                .compact();
-//    }
 }

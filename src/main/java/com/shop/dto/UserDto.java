@@ -1,5 +1,6 @@
 package com.shop.dto;
 
+import com.shop.enumEntity.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,5 @@ public class UserDto {
     private String address;
     private String fullName;
     private String imageUrl;
-    private String authority;
+    private RoleName authority;
 }

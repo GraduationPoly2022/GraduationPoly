@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
+
 @RestController
 @RequestMapping("/user")
 @CrossOrigin("*")
@@ -44,15 +46,11 @@ public class UserController {
             if (userDto.getAuthority() == null) {
                 role.setRoleName(RoleName.CLIENT);
             } else {
-                switch (userDto.getAuthority()) {
-                    case "admin" -> role.setRoleName(RoleName.ADMIN);
-                    case "shipper" -> role.setRoleName(RoleName.SHIPPER);
-                    default -> role.setRoleName(RoleName.CLIENT);
-                }
+                role.setRoleName(userDto.getAuthority());
             }
             BeanUtils.copyProperties(userDto, user);
             if (userDto.getImageUrl() == null) {
-                user.setImageUrl("abc.png");
+                user.setImageUrl(IMAGE_DEFAULT_URL);
             } else {
                 user.setImageUrl(userDto.getImageUrl());
             }

@@ -17,7 +17,8 @@ public class OrderDetail {
     public OrderDetail() {
     }
 
-    public OrderDetail(Long orderDetailId, Integer qty, Double price, Products products_orderDetail, Order orders_orderDetail) {
+    public OrderDetail(Long orderDetailId, Integer qty, Double price, Products products_orderDetail,
+                       Order orders_orderDetail) {
         this.orderDetailId = orderDetailId;
         this.qty = qty;
         this.price = price;
