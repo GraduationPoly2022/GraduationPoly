@@ -5,7 +5,7 @@ public enum PaymentEnum {
 
     private String pay;
 
-    public String getPay() {
+    private String getPay() {
         switch (this) {
             case PAID -> {
                 this.pay = "Đã thanh toán";

@@ -4,7 +4,7 @@ public enum Reason {
     ARRIVED_TOO_LATE, DAMAGED_IN_TRANSIT, NO_REASON, ITEM_WAS_DEFECTIVE, NOT_QUALITY, DESCRIPTION_INCORRECTLY,
     POOR_SERVICE_COVERAGE, MISSING_ACCESSORIES, DIFFERENT_ORDERS, ANOTHER_REASON;
 
-    public String getReason() {
+    private String getReason() {
         String value;
         switch (this) {
             case NO_REASON -> {
