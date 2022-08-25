@@ -3,10 +3,12 @@ package com.shop.controller;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.shop.config.JwtUtil;
 import com.shop.dto.JwtResponse;
 import com.shop.dto.ResponseMessage;
+import com.shop.dto.UserDto;
 import com.shop.entity.Role;
 import com.shop.entity.User;
 import com.shop.enumEntity.AuthenticationProvider;
@@ -23,12 +25,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,7 +42,6 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
 public class AuthorityController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -69,9 +74,7 @@ public class AuthorityController {
         if (this.passwordEncoder.matches(jwtResponse.getUserDto().getPassword(), userDetails.getPassword())) {
             String tokens
                     = this.jwtUtil.generateToken(userDetails, jwtResponse.getRememberMe() ? Expired.DAYS : Expired.HOURS);
-            User users = (User) this.userDetailServiceImp.loadUserByUsername(this.getNamePrincipal());
-            JwtResponse jwtResponse1 = new JwtResponse();
-            BeanUtils.copyProperties(users, jwtResponse1);
+            JwtResponse jwtResponse1 = getJwtResponse(userDetails);
             jwtResponse1.setToken(tokens);
             jwtResponse1.setRememberMe(jwtResponse.getRememberMe());
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -83,24 +86,26 @@ public class AuthorityController {
 
     }
 
+    private JwtResponse getJwtResponse(UserDetails userDetails) {
+        User users = (User) this.userDetailServiceImp.loadUserByUsername(userDetails.getUsername());
+        JwtResponse jwtResponse1 = new JwtResponse();
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(users, userDto);
+        userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
+        return jwtResponse1;
+    }
+
     @SneakyThrows
     @PostMapping("/google")
     public ResponseEntity<?> signInWithGoogleToken(@RequestBody String token) {
         NetHttpTransport transport = new NetHttpTransport();
-        GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+        JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                // Specify the CLIENT_ID of the app that accesses the backend:
                 .setAudience(Collections.singletonList(CLIENT_ID))
-                // Or, if multiple clients access the backend:
-                //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
                 .build();
-
-        // (Receive idTokenString by HTTPS POST)
-
         GoogleIdToken idToken = GoogleIdToken.parse(verifier.getJsonFactory(), token);
         GoogleIdToken.Payload payload = idToken.getPayload();
-
-        // Print user identifier
+        
         String userId = payload.getSubject();
         User user;
         if (this.userService.findByEmail(payload.getEmail()) == null) {
@@ -122,14 +127,11 @@ public class AuthorityController {
         try {
             this.authenticate(user.getUsername(), user.getPassword());
         } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lỗi " + e.getMessage());
         }
         UserDetails userDetails = this.userDetailServiceImp.loadUserByUsername(user.getUsername());
         String tokens = this.jwtUtil.generateToken(userDetails, payload.getExpirationTimeSeconds());
-
-        User users = (User) this.userDetailServiceImp.loadUserByUsername(this.getNamePrincipal());
-        JwtResponse jwtResponse1 = new JwtResponse();
-        BeanUtils.copyProperties(users, jwtResponse1);
+        JwtResponse jwtResponse1 = this.getJwtResponse(userDetails);
         jwtResponse1.setToken(tokens);
         jwtResponse1.setRememberMe(true);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -144,13 +146,5 @@ public class AuthorityController {
         } catch (BadCredentialsException e) {
             System.out.println("User bad credentials " + e.getMessage());
         }
-    }
-
-    private String getNamePrincipal() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            return authentication.getName();
-        }
-        return null;
     }
 }
