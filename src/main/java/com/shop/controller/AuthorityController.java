@@ -105,7 +105,7 @@ public class AuthorityController {
                 .build();
         GoogleIdToken idToken = GoogleIdToken.parse(verifier.getJsonFactory(), token);
         GoogleIdToken.Payload payload = idToken.getPayload();
-        
+
         String userId = payload.getSubject();
         User user;
         if (this.userService.findByEmail(payload.getEmail()) == null) {
@@ -147,4 +147,5 @@ public class AuthorityController {
             System.out.println("User bad credentials " + e.getMessage());
         }
     }
+
 }

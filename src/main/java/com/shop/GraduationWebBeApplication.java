@@ -27,7 +27,8 @@ public class GraduationWebBeApplication implements CommandLineRunner {
                 registry.addMapping("/**")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                         .allowedHeaders("*")
-                        .allowedOrigins("http//:localhost:4200/", "http//:localhost:8181/");
+//                        .allowedOrigins("http//:localhost:4200/", "http//:localhost:8081/");
+                        .allowedOrigins("*");
             }
         };
     }
