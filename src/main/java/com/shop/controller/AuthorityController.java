@@ -19,6 +19,7 @@ import com.shop.helper.UserNotFoundException;
 import com.shop.services.Impl.RoleServiceImpl;
 import com.shop.services.Impl.UserDetailServiceImp;
 import com.shop.services.Impl.UserServiceImpl;
+import com.shop.utils.Convert;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
 
 @RestController
 @RequestMapping("/auth")
@@ -86,15 +89,6 @@ public class AuthorityController {
 
     }
 
-    private JwtResponse getJwtResponse(UserDetails userDetails) {
-        User users = (User) this.userDetailServiceImp.loadUserByUsername(userDetails.getUsername());
-        JwtResponse jwtResponse1 = new JwtResponse();
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(users, userDto);
-        userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
-        return jwtResponse1;
-    }
-
     @SneakyThrows
     @PostMapping("/google")
     public ResponseEntity<?> signInWithGoogleToken(@RequestBody String token) {
@@ -138,6 +132,45 @@ public class AuthorityController {
                 new ResponseMessage(StatusMessage.OK, "Login is successfully", jwtResponse1));
     }
 
+    @PostMapping("/user")
+    public ResponseEntity<ResponseMessage> createUser(@RequestBody UserDto userDto) {
+        ResponseEntity<ResponseMessage> message = null;
+        User user = new User();
+        if (this.userService.findByEmail(userDto.getEmail()) != null) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email is already exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email is already exists", userError));
+        }
+        try {
+            userDto.setAddress(Convert.CapitalAllFirstLetter(userDto.getAddress()));
+            userDto.setFullName(Convert.CapitalAllFirstLetter(userDto.getFullName()));
+            Role role = new Role();
+            if (userDto.getAuthority() == null) {
+                role.setRoleName(RoleName.CLIENT);
+            } else {
+                role.setRoleName(userDto.getAuthority());
+            }
+            BeanUtils.copyProperties(userDto, user);
+            if (userDto.getImageUrl() == null) {
+                user.setImageUrl(IMAGE_DEFAULT_URL);
+            } else {
+                user.setImageUrl(userDto.getImageUrl());
+            }
+            Set<Role> roles = new HashSet<>();
+            roles.add(this.roleService.findByRoleName(role.getRoleName()));
+            user.setAuthProvider(AuthenticationProvider.LOCAL_PROVIDER);
+            user.setRoleSet(roles);
+            User u = this.userService.createUser(user);
+            if (u != null) message = ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+        } catch (Exception e) {
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
+        }
+        return message;
+    }
+
     private void authenticate(String username, String password) throws Exception {
         try {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -148,4 +181,12 @@ public class AuthorityController {
         }
     }
 
+    private JwtResponse getJwtResponse(UserDetails userDetails) {
+        User users = (User) this.userDetailServiceImp.loadUserByUsername(userDetails.getUsername());
+        JwtResponse jwtResponse1 = new JwtResponse();
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(users, userDto);
+        userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
+        return jwtResponse1;
+    }
 }
