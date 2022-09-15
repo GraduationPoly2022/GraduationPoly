@@ -1,25 +1,30 @@
 package com.shop.controller;
 
+<<<<<<< HEAD
 import com.shop.dto.ResponseMessage;
 import com.shop.dto.UserDto;
 import com.shop.entity.Role;
 import com.shop.enumEntity.RoleName;
 import com.shop.entity.User;
+=======
+>>>>>>> 42aaa18 (v1)
 import com.shop.services.Impl.RoleServiceImpl;
 import com.shop.services.Impl.UserServiceImpl;
-import com.shop.utils.Convert;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
+=======
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+>>>>>>> 42aaa18 (v1)
 
 @RestController
-@RequestMapping("/user")
-@CrossOrigin("*")
+@RequestMapping("api/user")
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
@@ -27,6 +32,7 @@ public class UserController {
     @Autowired
     private RoleServiceImpl roleService;
 
+<<<<<<< HEAD
     @PostMapping("/")
     public ResponseEntity<ResponseMessage> createUser(@RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
@@ -62,3 +68,7 @@ public class UserController {
         return message;
     }
 }
+=======
+
+}
+>>>>>>> 42aaa18 (v1)
