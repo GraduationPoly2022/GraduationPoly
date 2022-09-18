@@ -22,7 +22,7 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long userId;
 
     @NotBlank
     private String email;
@@ -63,10 +63,10 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, String email, String password, String fullName,
+    public User(Long userId, String email, String password, String fullName,
                 String phoneNumber, String address, String imageUrl,
                 AuthenticationProvider authProvider) {
-        this.id = id;
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -76,12 +76,12 @@ public class User implements UserDetails {
         this.authProvider = authProvider;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @JsonDeserialize(using = CustomAuthorityDeserializer.class)
