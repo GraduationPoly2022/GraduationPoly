@@ -6,6 +6,8 @@ import com.shop.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements IUserService {
     @Autowired
@@ -19,5 +21,15 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User createUser(User user) {
         return this.userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findAlUsers() {
+        return this.userRepository.findAll();
+    }
+
+    @Override
+    public User findById(Long id) {
+        return this.userRepository.findById(id).orElse(null);
     }
 }
