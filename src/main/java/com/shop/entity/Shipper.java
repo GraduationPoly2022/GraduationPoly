@@ -29,13 +29,12 @@ public class Shipper {
     public Shipper() {
     }
 
-    public Shipper(Long shipperId, Double total, String notes, User user_shippers, Order orders_shipper, Set<Return> returns) {
+    public Shipper(Long shipperId, Double total, String notes, User user_shippers, Order orders_shipper) {
         this.shipperId = shipperId;
         this.total = total;
         this.notes = notes;
         this.user_shippers = user_shippers;
         this.orders_shipper = orders_shipper;
-        this.returns = returns;
     }
 
     public Long getShipperId() {

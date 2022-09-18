@@ -1,17 +1,25 @@
 package com.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.shop.config.CustomAuthorityDeserializer;
+import com.shop.dto.Authority;
+import com.shop.enumEntity.AuthenticationProvider;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -23,6 +31,8 @@ public class User {
     private String phoneNumber;
     private String address;
     private String imageUrl;
+    @Enumerated(EnumType.STRING)
+    private AuthenticationProvider authProvider;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
@@ -45,11 +55,17 @@ public class User {
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
+    @OneToMany(mappedBy = "userReview", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Reviews> reviewsSet = new LinkedHashSet<>();
+
+
     public User() {
     }
 
     public User(Long id, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl, Set<Order> orders, Set<Shipper> shippers, Set<Comment> comments, Set<CommentDetail> commentDetails) {
+                String phoneNumber, String address, String imageUrl,
+                AuthenticationProvider authProvider) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -57,10 +73,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
-        this.orders = orders;
-        this.shippers = shippers;
-        this.comments = comments;
-        this.commentDetails = commentDetails;
+        this.authProvider = authProvider;
     }
 
     public Long getId() {
@@ -71,21 +84,53 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Authority> authorities = new HashSet<>();
+        this.roleSet.forEach(e -> {
+            authorities.add(new Authority(e.getRoleName()));
+        });
+        return authorities;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 
     public String getFullName() {
         return fullName;
@@ -157,5 +202,21 @@ public class User {
 
     public void setCommentDetails(Set<CommentDetail> commentDetails) {
         this.commentDetails = commentDetails;
+    }
+
+    public AuthenticationProvider getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(AuthenticationProvider authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    public Set<Reviews> getReviewsSet() {
+        return reviewsSet;
+    }
+
+    public void setReviewsSet(Set<Reviews> reviewsSet) {
+        this.reviewsSet = reviewsSet;
     }
 }

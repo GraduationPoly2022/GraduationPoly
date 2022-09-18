@@ -1,17 +1,22 @@
 package com.shop.enumEntity;
 
 public enum PaymentEnum {
-    PAID("Đã thanh toán"),
-    UNPAID("Chưa thanh toán");
+    PAID, UNPAID;
 
     private String pay;
-    private PaymentEnum(String pay) {
-        this.pay = pay;
-    }
 
-    public String getPay() {
+    private String getPay() {
+        switch (this) {
+            case PAID -> {
+                this.pay = "Đã thanh toán";
+            }
+            case UNPAID -> {
+                this.pay = "Chưa thanh toán";
+            }
+        }
         return pay;
     }
+
     @Override
     public String toString() {
         return this.getPay();

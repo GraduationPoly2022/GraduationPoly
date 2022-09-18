@@ -2,8 +2,8 @@ package com.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.enumEntity.DeviceEnum;
+import com.shop.enumEntity.OrderStatus;
 import com.shop.enumEntity.PaymentEnum;
-import com.shop.enumEntity.StatusName;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,11 +21,11 @@ public class Order {
     private Date deliveryDate;
     @Temporal(TemporalType.DATE)
     private Date recipientDate;
-    private String reciver;
-    private String phoneReciver;
-    private String addressReciver;
+    private String receive;
+    private String phoneReceive;
+    private String addressReceive;
     @Enumerated(EnumType.STRING)
-    private StatusName status;
+    private OrderStatus status;
     private Double amount;
     @Enumerated(EnumType.STRING)
     private PaymentEnum paymentReceived;
@@ -52,21 +52,22 @@ public class Order {
     }
 
 
-    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String reciver, String phoneReciver, String addressReciver, StatusName status, Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse, User users_orders, Set<OrderDetail> orderDetails, Set<Shipper> shippers, Return returns) {
+    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receive,
+                 String phoneReceive, String addressReceive, OrderStatus status,
+                 Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse,
+                 User users_orders, Return returns) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.recipientDate = recipientDate;
-        this.reciver = reciver;
-        this.phoneReciver = phoneReciver;
-        this.addressReciver = addressReciver;
+        this.receive = receive;
+        this.phoneReceive = phoneReceive;
+        this.addressReceive = addressReceive;
         this.status = status;
         this.amount = amount;
         this.paymentReceived = paymentReceived;
         this.deviceUse = deviceUse;
         this.users_orders = users_orders;
-        this.orderDetails = orderDetails;
-        this.shippers = shippers;
         this.returns = returns;
     }
 
@@ -102,35 +103,35 @@ public class Order {
         this.recipientDate = recipientDate;
     }
 
-    public String getReciver() {
-        return reciver;
+    public String getReceive() {
+        return receive;
     }
 
-    public void setReciver(String reciver) {
-        this.reciver = reciver;
+    public void setReceive(String receive) {
+        this.receive = receive;
     }
 
-    public String getPhoneReciver() {
-        return phoneReciver;
+    public String getPhoneReceive() {
+        return phoneReceive;
     }
 
-    public void setPhoneReciver(String phoneReciver) {
-        this.phoneReciver = phoneReciver;
+    public void setPhoneReceive(String phoneReceive) {
+        this.phoneReceive = phoneReceive;
     }
 
-    public String getAddressReciver() {
-        return addressReciver;
+    public String getAddressReceive() {
+        return addressReceive;
     }
 
-    public void setAddressReciver(String addressReciver) {
-        this.addressReciver = addressReciver;
+    public void setAddressReceive(String addressReceive) {
+        this.addressReceive = addressReceive;
     }
 
-    public StatusName getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StatusName status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
