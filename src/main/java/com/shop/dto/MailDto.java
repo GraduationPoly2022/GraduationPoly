@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtResponse {
-    private String token;
-    private Boolean rememberMe;
-    private UserDto userDto;
-    private Boolean moblie = false;
+public class MailDto {
+    private String toMail;
+    private String contentHtml;
 }

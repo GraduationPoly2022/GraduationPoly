@@ -15,11 +15,13 @@ import com.shop.enumEntity.AuthenticationProvider;
 import com.shop.enumEntity.Expired;
 import com.shop.enumEntity.RoleName;
 import com.shop.enumEntity.StatusMessage;
+import com.shop.helper.HandleTimeCode;
+import com.shop.helper.TimeCode;
 import com.shop.helper.UserNotFoundException;
+import com.shop.services.Impl.MailServiceImpl;
 import com.shop.services.Impl.RoleServiceImpl;
-import com.shop.services.Impl.UserDetailServiceImp;
+import com.shop.services.Impl.UserDetailServiceImpl;
 import com.shop.services.Impl.UserServiceImpl;
-import com.shop.utils.Convert;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +34,12 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
-import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
 
 @RestController
 @RequestMapping("/auth")
@@ -54,7 +52,7 @@ public class AuthorityController {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserDetailServiceImp userDetailServiceImp;
+    private UserDetailServiceImpl userDetailServiceImpl;
 
     @Autowired
     private UserServiceImpl userService;
@@ -63,6 +61,12 @@ public class AuthorityController {
 
     @Autowired
     private RoleServiceImpl roleService;
+
+    @Autowired
+    private HandleTimeCode handleTimeCode;
+    private TimeCode timeCode;
+    @Autowired
+    private MailServiceImpl mailService;
 
     @SneakyThrows
     @PostMapping("/generate-token")
@@ -73,13 +77,17 @@ public class AuthorityController {
             e.getStackTrace();
             throw new Exception("User not found " + e.getMessage());
         }
-        UserDetails userDetails = this.userDetailServiceImp.loadUserByUsername(jwtResponse.getUserDto().getEmail());
+        UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(jwtResponse.getUserDto().getEmail());
         if (this.passwordEncoder.matches(jwtResponse.getUserDto().getPassword(), userDetails.getPassword())) {
-            String tokens
-                    = this.jwtUtil.generateToken(userDetails, jwtResponse.getRememberMe() ? Expired.DAYS : Expired.HOURS);
-            JwtResponse jwtResponse1 = getJwtResponse(userDetails);
-            jwtResponse1.setToken(tokens);
-            jwtResponse1.setRememberMe(jwtResponse.getRememberMe());
+            JwtResponse jwtResponse1;
+            if (jwtResponse.getMoblie()) {
+                jwtResponse1 = this.hanldeToken(userDetails, Expired.TIME_MOBILE,
+                        jwtResponse.getRememberMe());
+            } else {
+                jwtResponse1 = this.hanldeToken(userDetails, jwtResponse.getRememberMe() ? Expired.DAYS : Expired.HOURS,
+                        jwtResponse.getRememberMe());
+            }
+
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseMessage(StatusMessage.OK, "Login is successfully", jwtResponse1));
         } else {
@@ -103,17 +111,7 @@ public class AuthorityController {
         String userId = payload.getSubject();
         User user;
         if (this.userService.findByEmail(payload.getEmail()) == null) {
-            user = new User();
-            user.setEmail(payload.getEmail());
-            user.setPassword(this.passwordEncoder.encode(userId));
-            user.setFullName((String) payload.get("name"));
-            user.setAuthProvider(AuthenticationProvider.GOOGLE_PROVIDER);
-            user.setImageUrl((String) payload.get("picture"));
-            Role role = this.roleService.findByRoleName(RoleName.CLIENT);
-            Set<Role> roleSet = new HashSet<>();
-            roleSet.add(role);
-            user.setRoleSet(roleSet);
-            this.userService.createUser(user);
+            user = this.handleCreateUserPayload(payload, userId);
         } else {
             user = this.userService.findByEmail(payload.getEmail());
         }
@@ -123,17 +121,14 @@ public class AuthorityController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lỗi " + e.getMessage());
         }
-        UserDetails userDetails = this.userDetailServiceImp.loadUserByUsername(user.getUsername());
-        String tokens = this.jwtUtil.generateToken(userDetails, payload.getExpirationTimeSeconds());
-        JwtResponse jwtResponse1 = this.getJwtResponse(userDetails);
-        jwtResponse1.setToken(tokens);
-        jwtResponse1.setRememberMe(true);
+        UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(user.getUsername());
+        JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseMessage(StatusMessage.OK, "Login is successfully", jwtResponse1));
     }
 
     @PostMapping("/user")
-    public ResponseEntity<ResponseMessage> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
         if (this.userService.findByEmail(userDto.getEmail()) != null) {
@@ -143,30 +138,55 @@ public class AuthorityController {
                     .body(new ResponseMessage(StatusMessage.ERROR, "Email is already exists", userError));
         }
         try {
-            userDto.setAddress(Convert.CapitalAllFirstLetter(userDto.getAddress()));
-            userDto.setFullName(Convert.CapitalAllFirstLetter(userDto.getFullName()));
-            Role role = new Role();
-            if (userDto.getAuthority() == null) {
-                role.setRoleName(RoleName.CLIENT);
+            UserController.CreateUser(userDto, user, this.roleService);
+            if (Objects.equals(this.timeCode.getCode(), code)) {
+                User u = this.userService.createUser(user);
+                if (u != null) message = ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
             } else {
-                role.setRoleName(userDto.getAuthority());
+                message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponseMessage(StatusMessage.FAILED, "Code is incorrect", null)
+                );
             }
-            BeanUtils.copyProperties(userDto, user);
-            if (userDto.getImageUrl() == null) {
-                user.setImageUrl(IMAGE_DEFAULT_URL);
-            } else {
-                user.setImageUrl(userDto.getImageUrl());
-            }
-            Set<Role> roles = new HashSet<>();
-            roles.add(this.roleService.findByRoleName(role.getRoleName()));
-            user.setAuthProvider(AuthenticationProvider.LOCAL_PROVIDER);
-            user.setRoleSet(roles);
-            User u = this.userService.createUser(user);
-            if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
+        }
+        return message;
+    }
+
+    @GetMapping("/user/check-mail")
+    public Boolean ckeckEmailExists(@RequestParam("email") String email) {
+        return this.userService.findByEmail(email) != null;
+    }
+
+    @PatchMapping("/user")
+    public ResponseEntity<ResponseMessage> handleForgotPassword(@RequestParam("email") String email,
+                                                                @RequestParam("password") String password) {
+        User user = this.userService.findByEmail(email);
+        if (user != null) {
+            user.setPassword(this.passwordEncoder.encode(password));
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseMessage(StatusMessage.OK, "Change password is successfully",
+                            this.userService.createUser(user))
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseMessage(StatusMessage.OK, "Change password is not successfully",
+                        null)
+        );
+    }
+
+    @GetMapping("/send-mail/{toForm}/{name}")
+    public ResponseEntity<ResponseMessage> sendCode(@PathVariable("toForm") String toForm, @PathVariable("name") String name) {
+        ResponseEntity<ResponseMessage> message = null;
+        this.timeCode = this.handleTimeCode.timeCode();
+        try {
+            this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
+            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "code ", this.timeCode));
+        } catch (Exception e) {
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.FAILED, "error " + e.getMessage(), null));
         }
         return message;
     }
@@ -181,12 +201,29 @@ public class AuthorityController {
         }
     }
 
-    private JwtResponse getJwtResponse(UserDetails userDetails) {
-        User users = (User) this.userDetailServiceImp.loadUserByUsername(userDetails.getUsername());
+    private <T> JwtResponse hanldeToken(UserDetails userDetails, T expired, Boolean rememberMe) {
+        String tokens = this.jwtUtil.generateToken(userDetails, expired);
+        User users = (User) this.userDetailServiceImpl.loadUserByUsername(userDetails.getUsername());
         JwtResponse jwtResponse1 = new JwtResponse();
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(users, userDto);
         userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
+        jwtResponse1.setToken(tokens);
+        jwtResponse1.setRememberMe(rememberMe);
         return jwtResponse1;
+    }
+
+    private User handleCreateUserPayload(GoogleIdToken.Payload payload, String userId) {
+        User user = new User();
+        user.setEmail(payload.getEmail());
+        user.setPassword(this.passwordEncoder.encode(userId));
+        user.setFullName((String) payload.get("name"));
+        user.setAuthProvider(AuthenticationProvider.GOOGLE_PROVIDER);
+        user.setImageUrl((String) payload.get("picture"));
+        Role role = this.roleService.findByRoleName(RoleName.CLIENT);
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(role);
+        user.setRoleSet(roleSet);
+        return this.userService.createUser(user);
     }
 }
