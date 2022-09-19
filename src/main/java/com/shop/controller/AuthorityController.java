@@ -18,10 +18,9 @@ import com.shop.enumEntity.StatusMessage;
 import com.shop.helper.UserNotFoundException;
 import com.shop.helper.handleCode.HandleTimeCode;
 import com.shop.helper.handleCode.TimeCode;
-import com.shop.services.Impl.MailServiceImpl;
-import com.shop.services.Impl.RoleServiceImpl;
-import com.shop.services.Impl.UserDetailServiceImpl;
-import com.shop.services.Impl.UserServiceImpl;
+import com.shop.services.IMailService;
+import com.shop.services.IRoleService;
+import com.shop.services.IUserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,22 +54,22 @@ public class AuthorityController {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserDetailServiceImpl userDetailServiceImpl;
+    private UserDetailsService userDetailServiceImpl;
 
     @Autowired
-    private UserServiceImpl userService;
+    private IUserService userService;
     @Value("${google.clientId}")
     private String CLIENT_ID;
 
     @Autowired
-    private RoleServiceImpl roleService;
+    private IRoleService roleService;
 
     @Autowired
     private HandleTimeCode handleTimeCode;
 
     private TimeCode timeCode;
     @Autowired
-    private MailServiceImpl mailService;
+    private IMailService mailService;
 
     @SneakyThrows
     @PostMapping("/generate-token")
@@ -141,7 +141,7 @@ public class AuthorityController {
                     .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
         }
         try {
-            UserController.CreateUser(userDto, user, this.roleService);
+            UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             if (Objects.equals(this.timeCode.getCode(), code)) {
                 User u = this.userService.createUser(user);
                 if (u != null) message = ResponseEntity.status(HttpStatus.OK)

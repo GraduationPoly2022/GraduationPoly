@@ -7,8 +7,8 @@ import com.shop.entity.User;
 import com.shop.enumEntity.AuthenticationProvider;
 import com.shop.enumEntity.RoleName;
 import com.shop.enumEntity.StatusMessage;
-import com.shop.services.Impl.RoleServiceImpl;
-import com.shop.services.Impl.UserServiceImpl;
+import com.shop.services.IRoleService;
+import com.shop.services.IUserService;
 import com.shop.utils.Convert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +27,15 @@ import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
 @RequestMapping("api/user")
 public class UserController {
     @Autowired
-    private UserServiceImpl userService;
+    private IUserService userService;
 
     @Autowired
-    private RoleServiceImpl roleService;
+    private IRoleService roleService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public static void CreateUser(@RequestBody UserDto userDto, User user, RoleServiceImpl roleService) {
+    public static void CreateUser(@RequestBody UserDto userDto, User user, IRoleService roleService, String password) {
         userDto.setAddress(Convert.CapitalAllFirstLetter(userDto.getAddress()));
         userDto.setFullName(Convert.CapitalAllFirstLetter(userDto.getFullName()));
         Role role = new Role();
@@ -51,7 +51,7 @@ public class UserController {
             user.setImageUrl(userDto.getImageUrl());
         }
         user.setUserId(userDto.getUserId());
-        user.setPassword(new UserController().passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(password);
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.findByRoleName(role.getRoleName()));
         user.setAuthProvider(AuthenticationProvider.LOCAL_PROVIDER);
@@ -75,7 +75,7 @@ public class UserController {
                     .body(new ResponseMessage(StatusMessage.ERROR, "Email address dones not exist", userError));
         }
         try {
-            CreateUser(userDto, user, this.roleService);
+            CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             User u = this.userService.createUser(user);
             if (u != null) message = ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseMessage(StatusMessage.OK, "Succesful user creation", u));
@@ -92,7 +92,7 @@ public class UserController {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
         try {
-            CreateUser(userDto, user, this.roleService);
+            CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             User u = this.userService.createUser(user);
             if (u != null) message = ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseMessage(StatusMessage.OK, "User update successful", u));
