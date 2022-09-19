@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.shop.helper.CheckMail.emailExists;
 import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
 
 @RestController
@@ -63,15 +64,21 @@ public class UserController {
         User user = new User();
         if (this.userService.findByEmail(userDto.getEmail()) != null) {
             UserDto userError = new UserDto();
-            userError.setEmail("Email is already exists");
+            userError.setEmail("Email already exists");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "Email is already exists", userError));
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
+        }
+        if (!emailExists(userDto.getEmail())) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email address dones not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email address dones not exist", userError));
         }
         try {
             CreateUser(userDto, user, this.roleService);
             User u = this.userService.createUser(user);
             if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+                    .body(new ResponseMessage(StatusMessage.OK, "Succesful user creation", u));
 
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -88,7 +95,7 @@ public class UserController {
             CreateUser(userDto, user, this.roleService);
             User u = this.userService.createUser(user);
             if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Update user is successfully", u));
+                    .body(new ResponseMessage(StatusMessage.OK, "User update successful", u));
 
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)

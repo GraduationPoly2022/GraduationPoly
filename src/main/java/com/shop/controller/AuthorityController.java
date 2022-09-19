@@ -15,9 +15,9 @@ import com.shop.enumEntity.AuthenticationProvider;
 import com.shop.enumEntity.Expired;
 import com.shop.enumEntity.RoleName;
 import com.shop.enumEntity.StatusMessage;
-import com.shop.helper.HandleTimeCode;
-import com.shop.helper.TimeCode;
 import com.shop.helper.UserNotFoundException;
+import com.shop.helper.handleCode.HandleTimeCode;
+import com.shop.helper.handleCode.TimeCode;
 import com.shop.services.Impl.MailServiceImpl;
 import com.shop.services.Impl.RoleServiceImpl;
 import com.shop.services.Impl.UserDetailServiceImpl;
@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static com.shop.helper.CheckMail.emailExists;
 
 @RestController
 @RequestMapping("/auth")
@@ -64,6 +66,7 @@ public class AuthorityController {
 
     @Autowired
     private HandleTimeCode handleTimeCode;
+
     private TimeCode timeCode;
     @Autowired
     private MailServiceImpl mailService;
@@ -89,10 +92,10 @@ public class AuthorityController {
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseMessage(StatusMessage.OK, "Login is successfully", jwtResponse1));
+                    new ResponseMessage(StatusMessage.OK, "Logged in successful", jwtResponse1));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseMessage(StatusMessage.ERROR, "Login is not successfully", null));
+                    new ResponseMessage(StatusMessage.ERROR, "Login unsuccessful", null));
         }
 
     }
@@ -133,19 +136,19 @@ public class AuthorityController {
         User user = new User();
         if (this.userService.findByEmail(userDto.getEmail()) != null) {
             UserDto userError = new UserDto();
-            userError.setEmail("Email is already exists");
+            userError.setEmail("Email already exists");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "Email is already exists", userError));
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
         }
         try {
             UserController.CreateUser(userDto, user, this.roleService);
             if (Objects.equals(this.timeCode.getCode(), code)) {
                 User u = this.userService.createUser(user);
                 if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+                        .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
             } else {
                 message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseMessage(StatusMessage.FAILED, "Code is incorrect", null)
+                        new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
                 );
             }
 
@@ -168,12 +171,12 @@ public class AuthorityController {
         if (user != null) {
             user.setPassword(this.passwordEncoder.encode(password));
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseMessage(StatusMessage.OK, "Change password is successfully",
+                    new ResponseMessage(StatusMessage.OK, "Change password successfully",
                             this.userService.createUser(user))
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseMessage(StatusMessage.OK, "Change password is not successfully",
+                new ResponseMessage(StatusMessage.OK, "Password change failed",
                         null)
         );
     }
@@ -182,11 +185,19 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> sendCode(@PathVariable("toForm") String toForm, @PathVariable("name") String name) {
         ResponseEntity<ResponseMessage> message = null;
         this.timeCode = this.handleTimeCode.timeCode();
+        if (!emailExists(toForm)) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email address dones not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address dones not exist", userError));
+        }
         try {
             this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "code ", this.timeCode));
+            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Account verification code", this.timeCode));
         } catch (Exception e) {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.FAILED, "error " + e.getMessage(), null));
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseMessage(StatusMessage.FAILED, "Error " + e.getMessage(), null)
+            );
         }
         return message;
     }

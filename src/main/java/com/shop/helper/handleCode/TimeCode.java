@@ -1,4 +1,4 @@
-package com.shop.helper;
+package com.shop.helper.handleCode;
 
 public class TimeCode {
     private Long timeExpired;
