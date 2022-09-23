@@ -134,12 +134,6 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
-        if (this.userService.findByEmail(userDto.getEmail()) != null) {
-            UserDto userError = new UserDto();
-            userError.setEmail("Email already exists");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
-        }
         try {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             if (Objects.equals(this.timeCode.getCode(), code)) {
@@ -190,6 +184,13 @@ public class AuthorityController {
             userError.setEmail("Email address dones not exist");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.FAILED, "Email address dones not exist", userError));
+        } else {
+            if (this.userService.findByEmail(toForm) != null) {
+                UserDto userError = new UserDto();
+                userError.setEmail("Email already exists");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
+            }
         }
         try {
             this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
