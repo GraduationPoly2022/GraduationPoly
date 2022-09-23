@@ -183,7 +183,7 @@ public class AuthorityController {
             UserDto userError = new UserDto();
             userError.setEmail("Email address dones not exist");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address dones not exist", userError));
+                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
         } else {
             if (this.userService.findByEmail(toForm) != null) {
                 UserDto userError = new UserDto();
