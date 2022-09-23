@@ -181,7 +181,7 @@ public class AuthorityController {
         this.timeCode = this.handleTimeCode.timeCode();
         if (!emailExists(toForm)) {
             UserDto userError = new UserDto();
-            userError.setEmail("Email address dones not exist");
+            userError.setEmail("Email address does not exist");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
         } else {
