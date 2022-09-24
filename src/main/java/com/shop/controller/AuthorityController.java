@@ -134,18 +134,18 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
+        if (!this.timeCode.getCode().equals(code)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
+            );
+        }
         try {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             if (Objects.equals(this.timeCode.getCode(), code)) {
                 User u = this.userService.createUser(user);
                 if (u != null) message = ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
-            } else {
-                message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
-                );
             }
-
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
@@ -177,7 +177,7 @@ public class AuthorityController {
 
     @GetMapping("/send-mail/{toForm}/{name}")
     public ResponseEntity<ResponseMessage> sendCode(@PathVariable("toForm") String toForm, @PathVariable("name") String name) {
-        ResponseEntity<ResponseMessage> message = null;
+        ResponseEntity<ResponseMessage> message;
         this.timeCode = this.handleTimeCode.timeCode();
         if (!emailExists(toForm)) {
             UserDto userError = new UserDto();
