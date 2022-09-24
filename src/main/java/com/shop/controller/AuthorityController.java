@@ -85,10 +85,10 @@ public class AuthorityController {
             JwtResponse jwtResponse1;
             if (jwtResponse.getMoblie()) {
                 jwtResponse1 = this.hanldeToken(userDetails, Expired.TIME_MOBILE,
-                        jwtResponse.getRememberMe());
+                        jwtResponse.getRememberMe(), jwtResponse.getMoblie());
             } else {
                 jwtResponse1 = this.hanldeToken(userDetails, jwtResponse.getRememberMe() ? Expired.DAYS : Expired.HOURS,
-                        jwtResponse.getRememberMe());
+                        jwtResponse.getRememberMe(), jwtResponse.getMoblie());
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -125,7 +125,7 @@ public class AuthorityController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lỗi " + e.getMessage());
         }
         UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(user.getUsername());
-        JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true);
+        JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true, false);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseMessage(StatusMessage.OK, "Login is successfully", jwtResponse1));
     }
@@ -213,14 +213,17 @@ public class AuthorityController {
         }
     }
 
-    private <T> JwtResponse hanldeToken(UserDetails userDetails, T expired, Boolean rememberMe) {
+    private <T> JwtResponse hanldeToken(UserDetails userDetails, T expired, Boolean rememberMe, Boolean moblie) {
         String tokens = this.jwtUtil.generateToken(userDetails, expired);
         User users = (User) this.userDetailServiceImpl.loadUserByUsername(userDetails.getUsername());
         JwtResponse jwtResponse1 = new JwtResponse();
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(users, userDto);
+        userDto.setEmail(users.getUsername());
         userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
         jwtResponse1.setToken(tokens);
+        jwtResponse1.setUserDto(userDto);
+        jwtResponse1.setMoblie(moblie);
         jwtResponse1.setRememberMe(rememberMe);
         return jwtResponse1;
     }
