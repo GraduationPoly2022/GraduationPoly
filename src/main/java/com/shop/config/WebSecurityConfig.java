@@ -1,6 +1,6 @@
 package com.shop.config;
 
-import com.shop.services.Impl.UserDetailServiceImp;
+import com.shop.services.Impl.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserDetailServiceImp userDetailServiceImp;
+    private UserDetailServiceImpl userDetailServiceImpl;
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Autowired
@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailServiceImp).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(this.userDetailServiceImpl).passwordEncoder(passwordEncoder());
     }
 
     @Override

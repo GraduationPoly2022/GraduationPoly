@@ -6,19 +6,10 @@ public enum Expired {
     private final Long localTimeMill = System.currentTimeMillis();
 
     public Long getTime() {
-        long timeMill;
-        switch (this) {
-            case HOURS -> {
-                timeMill = localTimeMill + (1000L * 60L * 60L * 2L);
-            }
-            case DAYS -> {
-                timeMill = localTimeMill + (1000L * 60L * 60L * 24L * 10L);
-            }
-            default -> {
-                timeMill = localTimeMill + (1000L * 60L * 60L * 24L * 30L * 2L);
-            }
-        }
-
-        return timeMill;
+        return switch (this) {
+            case HOURS -> (localTimeMill + (1000L * 60L * 60L * 2L));
+            case DAYS -> (localTimeMill + (1000L * 60L * 60L * 24L * 10L));
+            default -> (localTimeMill + (1000L * 60L * 60L * 24L * 30L * 2L));
+        };
     }
 }

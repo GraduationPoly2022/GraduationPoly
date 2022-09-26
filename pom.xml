@@ -86,7 +86,6 @@
             <artifactId>google-api-client</artifactId>
             <version>1.35.1</version>
         </dependency>
-
     </dependencies>
 
     <build>
