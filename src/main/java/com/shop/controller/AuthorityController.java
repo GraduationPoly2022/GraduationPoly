@@ -141,8 +141,10 @@ public class AuthorityController {
             UserController.CreateUser(userDto, user, this.roleService);
             if (Objects.equals(this.timeCode.getCode(), code)) {
                 User u = this.userService.createUser(user);
-                if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+                if (u != null) {
+                    message = ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+                }
             } else {
                 message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new ResponseMessage(StatusMessage.FAILED, "Code is incorrect", null)
