@@ -7,8 +7,8 @@ import com.shop.entity.User;
 import com.shop.enumEntity.AuthenticationProvider;
 import com.shop.enumEntity.RoleName;
 import com.shop.enumEntity.StatusMessage;
-import com.shop.services.Impl.RoleServiceImpl;
-import com.shop.services.Impl.UserServiceImpl;
+import com.shop.services.IRoleService;
+import com.shop.services.IUserService;
 import com.shop.utils.Convert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +20,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.shop.helper.CheckMail.emailExists;
 import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
 
 @RestController
 @RequestMapping("api/user")
 public class UserController {
     @Autowired
-    private UserServiceImpl userService;
+    private IUserService userService;
 
     @Autowired
-    private RoleServiceImpl roleService;
+    private IRoleService roleService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public static void CreateUser(@RequestBody UserDto userDto, User user, RoleServiceImpl roleService) {
+    public static void CreateUser(@RequestBody UserDto userDto, User user, IRoleService roleService, String password) {
         userDto.setAddress(Convert.CapitalAllFirstLetter(userDto.getAddress()));
         userDto.setFullName(Convert.CapitalAllFirstLetter(userDto.getFullName()));
         Role role = new Role();
@@ -50,7 +51,7 @@ public class UserController {
             user.setImageUrl(userDto.getImageUrl());
         }
         user.setUserId(userDto.getUserId());
-        user.setPassword(new UserController().passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(password);
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.findByRoleName(role.getRoleName()));
         user.setAuthProvider(AuthenticationProvider.LOCAL_PROVIDER);
@@ -63,15 +64,21 @@ public class UserController {
         User user = new User();
         if (this.userService.findByEmail(userDto.getEmail()) != null) {
             UserDto userError = new UserDto();
-            userError.setEmail("Email is already exists");
+            userError.setEmail("Email already exists");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "Email is already exists", userError));
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
+        }
+        if (!emailExists(userDto.getEmail())) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email address dones not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email address dones not exist", userError));
         }
         try {
-            CreateUser(userDto, user, this.roleService);
+            CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             User u = this.userService.createUser(user);
             if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+                    .body(new ResponseMessage(StatusMessage.OK, "Succesful user creation", u));
 
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -85,10 +92,10 @@ public class UserController {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
         try {
-            CreateUser(userDto, user, this.roleService);
+            CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             User u = this.userService.createUser(user);
             if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Update user is successfully", u));
+                    .body(new ResponseMessage(StatusMessage.OK, "User update successful", u));
 
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
