@@ -20,14 +20,14 @@ public class Accessory {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products product_accessories;
+    private Products productAccessories;
 
     public Accessory() {
     }
 
     public Accessory(Long accessoryId, String connector, String length, String switches,
                      Double typeKeyboard, Double sizeKey, String special,
-                     Double sizeKeyboard, String charging, String notes, Products product_accessories) {
+                     Double sizeKeyboard, String charging, String notes, Products productAccessories) {
         this.accessoryId = accessoryId;
         this.connector = connector;
         this.length = length;
@@ -38,7 +38,7 @@ public class Accessory {
         this.sizeKeyboard = sizeKeyboard;
         this.charging = charging;
         this.notes = notes;
-        this.product_accessories = product_accessories;
+        this.productAccessories = productAccessories;
     }
 
     public Long getAccessoryId() {
@@ -113,12 +113,12 @@ public class Accessory {
         this.charging = charging;
     }
 
-    public Products getProduct_accessories() {
-        return product_accessories;
+    public Products getProductAccessories() {
+        return productAccessories;
     }
 
-    public void setProduct_accessories(Products product_accessories) {
-        this.product_accessories = product_accessories;
+    public void setProductAccessories(Products productAccessories) {
+        this.productAccessories = productAccessories;
     }
 
     public String getNotes() {
