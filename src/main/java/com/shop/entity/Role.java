@@ -19,7 +19,7 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
-    @ManyToMany(mappedBy = "roleSet",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roleSet", fetch = FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.TRUE)
     private Set<User> userSet = new HashSet<>();
 
