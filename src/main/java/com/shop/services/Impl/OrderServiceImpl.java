@@ -21,6 +21,6 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Order findByUserAndStatus(User user, OrderStatus status) {
-        return this.orderRepository.findByUsers_ordersAndStatus(user, status).orElse(null);
+        return this.orderRepository.findByUsersOrdersAndStatus(user, status).orElse(null);
     }
 }
