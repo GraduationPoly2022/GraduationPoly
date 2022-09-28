@@ -3,6 +3,7 @@ package com.shop.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -12,61 +13,57 @@ public class Products {
     private Long productId;
     private String productName;
     private String imageMain;
-    private boolean available;
+    private String imageUrl;
+    private Boolean available;
+    private Integer warranty;
 
-
-    @OneToMany(mappedBy = "product_productId", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Comment> comments;
-
-    @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productImages", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<imageDetail> imageDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Category categories_product;
+    private Category categoriesProduct;
 
-    @OneToMany(mappedBy = "producer_product", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Producer> producer;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Producer productProducer;
 
-    @OneToMany(mappedBy = "smartPhone_product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "smartPhoneProduct", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<SmartPhone> smartPhone;
 
-    @OneToMany(mappedBy = "product_accessories", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productAccessories", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Accessory> accessories;
 
-    @OneToMany(mappedBy = "product_laptop", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productLaptop", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Laptop> laptops;
+
+    @OneToMany(mappedBy = "productsOrderDetail", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<OrderDetail> OrderDetails;
+    @OneToMany(mappedBy = "productComment", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> commentProduct;
+
+    @OneToMany(mappedBy = "productReview", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 
     public Products() {
     }
 
-<<<<<<< HEAD
-    public Products(Long productId, String productName, String imageMain, String imageUrl, boolean available, Long imageDetailId, Long categoryId, Long producerId, Set<Comment> comments, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
-=======
-    public Products(Long productId, String productName, String imageMain, boolean available, Set<imageDetail> imageDetails, Category categories_product, Set<Producer> producer, Set<SmartPhone> smartPhone, Set<Accessory> accessories, Set<Laptop> laptops) {
->>>>>>> 36fac23 (Update ngay 30/7/2022)
+    public Products(Long productId, String productName, String imageMain,
+                    String imageUrl, Boolean available, Integer warranty,
+                    Category categoriesProduct, Producer productProducer) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
+        this.imageUrl = imageUrl;
         this.available = available;
-<<<<<<< HEAD
-        this.imageDetailId = imageDetailId;
-        this.categoryId = categoryId;
-        this.producerId = producerId;
-        this.comments = comments;
-=======
->>>>>>> 36fac23 (Update ngay 30/7/2022)
-        this.imageDetails = imageDetails;
-        this.categories_product = categories_product;
-        this.producer = producer;
-        this.smartPhone = smartPhone;
-        this.accessories = accessories;
-        this.laptops = laptops;
+        this.warranty = warranty;
+        this.categoriesProduct = categoriesProduct;
+        this.productProducer = productProducer;
     }
 
     public Long getProductId() {
@@ -93,49 +90,22 @@ public class Products {
         this.imageMain = imageMain;
     }
 
-    public boolean isAvailable() {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Boolean isAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(Boolean available) {
         this.available = available;
     }
 
-<<<<<<< HEAD
-    public Long getImageDetailId() {
-        return imageDetailId;
-    }
-
-    public void setImageDetailId(Long imageDetailId) {
-        this.imageDetailId = imageDetailId;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Long getProducerId() {
-        return producerId;
-    }
-
-    public void setProducerId(Long producerId) {
-        this.producerId = producerId;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
-=======
->>>>>>> 36fac23 (Update ngay 30/7/2022)
     public Set<imageDetail> getImageDetails() {
         return imageDetails;
     }
@@ -144,20 +114,12 @@ public class Products {
         this.imageDetails = imageDetails;
     }
 
-    public Category getCategories_product() {
-        return categories_product;
+    public Category getCategoriesProduct() {
+        return categoriesProduct;
     }
 
-    public void setCategories_product(Category categories_product) {
-        this.categories_product = categories_product;
-    }
-
-    public Set<Producer> getProducer() {
-        return producer;
-    }
-
-    public void setProducer(Set<Producer> producer) {
-        this.producer = producer;
+    public void setCategoriesProduct(Category categoriesProduct) {
+        this.categoriesProduct = categoriesProduct;
     }
 
     public Set<SmartPhone> getSmartPhone() {
@@ -182,5 +144,45 @@ public class Products {
 
     public void setLaptops(Set<Laptop> laptops) {
         this.laptops = laptops;
+    }
+
+    public Set<OrderDetail> getOrderDetails() {
+        return OrderDetails;
+    }
+
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        OrderDetails = orderDetails;
+    }
+
+    public Set<Comment> getCommentProduct() {
+        return commentProduct;
+    }
+
+    public void setCommentProduct(Set<Comment> commentProduct) {
+        this.commentProduct = commentProduct;
+    }
+
+    public Producer getProductProducer() {
+        return productProducer;
+    }
+
+    public void setProductProducer(Producer productProducer) {
+        this.productProducer = productProducer;
+    }
+
+    public Integer getWarranty() {
+        return warranty;
+    }
+
+    public void setWarranty(Integer warranty) {
+        this.warranty = warranty;
+    }
+
+    public Set<Reviews> getProductReviewsSet() {
+        return reviewsSet;
+    }
+
+    public void setProductReviewsSet(Set<Reviews> reviewsSet) {
+        this.reviewsSet = reviewsSet;
     }
 }

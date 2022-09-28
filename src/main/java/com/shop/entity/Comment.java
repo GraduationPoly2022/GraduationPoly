@@ -1,7 +1,6 @@
 package com.shop.entity;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -10,7 +9,6 @@ import java.util.Set;
 
 
 @Entity
-
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,29 +17,26 @@ public class Comment {
     @Temporal(TemporalType.DATE)
     private Date CommentDate;
 
-
-
-    @OneToMany(mappedBy = "comment_commentDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "commentDetails", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User user_comments;
+    private Products productComment;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products product_productId;
-
+    private User userComments;
 
     public Comment() {
     }
 
-    public Comment(Long commentId, String content, Date commentDate, Set<CommentDetail> commentDetails, User user_comments, Products product_productId) {
+    public Comment(Long commentId, String content, Date commentDate,
+                   Products productComment, User userComments) {
         CommentId = commentId;
         Content = content;
         CommentDate = commentDate;
-        this.commentDetails = commentDetails;
-        this.user_comments = user_comments;
-        this.product_productId = product_productId;
+        this.productComment = productComment;
+        this.userComments = userComments;
     }
 
     public Long getCommentId() {
@@ -76,19 +71,19 @@ public class Comment {
         this.commentDetails = commentDetails;
     }
 
-    public User getUser_comments() {
-        return user_comments;
+    public User getUserComments() {
+        return userComments;
     }
 
-    public void setUser_comments(User user_comments) {
-        this.user_comments = user_comments;
+    public void setUserComments(User userComments) {
+        this.userComments = userComments;
     }
 
-    public Products getProduct_productId() {
-        return product_productId;
+    public Products getProductComment() {
+        return productComment;
     }
 
-    public void setProduct_productId(Products product_productId) {
-        this.product_productId = product_productId;
+    public void setProductComment(Products productComment) {
+        this.productComment = productComment;
     }
 }

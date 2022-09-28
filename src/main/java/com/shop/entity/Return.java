@@ -1,10 +1,9 @@
 package com.shop.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shop.enumEntity.Reason;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "returns")
@@ -14,28 +13,27 @@ public class Return {
     private Long returnId;
     @Temporal(TemporalType.DATE)
     private Date returnDate;
-    private String reason;
-
+    @Enumerated(EnumType.STRING)
+    private Reason reason;
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Order order_return;
-
-
+    private Order orderReturn;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Shipper shippers_return;
+    private Shipper shippersReturn;
 
     public Return() {
     }
 
-    public Return(Long returnId, Date returnDate, String reason, String notes, Order order_return, Shipper shippers_return1) {
+    public Return(Long returnId, Date returnDate, Reason reason, String notes,
+                  Order orderReturn, Shipper shippersReturn) {
         this.returnId = returnId;
         this.returnDate = returnDate;
         this.reason = reason;
         this.notes = notes;
-        this.order_return = order_return;
-        this.shippers_return = shippers_return1;
+        this.orderReturn = orderReturn;
+        this.shippersReturn = shippersReturn;
     }
 
     public Long getReturnId() {
@@ -54,11 +52,11 @@ public class Return {
         this.returnDate = returnDate;
     }
 
-    public String getReason() {
+    public Reason getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void setReason(Reason reason) {
         this.reason = reason;
     }
 
@@ -70,19 +68,19 @@ public class Return {
         this.notes = notes;
     }
 
-    public Order getOrder_return() {
-        return order_return;
+    public Order getOrderReturn() {
+        return orderReturn;
     }
 
-    public void setOrder_return(Order order_return) {
-        this.order_return = order_return;
+    public void setOrderReturn(Order orderReturn) {
+        this.orderReturn = orderReturn;
     }
 
-    public Shipper getShippers_return() {
-        return shippers_return;
+    public Shipper getShippersReturn() {
+        return shippersReturn;
     }
 
-    public void setShippers_return(Shipper shippers_return) {
-        this.shippers_return = shippers_return;
+    public void setShippersReturn(Shipper shippersReturn) {
+        this.shippersReturn = shippersReturn;
     }
 }
