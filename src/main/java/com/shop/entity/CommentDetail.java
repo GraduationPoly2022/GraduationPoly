@@ -13,22 +13,22 @@ public class CommentDetail {
     @Temporal(TemporalType.DATE)
     private Date ContentDateReply;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Comment comment_commentDetails;
+    private Comment commentDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User user_commentDetails;
+    private User userCommentDetails;
     ;
 
     public CommentDetail() {
     }
 
     public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply,
-                         Comment comment_commentDetails, User user_commentDetails) {
+                         Comment commentDetails, User userCommentDetails) {
         CommentDtId = commentDtId;
         ContentReply = contentReply;
         ContentDateReply = contentDateReply;
-        this.comment_commentDetails = comment_commentDetails;
-        this.user_commentDetails = user_commentDetails;
+        this.commentDetails = commentDetails;
+        this.userCommentDetails = userCommentDetails;
     }
 
     public Long getCommentDtId() {
@@ -56,19 +56,19 @@ public class CommentDetail {
     }
 
 
-    public Comment getComment_commentDetails() {
-        return comment_commentDetails;
+    public Comment getCommentDetails() {
+        return commentDetails;
     }
 
-    public void setComment_commentDetails(Comment comment_commentDetails) {
-        this.comment_commentDetails = comment_commentDetails;
+    public void setCommentDetails(Comment commentDetails) {
+        this.commentDetails = commentDetails;
     }
 
-    public User getUser_commentDetails() {
-        return user_commentDetails;
+    public User getUserCommentDetails() {
+        return userCommentDetails;
     }
 
-    public void setUser_commentDetails(User user_commentDetails) {
-        this.user_commentDetails = user_commentDetails;
+    public void setUserCommentDetails(User userCommentDetails) {
+        this.userCommentDetails = userCommentDetails;
     }
 }

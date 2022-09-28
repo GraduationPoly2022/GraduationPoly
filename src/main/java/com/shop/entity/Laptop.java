@@ -22,14 +22,14 @@ public class Laptop {
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products product_laptop;
+    private Products productLaptop;
 
     public Laptop() {
     }
 
     public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu,
                   String systemOperator, String gateway, String design, String special,
-                  String sizeAndWeight, Date yearOfManufacture, String notes, Products product_laptop) {
+                  String sizeAndWeight, Date yearOfManufacture, String notes, Products productLaptop) {
         this.laptopId = laptopId;
         this.monitor = monitor;
         this.cpu = cpu;
@@ -43,7 +43,7 @@ public class Laptop {
         this.sizeAndWeight = sizeAndWeight;
         this.yearOfManufacture = yearOfManufacture;
         this.notes = notes;
-        this.product_laptop = product_laptop;
+        this.productLaptop = productLaptop;
     }
 
     public Long getLaptopId() {
@@ -142,12 +142,12 @@ public class Laptop {
         this.yearOfManufacture = yearOfManufacture;
     }
 
-    public Products getProduct_laptop() {
-        return product_laptop;
+    public Products getProductLaptop() {
+        return productLaptop;
     }
 
-    public void setProduct_laptop(Products product_laptop) {
-        this.product_laptop = product_laptop;
+    public void setProductLaptop(Products productLaptop) {
+        this.productLaptop = productLaptop;
     }
 
     public String getNotes() {
