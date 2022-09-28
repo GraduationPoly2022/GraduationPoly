@@ -10,15 +10,15 @@ public class imageDetail {
     private String imageName;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products product_images;
+    private Products productImages;
 
     public imageDetail() {
     }
 
-    public imageDetail(String imageDetailId, String imageName, Products product_images) {
+    public imageDetail(String imageDetailId, String imageName, Products productImages) {
         this.imageDetailId = imageDetailId;
         this.imageName = imageName;
-        this.product_images = product_images;
+        this.productImages = productImages;
     }
 
     public String getImageDetailId() {
@@ -37,11 +37,11 @@ public class imageDetail {
         this.imageName = imageName;
     }
 
-    public Products getProduct_images() {
-        return product_images;
+    public Products getProductImages() {
+        return productImages;
     }
 
-    public void setProduct_images(Products product_images) {
-        this.product_images = product_images;
+    public void setProductImages(Products productImages) {
+        this.productImages = productImages;
     }
 }

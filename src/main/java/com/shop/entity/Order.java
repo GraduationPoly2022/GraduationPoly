@@ -34,17 +34,17 @@ public class Order {
     private DeviceEnum deviceUse;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User users_orders;
+    private User usersOrders;
 
-    @OneToMany(mappedBy = "orders_orderDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ordersDetail", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "orders_shipper", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderShipper", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Shipper> shippers;
 
-    @OneToOne(mappedBy = "order_return", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "orderReturn", cascade = CascadeType.ALL)
     @JsonIgnore
     private Return returns;
 
@@ -55,7 +55,7 @@ public class Order {
     public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receive,
                  String phoneReceive, String addressReceive, OrderStatus status,
                  Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse,
-                 User users_orders, Return returns) {
+                 User usersOrders, Return returns) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
@@ -67,7 +67,7 @@ public class Order {
         this.amount = amount;
         this.paymentReceived = paymentReceived;
         this.deviceUse = deviceUse;
-        this.users_orders = users_orders;
+        this.usersOrders = usersOrders;
         this.returns = returns;
     }
 
@@ -167,12 +167,12 @@ public class Order {
         this.returns = returns;
     }
 
-    public User getUsers_orders() {
-        return users_orders;
+    public User getUsersOrders() {
+        return usersOrders;
     }
 
-    public void setUsers_orders(User users_orders) {
-        this.users_orders = users_orders;
+    public void setUsersOrders(User usersOrders) {
+        this.usersOrders = usersOrders;
     }
 
     public Set<OrderDetail> getOrderDetails() {

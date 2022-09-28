@@ -19,21 +19,21 @@ public class Return {
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Order order_return;
+    private Order orderReturn;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Shipper shippers_return;
+    private Shipper shippersReturn;
 
     public Return() {
     }
 
     public Return(Long returnId, Date returnDate, Reason reason, String notes,
-                  Order order_return, Shipper shippers_return1) {
+                  Order orderReturn, Shipper shippersReturn) {
         this.returnId = returnId;
         this.returnDate = returnDate;
         this.reason = reason;
         this.notes = notes;
-        this.order_return = order_return;
-        this.shippers_return = shippers_return1;
+        this.orderReturn = orderReturn;
+        this.shippersReturn = shippersReturn;
     }
 
     public Long getReturnId() {
@@ -68,19 +68,19 @@ public class Return {
         this.notes = notes;
     }
 
-    public Order getOrder_return() {
-        return order_return;
+    public Order getOrderReturn() {
+        return orderReturn;
     }
 
-    public void setOrder_return(Order order_return) {
-        this.order_return = order_return;
+    public void setOrderReturn(Order orderReturn) {
+        this.orderReturn = orderReturn;
     }
 
-    public Shipper getShippers_return() {
-        return shippers_return;
+    public Shipper getShippersReturn() {
+        return shippersReturn;
     }
 
-    public void setShippers_return(Shipper shippers_return) {
-        this.shippers_return = shippers_return;
+    public void setShippersReturn(Shipper shippersReturn) {
+        this.shippersReturn = shippersReturn;
     }
 }

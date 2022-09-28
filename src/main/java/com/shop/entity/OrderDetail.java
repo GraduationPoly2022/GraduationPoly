@@ -10,20 +10,20 @@ public class OrderDetail {
     private Integer qty;
     private Double price;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products products_orderDetail;
+    private Products productsOrderDetail;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Order orders_orderDetail;
+    private Order ordersDetail;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(Long orderDetailId, Integer qty, Double price, Products products_orderDetail,
-                       Order orders_orderDetail) {
+    public OrderDetail(Long orderDetailId, Integer qty, Double price, Products productsOrderDetail,
+                       Order ordersDetail) {
         this.orderDetailId = orderDetailId;
         this.qty = qty;
         this.price = price;
-        this.orders_orderDetail = orders_orderDetail;
-        this.products_orderDetail = products_orderDetail;
+        this.ordersDetail = ordersDetail;
+        this.productsOrderDetail = productsOrderDetail;
     }
 
     public Long getOrderDetailId() {
@@ -50,19 +50,19 @@ public class OrderDetail {
         this.price = price;
     }
 
-    public Products getProducts_orderDetail() {
-        return products_orderDetail;
+    public Products getProductsOrderDetail() {
+        return productsOrderDetail;
     }
 
-    public void setProducts_orderDetail(Products products_orderDetail) {
-        this.products_orderDetail = products_orderDetail;
+    public void setProductsOrderDetail(Products productsOrderDetail) {
+        this.productsOrderDetail = productsOrderDetail;
     }
 
-    public Order getOrders_orderDetail() {
-        return orders_orderDetail;
+    public Order getOrdersDetail() {
+        return ordersDetail;
     }
 
-    public void setOrders_orderDetail(Order orders_orderDetail) {
-        this.orders_orderDetail = orders_orderDetail;
+    public void setOrdersDetail(Order ordersDetail) {
+        this.ordersDetail = ordersDetail;
     }
 }

@@ -22,7 +22,7 @@ public class SmartPhone {
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products smartPhone_product;
+    private Products smartPhoneProduct;
 
     public SmartPhone() {
     }
@@ -30,7 +30,7 @@ public class SmartPhone {
     public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera,
                       String afterCamera, String cpu, String ram, String disk, String batteryAndCharging,
                       String video, String gpu, String connector, String utils,
-                      String notes, Products smartPhone_product) {
+                      String notes, Products smartPhoneProduct) {
         this.smartPhoneId = smartPhoneId;
         this.monitor = monitor;
         this.systemOperator = systemOperator;
@@ -45,7 +45,7 @@ public class SmartPhone {
         this.connector = connector;
         this.utils = utils;
         this.notes = notes;
-        this.smartPhone_product = smartPhone_product;
+        this.smartPhoneProduct = smartPhoneProduct;
     }
 
     public Long getSmartPhoneId() {
@@ -152,12 +152,12 @@ public class SmartPhone {
         this.utils = utils;
     }
 
-    public Products getSmartPhone_product() {
-        return smartPhone_product;
+    public Products getSmartPhoneProduct() {
+        return smartPhoneProduct;
     }
 
-    public void setSmartPhone_product(Products products) {
-        this.smartPhone_product = products;
+    public void setSmartPhoneProduct(Products products) {
+        this.smartPhoneProduct = products;
     }
 
     public String getNotes() {
