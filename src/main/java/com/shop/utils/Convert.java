@@ -44,7 +44,6 @@ public class Convert {
 
     public static <E> E objectToClass(@NotNull Object[] obj, @NotNull Class<E> clazz) {
         Map<String, Object> stringObjectMap = new HashMap<>();
-//        Class<?> aClass = clazz.getClass();
         Field[] fields = clazz.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             stringObjectMap.put(fields[i].getName(), obj[i]);
@@ -53,13 +52,4 @@ public class Convert {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper.convertValue(stringObjectMap, clazz);
     }
-
-//    public static Date c(Expired expired) {
-//        try {
-//            return new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy").parse(expired.toString());
-//        } catch (ParseException e) {
-//            System.out.println("error: " + e.getMessage());
-//        }
-//        return null;
-//    }
 }

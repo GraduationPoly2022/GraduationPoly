@@ -2,7 +2,7 @@ package com.shop.config;
 
 import com.shop.entity.Role;
 import com.shop.enumEntity.RoleName;
-import com.shop.services.IRoleService;
+import com.shop.services.Impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class DataSeeder implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private IRoleService roleService;
+    private RoleServiceImpl roleService;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

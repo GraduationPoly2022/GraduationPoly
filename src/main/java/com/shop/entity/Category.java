@@ -13,7 +13,7 @@ public class Category {
     private String name;
 
 
-    @OneToMany(mappedBy = "categoriesProduct", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categoriesProduct")
     @JsonIgnore
     private Set<Products> categoriesProduct;
 

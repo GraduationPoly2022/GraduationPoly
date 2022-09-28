@@ -34,28 +34,28 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AuthenticationProvider authProvider;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roleSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "usersOrders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usersOrders")
     @JsonIgnore
     private Set<Order> orders;
 
-    @OneToMany(mappedBy = "userShippers", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userShippers")
     @JsonIgnore
     private Set<Shipper> shippers;
 
-    @OneToMany(mappedBy = "userComments", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userComments")
     @JsonIgnore
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "userCommentDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userCommentDetails")
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
-    @OneToMany(mappedBy = "userReview", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userReview")
     @JsonIgnore
     private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 

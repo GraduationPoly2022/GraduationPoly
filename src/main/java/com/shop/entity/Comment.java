@@ -17,14 +17,14 @@ public class Comment {
     @Temporal(TemporalType.DATE)
     private Date CommentDate;
 
-    @OneToMany(mappedBy = "commentDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "commentDetails")
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Products productComment;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User userComments;
 
     public Comment() {

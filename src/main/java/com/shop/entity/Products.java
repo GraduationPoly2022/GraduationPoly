@@ -17,36 +17,36 @@ public class Products {
     private Boolean available;
     private Integer warranty;
 
-    @OneToMany(mappedBy = "productImages", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productImages")
     @JsonIgnore
     private Set<imageDetail> imageDetails;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category categoriesProduct;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Producer productProducer;
 
-    @OneToMany(mappedBy = "smartPhoneProduct", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "smartPhoneProduct")
     @JsonIgnore
     private Set<SmartPhone> smartPhone;
 
-    @OneToMany(mappedBy = "productAccessories", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productAccessories")
     @JsonIgnore
     private Set<Accessory> accessories;
 
-    @OneToMany(mappedBy = "productLaptop", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productLaptop")
     @JsonIgnore
     private Set<Laptop> laptops;
 
-    @OneToMany(mappedBy = "productsOrderDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productsOrderDetail")
     @JsonIgnore
     private Set<OrderDetail> OrderDetails;
-    @OneToMany(mappedBy = "productComment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productComment")
     @JsonIgnore
     private Set<Comment> commentProduct;
 
-    @OneToMany(mappedBy = "productReview", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productReview")
     @JsonIgnore
     private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 

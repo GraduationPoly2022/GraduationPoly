@@ -13,9 +13,9 @@ public class Reviews {
     private Integer rating;
     @Temporal(TemporalType.DATE)
     private Date dateReview;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User userReview;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Products productReview;
 
     public Reviews() {

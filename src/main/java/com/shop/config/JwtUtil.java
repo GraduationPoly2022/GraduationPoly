@@ -45,13 +45,9 @@ public class JwtUtil {
 
     private <T> String createToken(Map<String, Object> claims, String subject, T expired) {
         Long expiry;
-        if (expired instanceof Expired) {
-            expiry = ((Expired) expired).getTime();
-        } else {
-            expiry = System.currentTimeMillis() + ((Long) expired);
-        }
-
-        System.out.println(new Date(expiry));
+        if (expired instanceof Expired) expiry = ((Expired) expired).getTime();
+        else expiry = System.currentTimeMillis() + ((Long) expired);
+        
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(expiry))
