@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class Convert {
 
@@ -51,5 +51,53 @@ public class Convert {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper.convertValue(stringObjectMap, clazz);
+    }
+
+    public static <T> String ArrayToString(List<T> tList) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            for (T c : tList) {
+                Field[] fields = c.getClass().getDeclaredFields();
+                Method[] method = c.getClass().getMethods();
+                List<Object> values = new ArrayList<>();
+                for (Method method1 : method) {
+                    method1.setAccessible(true);
+                    if (method1.getName().startsWith("get")) {
+                        if (!method1.invoke(c).toString().startsWith("class")) {
+                            values.add(method1.invoke(c));
+                        }
+                    }
+                }
+                for (int i = 0; i < fields.length; i++) {
+                    sb.append(fields[i].getName()).append("=").append(values.get(i)).append(",");
+                }
+                sb = new StringBuilder(sb.substring(0, sb.lastIndexOf(",")));
+                sb.append(";");
+            }
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return sb.substring(0, sb.lastIndexOf(";")).trim();
+    }
+
+    public static <T> List<T> StringToArray(String str, Class<T> clazz) {
+        Map<String, Object> map = new HashMap<>();
+        List<T> list = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        String[] cuts = str.split(";");
+        for (String cut : cuts) {
+            String[] split = cut.split(",");
+            for (int i = 0; i < split.length; i++) {
+                String[] cutVals = split[i].trim().split("=");
+                map.put(cutVals[0], cutVals[1]);
+                if (i % 2 != 0) {
+                    T cur = mapper.convertValue(map, clazz);
+                    list.add(cur);
+                    map.clear();
+                }
+            }
+        }
+        return list;
     }
 }
