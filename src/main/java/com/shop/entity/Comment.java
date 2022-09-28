@@ -1,6 +1,7 @@
 package com.shop.entity;
 
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 
 @Entity
+
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,26 +19,29 @@ public class Comment {
     @Temporal(TemporalType.DATE)
     private Date CommentDate;
 
+
+
     @OneToMany(mappedBy = "comment_commentDetails", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products product_comment;
+    private User user_comments;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User user_comments;
+    private Products product_productId;
+
 
     public Comment() {
     }
 
-    public Comment(Long commentId, String content, Date commentDate,
-                   Products product_comment, User user_comments) {
+    public Comment(Long commentId, String content, Date commentDate, Set<CommentDetail> commentDetails, User user_comments, Products product_productId) {
         CommentId = commentId;
         Content = content;
         CommentDate = commentDate;
-        this.product_comment = product_comment;
+        this.commentDetails = commentDetails;
         this.user_comments = user_comments;
+        this.product_productId = product_productId;
     }
 
     public Long getCommentId() {
@@ -79,11 +84,11 @@ public class Comment {
         this.user_comments = user_comments;
     }
 
-    public Products getProduct_comment() {
-        return product_comment;
+    public Products getProduct_productId() {
+        return product_productId;
     }
 
-    public void setProduct_comment(Products product_comment) {
-        this.product_comment = product_comment;
+    public void setProduct_productId(Products product_productId) {
+        this.product_productId = product_productId;
     }
 }

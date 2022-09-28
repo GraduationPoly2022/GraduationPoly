@@ -1,9 +1,10 @@
 package com.shop.entity;
 
-import com.shop.enumEntity.Reason;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "returns")
@@ -13,21 +14,22 @@ public class Return {
     private Long returnId;
     @Temporal(TemporalType.DATE)
     private Date returnDate;
-    @Enumerated(EnumType.STRING)
-    private Reason reason;
+    private String reason;
+
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Order order_return;
+
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Shipper shippers_return;
 
     public Return() {
     }
 
-    public Return(Long returnId, Date returnDate, Reason reason, String notes,
-                  Order order_return, Shipper shippers_return1) {
+    public Return(Long returnId, Date returnDate, String reason, String notes, Order order_return, Shipper shippers_return1) {
         this.returnId = returnId;
         this.returnDate = returnDate;
         this.reason = reason;
@@ -52,11 +54,11 @@ public class Return {
         this.returnDate = returnDate;
     }
 
-    public Reason getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(Reason reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 

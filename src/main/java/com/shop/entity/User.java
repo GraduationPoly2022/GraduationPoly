@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.shop.config.CustomAuthorityDeserializer;
 import com.shop.dto.Authority;
-import com.shop.enumEntity.AuthenticationProvider;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +11,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -22,7 +20,7 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userId;
+    private Long id;
 
     @NotBlank
     private String email;
@@ -31,21 +29,7 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String address;
     private String imageUrl;
-    @Enumerated(EnumType.STRING)
-    private AuthenticationProvider authProvider;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roleSet = new HashSet<>();
-
-    @OneToMany(mappedBy = "users_orders", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Order> orders;
-
-    @OneToMany(mappedBy = "user_shippers", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Shipper> shippers;
 
     @OneToMany(mappedBy = "user_comments", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -55,33 +39,35 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
-    @OneToMany(mappedBy = "userReview", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Reviews> reviewsSet = new LinkedHashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roleSet = new HashSet<>();
+
 
 
     public User() {
     }
 
-    public User(Long userId, String email, String password, String fullName,
-                String phoneNumber, String address, String imageUrl,
-                AuthenticationProvider authProvider) {
-        this.userId = userId;
+    public User(Long id, String email, String password, String fullName, String phoneNumber, String address, String imageUrl, Set<Comment> comments, Set<CommentDetail> commentDetails, Set<Role> roleSet) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
-        this.authProvider = authProvider;
+        this.comments = comments;
+        this.commentDetails = commentDetails;
+        this.roleSet = roleSet;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @JsonDeserialize(using = CustomAuthorityDeserializer.class)
@@ -94,7 +80,6 @@ public class User implements UserDetails {
         return authorities;
     }
 
-    @Override
     public String getPassword() {
         return this.password;
     }
@@ -165,30 +150,6 @@ public class User implements UserDetails {
         this.imageUrl = imageUrl;
     }
 
-    public Set<Role> getRoleSet() {
-        return roleSet;
-    }
-
-    public void setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
-    }
-
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Set<Shipper> getShippers() {
-        return shippers;
-    }
-
-    public void setShippers(Set<Shipper> shippers) {
-        this.shippers = shippers;
-    }
-
     public Set<Comment> getComments() {
         return comments;
     }
@@ -205,19 +166,11 @@ public class User implements UserDetails {
         this.commentDetails = commentDetails;
     }
 
-    public AuthenticationProvider getAuthProvider() {
-        return authProvider;
+    public Set<Role> getRoleSet() {
+        return roleSet;
     }
 
-    public void setAuthProvider(AuthenticationProvider authProvider) {
-        this.authProvider = authProvider;
-    }
-
-    public Set<Reviews> getReviewsSet() {
-        return reviewsSet;
-    }
-
-    public void setReviewsSet(Set<Reviews> reviewsSet) {
-        this.reviewsSet = reviewsSet;
+    public void setRoleSet(Set<Role> roleSet) {
+        this.roleSet = roleSet;
     }
 }

@@ -15,12 +15,13 @@ import com.shop.enumEntity.AuthenticationProvider;
 import com.shop.enumEntity.Expired;
 import com.shop.enumEntity.RoleName;
 import com.shop.enumEntity.StatusMessage;
+import com.shop.helper.HandleTimeCode;
+import com.shop.helper.TimeCode;
 import com.shop.helper.UserNotFoundException;
-import com.shop.helper.handleCode.HandleTimeCode;
-import com.shop.helper.handleCode.TimeCode;
-import com.shop.services.IMailService;
-import com.shop.services.IRoleService;
-import com.shop.services.IUserService;
+import com.shop.services.Impl.MailServiceImpl;
+import com.shop.services.Impl.RoleServiceImpl;
+import com.shop.services.Impl.UserDetailServiceImpl;
+import com.shop.services.Impl.UserServiceImpl;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +40,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import static com.shop.helper.CheckMail.emailExists;
 
 @RestController
 @RequestMapping("/auth")
@@ -54,22 +52,21 @@ public class AuthorityController {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserDetailsService userDetailServiceImpl;
+    private UserDetailServiceImpl userDetailServiceImpl;
 
     @Autowired
-    private IUserService userService;
+    private UserServiceImpl userService;
     @Value("${google.clientId}")
     private String CLIENT_ID;
 
     @Autowired
-    private IRoleService roleService;
+    private RoleServiceImpl roleService;
 
     @Autowired
     private HandleTimeCode handleTimeCode;
-
     private TimeCode timeCode;
     @Autowired
-    private IMailService mailService;
+    private MailServiceImpl mailService;
 
     @SneakyThrows
     @PostMapping("/generate-token")
@@ -85,17 +82,17 @@ public class AuthorityController {
             JwtResponse jwtResponse1;
             if (jwtResponse.getMoblie()) {
                 jwtResponse1 = this.hanldeToken(userDetails, Expired.TIME_MOBILE,
-                        jwtResponse.getRememberMe(), jwtResponse.getMoblie());
+                        jwtResponse.getRememberMe());
             } else {
                 jwtResponse1 = this.hanldeToken(userDetails, jwtResponse.getRememberMe() ? Expired.DAYS : Expired.HOURS,
-                        jwtResponse.getRememberMe(), jwtResponse.getMoblie());
+                        jwtResponse.getRememberMe());
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseMessage(StatusMessage.OK, "Logged in successful", jwtResponse1));
+                    new ResponseMessage(StatusMessage.OK, "Login is successfully", jwtResponse1));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseMessage(StatusMessage.ERROR, "Login unsuccessful", null));
+                    new ResponseMessage(StatusMessage.ERROR, "Login is not successfully", null));
         }
 
     }
@@ -125,7 +122,7 @@ public class AuthorityController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lỗi " + e.getMessage());
         }
         UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(user.getUsername());
-        JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true, false);
+        JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseMessage(StatusMessage.OK, "Login is successfully", jwtResponse1));
     }
@@ -134,18 +131,24 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
-        if (!this.timeCode.getCode().equals(code)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
-            );
+        if (this.userService.findByEmail(userDto.getEmail()) != null) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email is already exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email is already exists", userError));
         }
         try {
-            UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
+            UserController.CreateUser(userDto, user, this.roleService);
             if (Objects.equals(this.timeCode.getCode(), code)) {
                 User u = this.userService.createUser(user);
                 if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
+                        .body(new ResponseMessage(StatusMessage.OK, "Create user is successfully", u));
+            } else {
+                message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponseMessage(StatusMessage.FAILED, "Code is incorrect", null)
+                );
             }
+
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
@@ -165,40 +168,25 @@ public class AuthorityController {
         if (user != null) {
             user.setPassword(this.passwordEncoder.encode(password));
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseMessage(StatusMessage.OK, "Change password successfully",
+                    new ResponseMessage(StatusMessage.OK, "Change password is successfully",
                             this.userService.createUser(user))
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseMessage(StatusMessage.OK, "Password change failed",
+                new ResponseMessage(StatusMessage.OK, "Change password is not successfully",
                         null)
         );
     }
 
     @GetMapping("/send-mail/{toForm}/{name}")
     public ResponseEntity<ResponseMessage> sendCode(@PathVariable("toForm") String toForm, @PathVariable("name") String name) {
-        ResponseEntity<ResponseMessage> message;
+        ResponseEntity<ResponseMessage> message = null;
         this.timeCode = this.handleTimeCode.timeCode();
-        if (!emailExists(toForm)) {
-            UserDto userError = new UserDto();
-            userError.setEmail("Email address does not exist");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
-        } else {
-            if (this.userService.findByEmail(toForm) != null) {
-                UserDto userError = new UserDto();
-                userError.setEmail("Email already exists");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
-            }
-        }
         try {
             this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Account verification code", this.timeCode));
+            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "code ", this.timeCode));
         } catch (Exception e) {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseMessage(StatusMessage.FAILED, "Error " + e.getMessage(), null)
-            );
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.FAILED, "error " + e.getMessage(), null));
         }
         return message;
     }
@@ -213,17 +201,14 @@ public class AuthorityController {
         }
     }
 
-    private <T> JwtResponse hanldeToken(UserDetails userDetails, T expired, Boolean rememberMe, Boolean moblie) {
+    private <T> JwtResponse hanldeToken(UserDetails userDetails, T expired, Boolean rememberMe) {
         String tokens = this.jwtUtil.generateToken(userDetails, expired);
         User users = (User) this.userDetailServiceImpl.loadUserByUsername(userDetails.getUsername());
         JwtResponse jwtResponse1 = new JwtResponse();
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(users, userDto);
-        userDto.setEmail(users.getUsername());
         userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
         jwtResponse1.setToken(tokens);
-        jwtResponse1.setUserDto(userDto);
-        jwtResponse1.setMoblie(moblie);
         jwtResponse1.setRememberMe(rememberMe);
         return jwtResponse1;
     }
