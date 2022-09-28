@@ -9,7 +9,7 @@ public class imageDetail {
     private String imageDetailId;
     private String imageName;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Products productImages;
 
     public imageDetail() {

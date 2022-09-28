@@ -21,7 +21,7 @@ public class SmartPhone {
     private String utils;
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Products smartPhoneProduct;
 
     public SmartPhone() {

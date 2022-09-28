@@ -18,9 +18,9 @@ public class Return {
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private Order orderReturn;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Shipper shippersReturn;
 
     public Return() {

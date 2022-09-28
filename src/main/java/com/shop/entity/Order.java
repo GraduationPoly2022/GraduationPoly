@@ -33,18 +33,18 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private DeviceEnum deviceUse;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User usersOrders;
 
-    @OneToMany(mappedBy = "ordersDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ordersDetail")
     @JsonIgnore
     private Set<OrderDetail> orderDetails;
 
-    @OneToMany(mappedBy = "orderShipper", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderShipper")
     @JsonIgnore
     private Set<Shipper> shippers;
 
-    @OneToOne(mappedBy = "orderReturn", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "orderReturn")
     @JsonIgnore
     private Return returns;
 

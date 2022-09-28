@@ -9,9 +9,9 @@ public class OrderDetail {
     private Long orderDetailId;
     private Integer qty;
     private Double price;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Products productsOrderDetail;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Order ordersDetail;
 
     public OrderDetail() {

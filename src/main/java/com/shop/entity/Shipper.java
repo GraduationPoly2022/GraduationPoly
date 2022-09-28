@@ -15,13 +15,13 @@ public class Shipper {
     @Column(columnDefinition = "varchar(5000)")
     private String notes;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User userShippers;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Order orderShipper;
 
-    @OneToMany(mappedBy = "shippersReturn", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shippersReturn")
     @JsonIgnore
     private Set<Return> returns;
 

@@ -12,10 +12,10 @@ public class CommentDetail {
     private String ContentReply;
     @Temporal(TemporalType.DATE)
     private Date ContentDateReply;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Comment commentDetails;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User userCommentDetails;
     ;
 

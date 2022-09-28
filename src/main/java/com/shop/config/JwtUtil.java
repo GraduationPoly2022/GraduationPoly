@@ -47,8 +47,7 @@ public class JwtUtil {
         Long expiry;
         if (expired instanceof Expired) expiry = ((Expired) expired).getTime();
         else expiry = System.currentTimeMillis() + ((Long) expired);
-
-        System.out.println(new Date(expiry));
+        
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(expiry))

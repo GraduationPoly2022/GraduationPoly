@@ -19,7 +19,7 @@ public class Accessory {
     private String notes;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Products productAccessories;
 
     public Accessory() {

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JwtResponse {
     private String token;
-    private Boolean rememberMe;
+    private Boolean rememberMe = false;
     private UserDto userDto;
     private Boolean moblie = false;
 }
