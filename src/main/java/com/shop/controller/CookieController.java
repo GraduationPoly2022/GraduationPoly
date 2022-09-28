@@ -1,4 +1,7 @@
 package com.shop.controller;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,53 +15,32 @@ import java.util.stream.Collectors;
 @RestController
 public class CookieController {
 
-    //Đọc HTTP Cookie
-    @GetMapping("/")
-    public String readCookie(@CookieValue(value = "username", defaultValue = "Lam") String username){
-        return"Chào! Tên đăng nhập của tôi là"+username;
+    //Tạo Cookie
+    @GetMapping("/create-cookie")
+    public ResponseEntity setCookie(){
+        ResponseCookie resCookie = ResponseCookie.from("user-id","c2FtLnNtaXRoQGV4YW1wbGUuY29t")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(1*24*60*60)
+                .domain("localhost")
+                .build();
+        return  ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,resCookie.toString()).build();
     }
 
-    //Đặt Cookie HTTP
-    @GetMapping("/change-username")
-    public String setCookie(HttpServletResponse response){
-        //tạo một cookie
-        Cookie cookie = new Cookie("username", "Lam");
-        cookie.setMaxAge(7 * 24 * 60 * 60); //Hết hạn sau 7 ngày
-        cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/"); //Cookie toàn cầu có thể truy cập ở mọi nơi
+    //Xóa Cookie
 
-        //thêm cookie vào phản hồi
-        response.addCookie(cookie);
-        return "Tên người dùng đã được thay đổi";
+    @GetMapping("/delete-cookie")
+    public ResponseEntity deleteCookie(){
+        //Tạo cookie
+        ResponseCookie resCookie = ResponseCookie.from("user-id", null)
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,resCookie.toString()).build();
     }
 
-    //Xóa Cookies
-    @GetMapping("/delete-username")
-    public String deleteCookie(HttpServletResponse response) {
-
-        //tạo một cookie
-        Cookie cookie = new Cookie("username", null);
-        cookie.setMaxAge(0);
-        cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-
-        //thêm cookie vào phản hồi
-        response.addCookie(cookie);
-
-        return "Tên người dùng đã bị xóa!";
-    }
-
-    //Đọc tất cả Cookie
-
-    @GetMapping("/all-cookies")
-    public String readAllCookie(HttpServletRequest request){
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null){
-            return Arrays.stream(cookies)
-                    .map(c -> c.getName()+"="+ c.getValue()).collect(Collectors.joining(","));
-        }
-        return "Không có Cookies";
+    //Đọc Cookie
+    @GetMapping("/read-cookie")
+    public String readCookie(@CookieValue(name = "user-id", defaultValue = "default-user-id") String cookieName){
+        return String.format("Giá trị của Cookie với tên user-id là: %s", cookieName);
     }
 }
