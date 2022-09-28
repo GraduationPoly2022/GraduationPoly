@@ -17,32 +17,32 @@ public class Products {
     private Boolean available;
     private Integer warranty;
 
-    @OneToMany(mappedBy = "productImages", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_images", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<imageDetail> imageDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Category categoriesProduct;
+    private Category categories_product;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Producer productProducer;
+    private Producer product_producer;
 
-    @OneToMany(mappedBy = "smartPhoneProduct", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "smartPhone_product", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<SmartPhone> smartPhone;
 
-    @OneToMany(mappedBy = "productAccessories", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_accessories", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Accessory> accessories;
 
-    @OneToMany(mappedBy = "productLaptop", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_laptop", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Laptop> laptops;
 
-    @OneToMany(mappedBy = "productsOrderDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "products_orderDetail", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<OrderDetail> OrderDetails;
-    @OneToMany(mappedBy = "productComment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_comment", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Comment> commentProduct;
 
@@ -55,15 +55,15 @@ public class Products {
 
     public Products(Long productId, String productName, String imageMain,
                     String imageUrl, Boolean available, Integer warranty,
-                    Category categoriesProduct, Producer productProducer) {
+                    Category categories_product, Producer product_producer) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
         this.imageUrl = imageUrl;
         this.available = available;
         this.warranty = warranty;
-        this.categoriesProduct = categoriesProduct;
-        this.productProducer = productProducer;
+        this.categories_product = categories_product;
+        this.product_producer = product_producer;
     }
 
     public Long getProductId() {
@@ -114,12 +114,12 @@ public class Products {
         this.imageDetails = imageDetails;
     }
 
-    public Category getCategoriesProduct() {
-        return categoriesProduct;
+    public Category getCategories_product() {
+        return categories_product;
     }
 
-    public void setCategoriesProduct(Category categoriesProduct) {
-        this.categoriesProduct = categoriesProduct;
+    public void setCategories_product(Category categories_product) {
+        this.categories_product = categories_product;
     }
 
     public Set<SmartPhone> getSmartPhone() {
@@ -162,12 +162,12 @@ public class Products {
         this.commentProduct = commentProduct;
     }
 
-    public Producer getProductProducer() {
-        return productProducer;
+    public Producer getProduct_producer() {
+        return product_producer;
     }
 
-    public void setProductProducer(Producer productProducer) {
-        this.productProducer = productProducer;
+    public void setProduct_producer(Producer product_producer) {
+        this.product_producer = product_producer;
     }
 
     public Integer getWarranty() {

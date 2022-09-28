@@ -17,26 +17,26 @@ public class Comment {
     @Temporal(TemporalType.DATE)
     private Date CommentDate;
 
-    @OneToMany(mappedBy = "commentDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment_commentDetails", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Products productComment;
+    private Products product_comment;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User userComments;
+    private User user_comments;
 
     public Comment() {
     }
 
     public Comment(Long commentId, String content, Date commentDate,
-                   Products productComment, User userComments) {
+                   Products product_comment, User user_comments) {
         CommentId = commentId;
         Content = content;
         CommentDate = commentDate;
-        this.productComment = productComment;
-        this.userComments = userComments;
+        this.product_comment = product_comment;
+        this.user_comments = user_comments;
     }
 
     public Long getCommentId() {
@@ -71,19 +71,19 @@ public class Comment {
         this.commentDetails = commentDetails;
     }
 
-    public User getUserComments() {
-        return userComments;
+    public User getUser_comments() {
+        return user_comments;
     }
 
-    public void setUserComments(User userComments) {
-        this.userComments = userComments;
+    public void setUser_comments(User user_comments) {
+        this.user_comments = user_comments;
     }
 
-    public Products getProductComment() {
-        return productComment;
+    public Products getProduct_comment() {
+        return product_comment;
     }
 
-    public void setProductComment(Products productComment) {
-        this.productComment = productComment;
+    public void setProduct_comment(Products product_comment) {
+        this.product_comment = product_comment;
     }
 }

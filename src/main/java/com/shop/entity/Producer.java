@@ -12,7 +12,7 @@ public class Producer {
     private Long producerId;
     private String name;
 
-    @OneToMany(mappedBy = "productProducer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product_producer", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Products> producer_product;
 

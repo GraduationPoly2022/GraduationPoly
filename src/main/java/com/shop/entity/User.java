@@ -39,19 +39,19 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roleSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "usersOrders", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users_orders", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Order> orders;
 
-    @OneToMany(mappedBy = "userShippers", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_shippers", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Shipper> shippers;
 
-    @OneToMany(mappedBy = "userComments", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_comments", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "userCommentDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_commentDetails", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 

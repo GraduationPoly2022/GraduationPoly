@@ -13,9 +13,9 @@ public class Category {
     private String name;
 
 
-    @OneToMany(mappedBy = "categoriesProduct", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categories_product", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Products> categoriesProduct;
+    private Set<Products> products;
 
     public Category() {
 
@@ -42,11 +42,11 @@ public class Category {
         this.name = name;
     }
 
-    public Set<Products> getCategoriesProduct() {
-        return categoriesProduct;
+    public Set<Products> getProducts() {
+        return products;
     }
 
-    public void setCategoriesProduct(Set<Products> categoriesProduct) {
-        this.categoriesProduct = categoriesProduct;
+    public void setProducts(Set<Products> products) {
+        this.products = products;
     }
 }
