@@ -1,0 +1,10 @@
+package com.shop.repository;
+
+import com.shop.dto.CommentDto;
+import com.shop.entity.CommentDetail;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CommentDetailRepository extends JpaRepository<CommentDetail,Long> {
+}

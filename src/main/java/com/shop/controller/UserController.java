@@ -72,13 +72,13 @@ public class UserController {
             UserDto userError = new UserDto();
             userError.setEmail("Email address dones not exist");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "Email address dones not exist", userError));
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email address done not exist", userError));
         }
         try {
             CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             User u = this.userService.createUser(user);
             if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Succesful user creation", u));
+                    .body(new ResponseMessage(StatusMessage.OK, "Successful user creation", u));
 
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
