@@ -28,6 +28,6 @@ public class OrderDto {
     private PaymentEnum paymentReceived;
     private OrderDetail orderDetail;
     private List<OrderDetail> lsOrderDetail;
-    private User user;
+    private User usersOrders;
     private Return returns;
 }

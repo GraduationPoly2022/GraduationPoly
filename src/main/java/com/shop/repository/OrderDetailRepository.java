@@ -12,5 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
-    Optional<OrderDetail> findByOrders_orderDetailAndProducts_orderDetailAndOrders_orderDetail_users_ordersAndOrders_orderDetail_status(Order order, Products products, User user, OrderStatus status);
+    Optional<OrderDetail> findByOrdersDetailAndProductsOrderDetailAndOrdersDetail_UsersOrdersAndOrdersDetail_status(Order order, Products products, User user, OrderStatus status);
 }

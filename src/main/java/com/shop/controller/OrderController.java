@@ -41,15 +41,15 @@ public class OrderController {
     @PostMapping("/")
     public ResponseEntity<ResponseMessage> insertOrder(@RequestBody OrderDto orderDto) {
         ResponseEntity<ResponseMessage> message = null;
-        Order checkUserAndStatus = this.orderService.findByUserAndStatus(orderDto.getUser(), OrderStatus.CART);
+        Order checkUserAndStatus = this.orderService.findByUserAndStatus(orderDto.getUsersOrders(), OrderStatus.CART);
         try {
             if (checkUserAndStatus == null) {
                 Order order = new Order();
                 BeanUtils.copyProperties(orderDto, order);
                 Order saveOrder = this.orderService.createOrder(order);
                 OrderDetail orderDetails = new OrderDetail();
-                BeanUtils.copyProperties(orderDto.getOrderDetail(), orderDetails, "orders_orderDetail");
-                orderDetails.setOrders_orderDetail(saveOrder);
+                BeanUtils.copyProperties(orderDto.getOrderDetail(), orderDetails, "ordersDetail");
+                orderDetails.setOrdersDetail(saveOrder);
                 OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(orderDetails);
                 if (saveOrder != null && saveOrderDetail != null) {
                     message = ResponseEntity.status(HttpStatus.OK)
@@ -59,15 +59,15 @@ public class OrderController {
                 OrderDetail checkOrderDetail = this.orderDetailService
                         .findByOrderAndProductAndUserAndStatus(
                                 checkUserAndStatus,
-                                orderDto.getOrderDetail().getProducts_orderDetail(),
-                                orderDto.getUser(),
+                                orderDto.getOrderDetail().getProductsOrderDetail(),
+                                orderDto.getUsersOrders(),
                                 OrderStatus.CART
                         );
                 OrderDetail orderDetails;
                 if (checkOrderDetail == null) {
                     orderDetails = new OrderDetail();
-                    BeanUtils.copyProperties(orderDto.getOrderDetail(), orderDetails, "orders_orderDetail", "qty");
-                    orderDetails.setOrders_orderDetail(checkUserAndStatus);
+                    BeanUtils.copyProperties(orderDto.getOrderDetail(), orderDetails, "ordersDetail", "qty");
+                    orderDetails.setOrdersDetail(checkUserAndStatus);
                     if (orderDto.getOrderDetail().getQty() == 0) {
                         orderDetails.setQty(1);
                     } else {

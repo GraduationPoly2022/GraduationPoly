@@ -18,13 +18,13 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
 
     @Override
     public OrderDetail createOrderDetail(OrderDetail orderDetail) {
-        return orderDetailRepository.save(orderDetail);
+        return this.orderDetailRepository.save(orderDetail);
     }
 
     @Override
     public OrderDetail findByOrderAndProductAndUserAndStatus(Order order, Products products, User user, OrderStatus status) {
         return this.orderDetailRepository
-                .findByOrders_orderDetailAndProducts_orderDetailAndOrders_orderDetail_users_ordersAndOrders_orderDetail_status(order, products, user, status).orElse(null);
+                .findByOrdersDetailAndProductsOrderDetailAndOrdersDetail_UsersOrdersAndOrdersDetail_status(order, products, user, status).orElse(null);
     }
 
 }
