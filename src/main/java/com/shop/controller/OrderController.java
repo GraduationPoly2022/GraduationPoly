@@ -14,10 +14,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/order")
@@ -32,12 +32,18 @@ public class OrderController {
     @Autowired
     private IUserService userService;
 
-//    @GetMapping("/all")
-//    public List<OrderDto> getAll() {
-//
-//        return ;
-//    }
+    //getAll Order and Order Detail
+    @GetMapping("/")
+    public ResponseEntity<ResponseMessage> getAll() {
+        ResponseEntity<ResponseMessage> message = null;
+        List<Order> list = this.orderService.findAll();
+        List<OrderDto> orderDtoList = transfer(list);
+        message = ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
+        return message;
+    }
 
+    //Insert Order and Order Detail
     @PostMapping("/")
     public ResponseEntity<ResponseMessage> insertOrder(@RequestBody OrderDto orderDto) {
         ResponseEntity<ResponseMessage> message = null;
@@ -94,5 +100,25 @@ public class OrderController {
         return message;
     }
 
+    private List<OrderDto> transfer(List<Order> orders) {
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        for (Order order : orders) {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setOrderId(order.getOrderId());
+            orderDto.setOrderDate(order.getOrderDate());
+            orderDto.setDeliveryDate(order.getDeliveryDate());
+            orderDto.setRecipientDate(order.getRecipientDate());
+            orderDto.setReceive(order.getReceive());
+            orderDto.setPhoneReceive(order.getPhoneReceive());
+            orderDto.setAddressReceive(order.getAddressReceive());
+            orderDto.setStatus(order.getStatus());
+            orderDto.setAmount(order.getAmount());
+            orderDto.setPaymentReceived(order.getPaymentReceived());
+            orderDto.setUsersOrders(order.getUsersOrders());
+            orderDtoList.add(orderDto);
+        }
+        return orderDtoList;
+    }
 
 }

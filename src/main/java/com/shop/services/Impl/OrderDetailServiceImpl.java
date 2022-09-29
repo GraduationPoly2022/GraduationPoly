@@ -10,6 +10,8 @@ import com.shop.services.IOrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderDetailServiceImpl implements IOrderDetailService {
 
@@ -25,6 +27,11 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     public OrderDetail findByOrderAndProductAndUserAndStatus(Order order, Products products, User user, OrderStatus status) {
         return this.orderDetailRepository
                 .findByOrdersDetailAndProductsOrderDetailAndOrdersDetail_UsersOrdersAndOrdersDetail_status(order, products, user, status).orElse(null);
+    }
+
+    @Override
+    public List<OrderDetail> findAll() {
+        return this.orderDetailRepository.findAll();
     }
 
 }
