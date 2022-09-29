@@ -1,25 +1,24 @@
 package com.shop.controller;
 
-import com.shop.dto.AccessoryDto;
-import com.shop.dto.LaptopDto;
-import com.shop.dto.ResponseMessage;
-import com.shop.dto.SmartPhoneDto;
-import com.shop.entity.Accessory;
-import com.shop.entity.Products;
-import com.shop.entity.imageDetail;
+import com.shop.dto.*;
+import com.shop.entity.*;
 import com.shop.enumEntity.ProductsEnum;
+import com.shop.enumEntity.StatusMessage;
 import com.shop.services.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pro")
-@CrossOrigin("*")
+@RequestMapping("/api/product")
 public class ProductController {
 
     @Autowired
@@ -34,30 +33,72 @@ public class ProductController {
     private IImageDetailService imageDetailService;
 
     @PostMapping("/")
-    public ResponseEntity<ResponseMessage> createAccessory(@RequestBody AccessoryDto accessoryDto,
-                                                           @RequestBody SmartPhoneDto smartPhoneDto,
-                                                           @RequestBody LaptopDto laptopDto,
-                                                           @RequestBody Products products,
-                                                           @RequestBody imageDetail imageDetail,
-                                                           Accessory accessory
+    public ResponseEntity<ResponseMessage> createProduct(@RequestBody ProductDto productDto
     ) {
         ResponseEntity<ResponseMessage> message = null;
-        Products products1 = new Products();
-        Products products2 = iProductService.createProducts(products1);
-        List<imageDetail> imageDetailList = new ArrayList<>();
-        for (imageDetail i : imageDetailList) {
-            imageDetail imageDetail1 = new imageDetail();
-//            imageDetail1.setProduct_images(products.getProductId());
-            imageDetail1.setImageName(i.getImageName());
-            git
-            imageDetailService.creImageDetail(imageDetail1);
+        if (!productDto.getProductsEnum().equals(ProductsEnum.ACCESSORY)
+                && !productDto.getProductsEnum().equals(ProductsEnum.LAPTOP)
+                && !productDto.getProductsEnum().equals(ProductsEnum.SMARTPHONE)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.NOT_FOUND,
+                    "Product is invalid", null));
         }
-        if (ProductsEnum.ACCESSORY == ProductsEnum.ACCESSORY) {
-            BeanUtils.copyProperties(accessoryDto, accessory);
-//            accessory.setProduct_accessories(products1);
-            iAccessoryService.createAccessory(accessory);
+        try {
+            Products products = new Products();
+            BeanUtils.copyProperties(productDto, products, "productId", "accessoryDto",
+                    "smartPhoneDto", "laptopDto", "imageDetail", "productsEnum");
+            Products productsSave = this.iProductService.createProducts(products);
+            // crate product
+            ProductDto productDtoReturn = new ProductDto();
+            BeanUtils.copyProperties(productsSave, productDtoReturn, "accessoryDto",
+                    "smartPhoneDto", "laptopDto", "imageDetail", "productsEnum");
+            productDtoReturn.setAvailable(productDto.getAvailable());
+            List<ImageDetail> imageDetails = new ArrayList<>();
+            productDto.getImageDetail().forEach(imageDetail -> {
+                Products product = new Products();
+                product.setProductId(productsSave.getProductId());
+                imageDetail.setProductImages(product);
+                imageDetails.add(imageDetail);
+            });
+            List<ImageDetail> imageDetailSave = this.imageDetailService.creImageDetail(imageDetails);
+            switch (productDto.getProductsEnum().toString()) {
+                case "LAPTOP" -> {
+                    Laptop laptop = new Laptop();
+                    BeanUtils.copyProperties(productDto.getLaptopDto(), laptop, "laptopId", "imageDetailList");
+                    Laptop laptopSave = this.iLapTopService.createLaptop(laptop);
+                    LaptopDto laptopDto = new LaptopDto();
+                    BeanUtils.copyProperties(laptopSave, laptopDto, "imageDetailList");
+                    laptopDto.setImageDetailList(imageDetailSave);
+                    productDtoReturn.setLaptopDto(laptopDto);
+                }
+                case "SMARTPHONE" -> {
+                    SmartPhone smartPhone = new SmartPhone();
+                    BeanUtils.copyProperties(productDto.getSmartPhoneDto(), smartPhone, "smartPhoneId", "imageDetailList");
+                    SmartPhone smartPhoneSave = this.iSmartPhoneService.createSmartPhone(smartPhone);
+                    SmartPhoneDto smartPhoneDto = new SmartPhoneDto();
+                    BeanUtils.copyProperties(smartPhoneSave, smartPhoneDto, "imageDetailList");
+                    smartPhoneDto.setImageDetailList(imageDetailSave);
+                    productDtoReturn.setSmartPhoneDto(smartPhoneDto);
+                }
+                case "ACCESSORY" -> {
+                    Accessory accessory = new Accessory();
+                    BeanUtils.copyProperties(productDto.getAccessoryDto(), accessory, "accessoryId", "imageDetailList");
+                    Accessory accessorySave = this.iAccessoryService.createAccessory(accessory);
+                    AccessoryDto accessoryDto = new AccessoryDto();
+                    BeanUtils.copyProperties(accessorySave, accessoryDto, "imageDetailList");
+                    accessoryDto.setImageDetailList(imageDetailSave);
+                    productDtoReturn.setAccessoryDto(accessoryDto);
+                }
+                default -> message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(
+                        StatusMessage.ERROR, "Key invalid", null));
+            }
+            message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK,
+                    "Create Product is successful!", productDtoReturn));
+        } catch (Exception e) {
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR,
+                    e.getMessage(), null));
         }
-        return null;
+        return message;
     }
+
 }
 

@@ -13,19 +13,16 @@ public class Products {
     private Long productId;
     private String productName;
     private String imageMain;
-    private String imageUrl;
     private Boolean available;
     private Integer warranty;
 
     @OneToMany(mappedBy = "productImages")
     @JsonIgnore
-    private Set<imageDetail> imageDetails;
+    private Set<ImageDetail> ImageDetails;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Category categoriesProduct;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Producer productProducer;
 
     @OneToMany(mappedBy = "smartPhoneProduct")
     @JsonIgnore
@@ -54,16 +51,15 @@ public class Products {
     }
 
     public Products(Long productId, String productName, String imageMain,
-                    String imageUrl, Boolean available, Integer warranty,
-                    Category categoriesProduct, Producer productProducer) {
+                    Boolean available, Integer warranty,
+                    Category categoriesProduct) {
         this.productId = productId;
         this.productName = productName;
         this.imageMain = imageMain;
-        this.imageUrl = imageUrl;
         this.available = available;
         this.warranty = warranty;
         this.categoriesProduct = categoriesProduct;
-        this.productProducer = productProducer;
+
     }
 
     public Long getProductId() {
@@ -90,13 +86,6 @@ public class Products {
         this.imageMain = imageMain;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public Boolean isAvailable() {
         return available;
@@ -106,12 +95,12 @@ public class Products {
         this.available = available;
     }
 
-    public Set<imageDetail> getImageDetails() {
-        return imageDetails;
+    public Set<ImageDetail> getImageDetails() {
+        return ImageDetails;
     }
 
-    public void setImageDetails(Set<imageDetail> imageDetails) {
-        this.imageDetails = imageDetails;
+    public void setImageDetails(Set<ImageDetail> ImageDetails) {
+        this.ImageDetails = ImageDetails;
     }
 
     public Category getCategoriesProduct() {
@@ -162,13 +151,6 @@ public class Products {
         this.commentProduct = commentProduct;
     }
 
-    public Producer getProductProducer() {
-        return productProducer;
-    }
-
-    public void setProductProducer(Producer productProducer) {
-        this.productProducer = productProducer;
-    }
 
     public Integer getWarranty() {
         return warranty;

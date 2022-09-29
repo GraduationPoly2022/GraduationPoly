@@ -24,13 +24,16 @@ public class SmartPhone {
     @ManyToOne(fetch = FetchType.EAGER)
     private Products smartPhoneProduct;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Producer smartPhoneProducer;
+
     public SmartPhone() {
     }
 
     public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera,
                       String afterCamera, String cpu, String ram, String disk, String batteryAndCharging,
                       String video, String gpu, String connector, String utils,
-                      String notes, Products smartPhoneProduct) {
+                      String notes, Products smartPhoneProduct, Producer smartPhoneProducer) {
         this.smartPhoneId = smartPhoneId;
         this.monitor = monitor;
         this.systemOperator = systemOperator;
@@ -46,6 +49,7 @@ public class SmartPhone {
         this.utils = utils;
         this.notes = notes;
         this.smartPhoneProduct = smartPhoneProduct;
+        this.smartPhoneProducer = smartPhoneProducer;
     }
 
     public Long getSmartPhoneId() {
@@ -166,5 +170,13 @@ public class SmartPhone {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Producer getSmartPhoneProducer() {
+        return smartPhoneProducer;
+    }
+
+    public void setSmartPhoneProducer(Producer smartPhoneProducer) {
+        this.smartPhoneProducer = smartPhoneProducer;
     }
 }

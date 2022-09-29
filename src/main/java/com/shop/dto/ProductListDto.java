@@ -2,6 +2,7 @@ package com.shop.dto;
 
 import com.shop.entity.Category;
 import com.shop.entity.ImageDetail;
+import com.shop.entity.Producer;
 import com.shop.enumEntity.ProductsEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,16 +13,17 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class ProductListDto {
     private Long productId;
     private String productName;
     private String imageMain;
     private Boolean available;
     private Integer warranty;
-    private AccessoryDto accessoryDto;
-    private SmartPhoneDto smartPhoneDto;
-    private LaptopDto laptopDto;
+    private List<AccessoryDto> accessoryDtoList;
+    private List<SmartPhoneDto> smartPhoneDtoList;
+    private List<LaptopDto> laptopDtoList;
     private Category categoriesProduct;
+    private Producer productProducer;
     private List<ImageDetail> imageDetail;
     private ProductsEnum productsEnum;
 }

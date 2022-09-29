@@ -1,7 +1,9 @@
 package com.shop.services;
 
-import com.shop.entity.imageDetail;
+import com.shop.entity.ImageDetail;
+
+import java.util.List;
 
 public interface IImageDetailService {
-    imageDetail creImageDetail(imageDetail imageDetail);
+    List<ImageDetail> creImageDetail(List<ImageDetail> imageDetail);
 }

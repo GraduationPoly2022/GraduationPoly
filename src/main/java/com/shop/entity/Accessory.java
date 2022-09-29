@@ -17,17 +17,17 @@ public class Accessory {
     private String charging;
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
-
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Products productAccessories;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Producer accessoriesProducer;
 
     public Accessory() {
     }
 
     public Accessory(Long accessoryId, String connector, String length, String switches,
                      Double typeKeyboard, Double sizeKey, String special,
-                     Double sizeKeyboard, String charging, String notes, Products productAccessories) {
+                     Double sizeKeyboard, String charging, String notes, Products productAccessories, Producer accessoriesProducer) {
         this.accessoryId = accessoryId;
         this.connector = connector;
         this.length = length;
@@ -39,6 +39,7 @@ public class Accessory {
         this.charging = charging;
         this.notes = notes;
         this.productAccessories = productAccessories;
+        this.accessoriesProducer = accessoriesProducer;
     }
 
     public Long getAccessoryId() {
@@ -127,5 +128,13 @@ public class Accessory {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Producer getAccessoriesProducer() {
+        return accessoriesProducer;
+    }
+
+    public void setAccessoriesProducer(Producer accessoriesProducer) {
+        this.accessoriesProducer = accessoriesProducer;
     }
 }

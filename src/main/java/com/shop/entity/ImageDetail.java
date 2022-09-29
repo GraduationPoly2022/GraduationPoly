@@ -3,29 +3,29 @@ package com.shop.entity;
 import javax.persistence.*;
 
 @Entity
-public class imageDetail {
+public class ImageDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String imageDetailId;
+    private Long imageDetailId;
     private String imageName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Products productImages;
 
-    public imageDetail() {
+    public ImageDetail() {
     }
 
-    public imageDetail(String imageDetailId, String imageName, Products productImages) {
+    public ImageDetail(Long imageDetailId, String imageName, Products productImages) {
         this.imageDetailId = imageDetailId;
         this.imageName = imageName;
         this.productImages = productImages;
     }
 
-    public String getImageDetailId() {
+    public Long getImageDetailId() {
         return imageDetailId;
     }
 
-    public void setImageDetailId(String imageDetailId) {
+    public void setImageDetailId(Long imageDetailId) {
         this.imageDetailId = imageDetailId;
     }
 

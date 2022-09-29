@@ -1,9 +1,9 @@
 package com.shop.repository;
 
-import com.shop.entity.imageDetail;
+import com.shop.entity.ImageDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ImageDetailRepository extends JpaRepository<imageDetail, String> {
+public interface ImageDetailRepository extends JpaRepository<ImageDetail, String> {
 }

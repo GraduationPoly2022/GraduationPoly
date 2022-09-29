@@ -12,9 +12,17 @@ public class Producer {
     private Long producerId;
     private String name;
 
-    @OneToMany(mappedBy = "productProducer")
+    @OneToMany(mappedBy = "accessoriesProducer")
     @JsonIgnore
-    private Set<Products> producer_product;
+    private Set<Accessory> accessoriesProducer;
+
+    @OneToMany(mappedBy = "smartPhoneProducer")
+    @JsonIgnore
+    private Set<SmartPhone> smartPhoneProducerSet;
+
+    @OneToMany(mappedBy = "laptopProducer")
+    @JsonIgnore
+    private Set<Laptop> laptopProducerSet;
 
     public Producer() {
     }
@@ -40,11 +48,27 @@ public class Producer {
         this.name = name;
     }
 
-    public Set<Products> getProducer_product() {
-        return producer_product;
+    public Set<Accessory> getAccessoriesProducer() {
+        return accessoriesProducer;
     }
 
-    public void setProducer_product(Set<Products> producer_product) {
-        this.producer_product = producer_product;
+    public void setAccessoriesProducer(Set<Accessory> accessoriesProducer) {
+        this.accessoriesProducer = accessoriesProducer;
+    }
+
+    public Set<SmartPhone> getSmartPhoneProducerSet() {
+        return smartPhoneProducerSet;
+    }
+
+    public void setSmartPhoneProducerSet(Set<SmartPhone> smartPhoneProducerSet) {
+        this.smartPhoneProducerSet = smartPhoneProducerSet;
+    }
+
+    public Set<Laptop> getLaptopProducerSet() {
+        return laptopProducerSet;
+    }
+
+    public void setLaptopProducerSet(Set<Laptop> laptopProducerSet) {
+        this.laptopProducerSet = laptopProducerSet;
     }
 }

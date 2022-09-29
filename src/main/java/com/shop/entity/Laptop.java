@@ -23,13 +23,15 @@ public class Laptop {
     private String notes;
     @ManyToOne(fetch = FetchType.EAGER)
     private Products productLaptop;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Producer laptopProducer;
 
     public Laptop() {
     }
 
     public Laptop(Long laptopId, String monitor, String cpu, String ram, String disk, String gpu,
                   String systemOperator, String gateway, String design, String special,
-                  String sizeAndWeight, Date yearOfManufacture, String notes, Products productLaptop) {
+                  String sizeAndWeight, Date yearOfManufacture, String notes, Products productLaptop, Producer laptopProducer) {
         this.laptopId = laptopId;
         this.monitor = monitor;
         this.cpu = cpu;
@@ -44,6 +46,7 @@ public class Laptop {
         this.yearOfManufacture = yearOfManufacture;
         this.notes = notes;
         this.productLaptop = productLaptop;
+        this.laptopProducer = laptopProducer;
     }
 
     public Long getLaptopId() {
@@ -156,5 +159,13 @@ public class Laptop {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Producer getLaptopProducer() {
+        return laptopProducer;
+    }
+
+    public void setLaptopProducer(Producer laptopProducer) {
+        this.laptopProducer = laptopProducer;
     }
 }
