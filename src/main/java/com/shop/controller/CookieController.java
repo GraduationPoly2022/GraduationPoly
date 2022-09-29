@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @RestController
 public class CookieController {
-
     //Tạo Cookie
     @GetMapping("/create-cookie")
     public ResponseEntity setCookie(){
@@ -22,14 +21,13 @@ public class CookieController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(1*24*60*60)
+                .maxAge(7*24*60*60) //Cookie hết hạn sau 7 ngày
                 .domain("localhost")
                 .build();
         return  ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,resCookie.toString()).build();
     }
 
     //Xóa Cookie
-
     @GetMapping("/delete-cookie")
     public ResponseEntity deleteCookie(){
         //Tạo cookie
