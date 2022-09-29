@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+
 @RequestMapping("/api/product")
+
 public class ProductController {
 
     @Autowired
@@ -39,7 +41,7 @@ public class ProductController {
         if (!productDto.getProductsEnum().equals(ProductsEnum.ACCESSORY)
                 && !productDto.getProductsEnum().equals(ProductsEnum.LAPTOP)
                 && !productDto.getProductsEnum().equals(ProductsEnum.SMARTPHONE)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.NOT_FOUND,
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR,
                     "Product is invalid", null));
         }
         try {
@@ -99,6 +101,5 @@ public class ProductController {
         }
         return message;
     }
-
 }
 

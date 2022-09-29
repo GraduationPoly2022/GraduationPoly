@@ -1,7 +1,7 @@
 package com.shop.enumEntity;
 
 public enum ProductsEnum {
-    SMARTPHONE, LAPTOP, ACCESSORY;
+    ACCESSORY, LAPTOP, SMARTPHONE;
 
     public String getSelection() {
         String selected = "";
@@ -19,4 +19,5 @@ public enum ProductsEnum {
     public String toString() {
         return this.getSelection();
     }
+
 }

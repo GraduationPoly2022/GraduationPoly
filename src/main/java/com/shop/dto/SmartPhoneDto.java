@@ -1,5 +1,6 @@
 package com.shop.dto;
 
+
 import com.shop.entity.ImageDetail;
 import com.shop.entity.Producer;
 import lombok.AllArgsConstructor;
@@ -29,4 +30,5 @@ public class SmartPhoneDto {
     private Producer smartPhoneProducer;
     private List<ImageDetail> imageDetailList;
 }
+
 
