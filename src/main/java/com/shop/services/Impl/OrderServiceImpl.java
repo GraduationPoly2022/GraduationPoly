@@ -8,6 +8,8 @@ import com.shop.services.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderServiceImpl implements IOrderService {
 
@@ -22,5 +24,10 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public Order findByUserAndStatus(User user, OrderStatus status) {
         return this.orderRepository.findByUsersOrdersAndStatus(user, status).orElse(null);
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return this.orderRepository.findAll();
     }
 }
