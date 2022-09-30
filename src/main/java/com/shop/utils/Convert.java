@@ -77,10 +77,13 @@ public class Convert {
         } catch (InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        return sb.substring(0, sb.lastIndexOf(";")).trim();
+        byte[] encode = Base64.getEncoder().encode(sb.substring(0, sb.lastIndexOf(";")).trim().getBytes());
+        return new String(encode);
     }
 
-    public static <T> List<T> StringToArray(String str, Class<T> clazz) {
+    public static <T> List<T> StringToArray(String encode, Class<T> clazz) {
+        byte[] decode = Base64.getDecoder().decode(encode);
+        String str = new String(decode);
         Map<String, Object> map = new HashMap<>();
         List<T> list = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
