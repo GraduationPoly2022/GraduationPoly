@@ -7,5 +7,5 @@ import java.util.List;
 public interface ICommentDetailService {
     CommentDetail addCommentDetail(CommentDetail commentDetail);
 
-    List<CommentDetail> findAllCommentDetail();
+    List<CommentDetail> findCommentDtById(Long CommentId);
 }

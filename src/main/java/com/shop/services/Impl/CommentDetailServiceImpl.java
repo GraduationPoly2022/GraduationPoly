@@ -18,7 +18,9 @@ public class CommentDetailServiceImpl implements com.shop.services.ICommentDetai
     }
 
     @Override
-    public List<CommentDetail> findAllCommentDetail() {
-        return this.commentDetailRepository.findAll();
+    public List<CommentDetail> findCommentDtById(Long CommentId) {
+        return this.commentDetailRepository.findByCommentDetails_commentId(CommentId);
     }
+
+
 }

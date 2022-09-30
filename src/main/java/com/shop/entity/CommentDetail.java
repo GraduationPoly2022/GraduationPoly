@@ -8,10 +8,10 @@ import java.util.Date;
 public class CommentDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long CommentDtId;
-    private String ContentReply;
+    private Long commentDtId;
+    private String contentReply;
     @Temporal(TemporalType.DATE)
-    private Date ContentDateReply;
+    private Date contentDateReply;
     @ManyToOne(fetch = FetchType.EAGER)
     private Comment commentDetails;
 
@@ -22,39 +22,37 @@ public class CommentDetail {
     public CommentDetail() {
     }
 
-    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply,
-                         Comment commentDetails, User userCommentDetails) {
-        CommentDtId = commentDtId;
-        ContentReply = contentReply;
-        ContentDateReply = contentDateReply;
+    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply, Comment commentDetails, User userCommentDetails) {
+        this.commentDtId = commentDtId;
+        this.contentReply = contentReply;
+        this.contentDateReply = contentDateReply;
         this.commentDetails = commentDetails;
         this.userCommentDetails = userCommentDetails;
     }
 
     public Long getCommentDtId() {
-        return CommentDtId;
+        return commentDtId;
     }
 
     public void setCommentDtId(Long commentDtId) {
-        CommentDtId = commentDtId;
+        this.commentDtId = commentDtId;
     }
 
     public String getContentReply() {
-        return ContentReply;
+        return contentReply;
     }
 
     public void setContentReply(String contentReply) {
-        ContentReply = contentReply;
+        this.contentReply = contentReply;
     }
 
     public Date getContentDateReply() {
-        return ContentDateReply;
+        return contentDateReply;
     }
 
     public void setContentDateReply(Date contentDateReply) {
-        ContentDateReply = contentDateReply;
+        this.contentDateReply = contentDateReply;
     }
-
 
     public Comment getCommentDetails() {
         return commentDetails;

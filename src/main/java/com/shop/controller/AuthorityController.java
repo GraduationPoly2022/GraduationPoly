@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import static com.shop.helper.CheckMail.emailExists;
@@ -134,18 +133,18 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
-        if (!this.timeCode.getCode().equals(code)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
-            );
-        }
+//        if (!this.timeCode.getCode().equals(code)) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//                    new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
+//            );
+//        }
         try {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
-            if (Objects.equals(this.timeCode.getCode(), code)) {
-                User u = this.userService.createUser(user);
-                if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
-            }
+//            if (Objects.equals(this.timeCode.getCode(), code)) {
+            User u = this.userService.createUser(user);
+            if (u != null) message = ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
+//            }
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));

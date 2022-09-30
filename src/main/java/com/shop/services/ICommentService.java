@@ -8,5 +8,5 @@ public interface ICommentService {
     Comment createComment(Comment comment);
 
 
-    List<Comment> findAllComment();
+    List<Comment> findCommentByProducts(Long productId);
 }
