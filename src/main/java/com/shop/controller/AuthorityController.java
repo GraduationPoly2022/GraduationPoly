@@ -11,17 +11,12 @@ import com.shop.dto.ResponseMessage;
 import com.shop.dto.UserDto;
 import com.shop.entity.Role;
 import com.shop.entity.User;
-import com.shop.enumEntity.AuthenticationProvider;
-import com.shop.enumEntity.Expired;
-import com.shop.enumEntity.RoleName;
-import com.shop.enumEntity.StatusMessage;
-import com.shop.helper.UserNotFoundException;
+import com.shop.enumEntity.*;
 import com.shop.helper.handleCode.HandleTimeCode;
 import com.shop.helper.handleCode.TimeCode;
 import com.shop.services.IMailService;
 import com.shop.services.IRoleService;
 import com.shop.services.IUserService;
-import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -71,14 +67,13 @@ public class AuthorityController {
     @Autowired
     private IMailService mailService;
 
-    @SneakyThrows
     @PostMapping("/generate-token")
     public ResponseEntity<ResponseMessage> loginSecurity(@RequestBody JwtResponse jwtResponse) {
         try {
             this.authenticate(jwtResponse.getUserDto().getEmail(), jwtResponse.getUserDto().getPassword());
-        } catch (UserNotFoundException e) {
-            e.getStackTrace();
-            throw new Exception("User not found " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseMessage(StatusMessage.ERROR, "Account does not exist yet", null));
         }
         UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(jwtResponse.getUserDto().getEmail());
         if (this.passwordEncoder.matches(jwtResponse.getUserDto().getPassword(), userDetails.getPassword())) {
@@ -100,9 +95,8 @@ public class AuthorityController {
 
     }
 
-    @SneakyThrows
     @PostMapping("/google")
-    public ResponseEntity<?> signInWithGoogleToken(@RequestBody String token) {
+    public ResponseEntity<ResponseMessage> signInWithGoogleToken(@RequestBody String token) throws IOException {
         NetHttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
@@ -121,8 +115,8 @@ public class AuthorityController {
 
         try {
             this.authenticate(user.getUsername(), user.getPassword());
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lỗi " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR, "Lỗi " + e.getMessage(), null));
         }
         UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(user.getUsername());
         JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true, false);
@@ -134,6 +128,9 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
+        if (this.handleTimeCode.fileNotFound()) {
+            this.timeCode = this.handleTimeCode.timeCodeExCode;
+        }
         if (!this.timeCode.getCode().equals(code)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
@@ -153,9 +150,22 @@ public class AuthorityController {
         return message;
     }
 
-    @GetMapping("/user/check-mail")
-    public Boolean ckeckEmailExists(@RequestParam("email") String email) {
-        return this.userService.findByEmail(email) != null;
+    @GetMapping("/check-mail")
+    public ResponseEntity<ResponseMessage> ckeckEmailExists(@RequestParam("email") String email) {
+        if (!emailExists(email)) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email address does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
+        } else if (this.userService.findByEmail(email) != null) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email already exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseMessage(StatusMessage.OK, "Email ok", true));
+        }
     }
 
     @PatchMapping("/user")
@@ -175,8 +185,10 @@ public class AuthorityController {
         );
     }
 
-    @GetMapping("/send-mail/{toForm}/{name}")
-    public ResponseEntity<ResponseMessage> sendCode(@PathVariable("toForm") String toForm, @PathVariable("name") String name) {
+    @GetMapping("/send-mail/{toForm}/{name}/{status}")
+    public ResponseEntity<ResponseMessage> sendCode(@PathVariable("toForm") String toForm,
+                                                    @PathVariable("name") String name,
+                                                    @PathVariable("status") TypeUsers status) {
         ResponseEntity<ResponseMessage> message;
         this.timeCode = this.handleTimeCode.timeCode();
         if (!emailExists(toForm)) {
@@ -185,20 +197,20 @@ public class AuthorityController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
         } else {
-            if (this.userService.findByEmail(toForm) != null) {
+            if (this.userService.findByEmail(toForm) != null && status == TypeUsers.CREATE) {
                 UserDto userError = new UserDto();
                 userError.setEmail("Email already exists");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
             }
-        }
-        try {
-            this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Account verification code", this.timeCode));
-        } catch (Exception e) {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseMessage(StatusMessage.FAILED, "Error " + e.getMessage(), null)
-            );
+            try {
+                this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
+                message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Account verification code", this.timeCode));
+            } catch (Exception e) {
+                message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponseMessage(StatusMessage.FAILED, "Error " + e.getMessage(), null)
+                );
+            }
         }
         return message;
     }
@@ -207,9 +219,9 @@ public class AuthorityController {
         try {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            System.out.println("User disable " + e.getMessage());
+            throw new Exception("USER DISABLED " + e.getMessage());
         } catch (BadCredentialsException e) {
-            System.out.println("User bad credentials " + e.getMessage());
+            throw new Exception("Invalid Credentials " + e.getMessage());
         }
     }
 

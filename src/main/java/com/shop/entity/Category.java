@@ -9,29 +9,28 @@ import java.util.Set;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long categoryId;
+    private Long catId;
     private String name;
 
 
-    @OneToMany(mappedBy = "categoriesProduct")
+    @OneToMany(mappedBy = "catProd")
     @JsonIgnore
-    private Set<Products> categoriesProduct;
+    private Set<Products> catProd;
 
     public Category() {
-
     }
 
-    public Category(Long categoryId, String name) {
-        this.categoryId = categoryId;
+    public Category(Long catId, String name) {
+        this.catId = catId;
         this.name = name;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getCatId() {
+        return catId;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCatId(Long catId) {
+        this.catId = catId;
     }
 
     public String getName() {
@@ -42,11 +41,11 @@ public class Category {
         this.name = name;
     }
 
-    public Set<Products> getCategoriesProduct() {
-        return categoriesProduct;
+    public Set<Products> getCatProd() {
+        return catProd;
     }
 
-    public void setCategoriesProduct(Set<Products> categoriesProduct) {
-        this.categoriesProduct = categoriesProduct;
+    public void setCatProd(Set<Products> catProd) {
+        this.catProd = catProd;
     }
 }

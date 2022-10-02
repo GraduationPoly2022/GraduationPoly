@@ -12,17 +12,17 @@ import java.util.Set;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long CommentId;
-    private String Content;
+    private Long commentId;
+    private String content;
     @Temporal(TemporalType.DATE)
-    private Date CommentDate;
+    private Date commentDate;
 
-    @OneToMany(mappedBy = "commentDetails")
+    @OneToMany(mappedBy = "cmde")
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Products productComment;
+    private Products prodComment;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User userComments;
@@ -31,36 +31,36 @@ public class Comment {
     }
 
     public Comment(Long commentId, String content, Date commentDate,
-                   Products productComment, User userComments) {
-        CommentId = commentId;
-        Content = content;
-        CommentDate = commentDate;
-        this.productComment = productComment;
+                   Products prodComment, User userComments) {
+        this.commentId = commentId;
+        this.content = content;
+        this.commentDate = commentDate;
+        this.prodComment = prodComment;
         this.userComments = userComments;
     }
 
     public Long getCommentId() {
-        return CommentId;
+        return commentId;
     }
 
     public void setCommentId(Long commentId) {
-        CommentId = commentId;
+        this.commentId = commentId;
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
     }
 
     public Date getCommentDate() {
-        return CommentDate;
+        return commentDate;
     }
 
     public void setCommentDate(Date commentDate) {
-        CommentDate = commentDate;
+        this.commentDate = commentDate;
     }
 
     public Set<CommentDetail> getCommentDetails() {
@@ -79,11 +79,11 @@ public class Comment {
         this.userComments = userComments;
     }
 
-    public Products getProductComment() {
-        return productComment;
+    public Products getProdComment() {
+        return prodComment;
     }
 
-    public void setProductComment(Products productComment) {
-        this.productComment = productComment;
+    public void setProdComment(Products prodComment) {
+        this.prodComment = prodComment;
     }
 }

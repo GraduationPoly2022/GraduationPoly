@@ -14,7 +14,7 @@ import java.util.Set;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderId;
+    private Long odId;
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     @Temporal(TemporalType.DATE)
@@ -34,9 +34,9 @@ public class Order {
     private DeviceEnum deviceUse;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private User usersOrders;
+    private User usersOd;
 
-    @OneToMany(mappedBy = "ordersDetail")
+    @OneToMany(mappedBy = "odde")
     @JsonIgnore
     private Set<OrderDetail> orderDetails;
 
@@ -51,12 +51,11 @@ public class Order {
     public Order() {
     }
 
-
-    public Order(Long orderId, Date orderDate, Date deliveryDate, Date recipientDate, String receive,
+    public Order(Long odId, Date orderDate, Date deliveryDate, Date recipientDate, String receive,
                  String phoneReceive, String addressReceive, OrderStatus status,
                  Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse,
-                 User usersOrders, Return returns) {
-        this.orderId = orderId;
+                 User usersOd, Return returns) {
+        this.odId = odId;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.recipientDate = recipientDate;
@@ -67,16 +66,16 @@ public class Order {
         this.amount = amount;
         this.paymentReceived = paymentReceived;
         this.deviceUse = deviceUse;
-        this.usersOrders = usersOrders;
+        this.usersOd = usersOd;
         this.returns = returns;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getOdId() {
+        return odId;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setOdId(Long odId) {
+        this.odId = odId;
     }
 
     public Date getOrderDate() {
@@ -167,12 +166,12 @@ public class Order {
         this.returns = returns;
     }
 
-    public User getUsersOrders() {
-        return usersOrders;
+    public User getUsersOd() {
+        return usersOd;
     }
 
-    public void setUsersOrders(User usersOrders) {
-        this.usersOrders = usersOrders;
+    public void setUsersOd(User usersOd) {
+        this.usersOd = usersOd;
     }
 
     public Set<OrderDetail> getOrderDetails() {

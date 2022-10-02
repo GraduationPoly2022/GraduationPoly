@@ -37,9 +37,10 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnore
     private Set<Role> roleSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "usersOrders")
+    @OneToMany(mappedBy = "usersOd")
     @JsonIgnore
     private Set<Order> orders;
 
@@ -51,14 +52,13 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "userCommentDetails")
+    @OneToMany(mappedBy = "userCmde")
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
     @OneToMany(mappedBy = "userReview")
     @JsonIgnore
     private Set<Reviews> reviewsSet = new LinkedHashSet<>();
-
 
     public User() {
     }

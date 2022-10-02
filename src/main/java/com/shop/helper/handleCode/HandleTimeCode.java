@@ -13,7 +13,7 @@ import java.util.TimerTask;
 @Service
 public class HandleTimeCode {
     private final Date now = new Date();
-    private TimerTask timerTask;
+    public TimeCode timeCodeExCode;
 
     public HandleTimeCode() {
     }
@@ -37,6 +37,27 @@ public class HandleTimeCode {
         return timeCode;
     }
 
+    public boolean fileNotFound() {
+        boolean filsExists = false;
+        File file = new File("timeCode.json");
+        if (file.exists()) {
+            filsExists = true;
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                this.timeCodeExCode = objectMapper.readValue(file, TimeCode.class);
+                Date code = new Date(this.timeCodeExCode.getTimeExpired());
+                if (this.now.after(code)) {
+                    this.timeCodeExCode.setCode("");
+                    new File("timeCode.json").deleteOnExit();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            this.deleteWhenTimeExpired();
+        }
+        return filsExists;
+    }
+
     public TimeCode timeCode() {
         TimeCode timeCode;
         if (this.readCode() == null) {
@@ -50,13 +71,13 @@ public class HandleTimeCode {
             }
         } else {
             timeCode = this.readCode();
-//            Date code = new Date(timeCode1.getTimeExpired());
-//            if (this.now.after(code)) {
-//                timeCode1.setCode("");
-//                new File("timeCode.json").deleteOnExit();
-//            }
+            Date code = new Date(timeCode.getTimeExpired());
+            if (this.now.after(code)) {
+                timeCode.setCode("");
+                new File("timeCode.json").deleteOnExit();
+            }
         }
-        this.deleteWhenTimeExpired();
+//        this.deleteWhenTimeExpired();
         return timeCode;
     }
 

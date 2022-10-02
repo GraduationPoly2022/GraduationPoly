@@ -46,4 +46,12 @@ public class Role {
     public void setRoleName(RoleName roleName) {
         this.roleName = roleName;
     }
+
+    public Set<User> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(Set<User> userSet) {
+        this.userSet = userSet;
+    }
 }
