@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.shop.helper.CheckMail.emailExists;
@@ -95,7 +96,7 @@ public class AuthorityController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<?> signInWithGoogleToken(@RequestBody String token) throws IOException {
+    public ResponseEntity<ResponseMessage> signInWithGoogleToken(@RequestBody String token) throws IOException {
         NetHttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
@@ -115,7 +116,7 @@ public class AuthorityController {
         try {
             this.authenticate(user.getUsername(), user.getPassword());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lỗi " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR, "Lỗi " + e.getMessage(), null));
         }
         UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(user.getUsername());
         JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true, false);
@@ -127,6 +128,9 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
+        if (this.handleTimeCode.fileNotFound()) {
+            this.timeCode = this.handleTimeCode.timeCodeExCode;
+        }
         if (!this.timeCode.getCode().equals(code)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
@@ -134,11 +138,13 @@ public class AuthorityController {
         }
         try {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
-//            if (Objects.equals(this.timeCode.getCode(), code)) {
-            User u = this.userService.createUser(user);
-            if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
-//            }
+            if (Objects.equals(this.timeCode.getCode(), code)) {
+                User u = this.userService.createUser(user);
+                if (u != null) {
+                    message = ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
+                }
+            }
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
@@ -146,9 +152,22 @@ public class AuthorityController {
         return message;
     }
 
-    @GetMapping("/user/check-mail")
-    public Boolean ckeckEmailExists(@RequestParam("email") String email) {
-        return this.userService.findByEmail(email) != null;
+    @GetMapping("/check-mail")
+    public ResponseEntity<ResponseMessage> ckeckEmailExists(@RequestParam("email") String email) {
+        if (!emailExists(email)) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email address does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
+        } else if (this.userService.findByEmail(email) != null) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email already exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseMessage(StatusMessage.OK, "Email ok", true));
+        }
     }
 
     @PatchMapping("/user")

@@ -1,31 +1,34 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 public class ImageDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String imdeId;
+    private Long imdeId;
     private String imageName;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Products prodImde;
 
     public ImageDetail() {
     }
 
-    public ImageDetail(String imdeId, String imageName, Products prodImde) {
+    public ImageDetail(Long imdeId, String imageName, Products prodImde) {
         this.imdeId = imdeId;
         this.imageName = imageName;
         this.prodImde = prodImde;
     }
 
-    public String getImdeId() {
+    public Long getImdeId() {
         return imdeId;
     }
 
-    public void setImdeId(String imdeId) {
+    public void setImdeId(Long imdeId) {
         this.imdeId = imdeId;
     }
 

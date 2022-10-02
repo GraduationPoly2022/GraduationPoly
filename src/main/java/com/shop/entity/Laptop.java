@@ -10,6 +10,7 @@ public class Laptop {
 
     @Id
     @Column(name = "laptop_id")
+    @JsonIgnore
     private Long laptopId;
 
     @OneToOne

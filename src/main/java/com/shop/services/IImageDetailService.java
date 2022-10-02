@@ -2,11 +2,12 @@ package com.shop.services;
 
 
 import com.shop.entity.ImageDetail;
+import com.shop.entity.Products;
 
 import java.util.List;
 
 public interface IImageDetailService {
     List<ImageDetail> creImageDetail(List<ImageDetail> imageDetail);
 
-    List<ImageDetail> findByProduct(Long prodId);
+    List<ImageDetail> findByProd(Products products);
 }
