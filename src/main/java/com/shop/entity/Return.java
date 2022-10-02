@@ -10,6 +10,7 @@ import java.util.Date;
 public class Return {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "return_id")
     private Long returnId;
     @Temporal(TemporalType.DATE)
     private Date returnDate;
@@ -19,6 +20,8 @@ public class Return {
     private String notes;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "return_id")
+    @MapsId
     private Order orderReturn;
     @ManyToOne(fetch = FetchType.EAGER)
     private Shipper shippersReturn;

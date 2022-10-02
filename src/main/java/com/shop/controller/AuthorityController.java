@@ -41,6 +41,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.shop.helper.CheckMail.emailExists;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthorityController {
@@ -177,19 +179,19 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> sendCode(@PathVariable("toForm") String toForm, @PathVariable("name") String name) {
         ResponseEntity<ResponseMessage> message;
         this.timeCode = this.handleTimeCode.timeCode();
-//        if (!emailExists(toForm)) {
-//            UserDto userError = new UserDto();
-//            userError.setEmail("Email address does not exist");
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
-//        } else {
-//            if (this.userService.findByEmail(toForm) != null) {
-//                UserDto userError = new UserDto();
-//                userError.setEmail("Email already exists");
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                        .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
-//            }
-//        }
+        if (!emailExists(toForm)) {
+            UserDto userError = new UserDto();
+            userError.setEmail("Email address does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
+        } else {
+            if (this.userService.findByEmail(toForm) != null) {
+                UserDto userError = new UserDto();
+                userError.setEmail("Email already exists");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
+            }
+        }
         try {
             this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
             message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Account verification code", this.timeCode));

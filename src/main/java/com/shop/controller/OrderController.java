@@ -1,6 +1,5 @@
 package com.shop.controller;
 
-
 import com.shop.dto.OrderDto;
 import com.shop.dto.ResponseMessage;
 import com.shop.entity.Order;
@@ -9,7 +8,6 @@ import com.shop.enumEntity.OrderStatus;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.services.IOrderDetailService;
 import com.shop.services.IOrderService;
-import com.shop.services.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,14 +27,12 @@ public class OrderController {
     @Autowired
     private IOrderDetailService orderDetailService;
 
-    @Autowired
-    private IUserService userService;
 
-    //getAll Order and Order Detail
-    @GetMapping("/")
-    public ResponseEntity<ResponseMessage> getAll() {
+    //GetAll Order and Order Detail
+    @GetMapping("/get-data/{userId}")
+    public ResponseEntity<ResponseMessage> getAll(@PathVariable("userId") Long userId) {
         ResponseEntity<ResponseMessage> message = null;
-        List<Order> list = this.orderService.findAll();
+        List<Order> list = this.orderService.findAll(OrderStatus.CART, userId);
         List<OrderDto> orderDtoList = transfer(list);
         message = ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
@@ -47,15 +43,15 @@ public class OrderController {
     @PostMapping("/")
     public ResponseEntity<ResponseMessage> insertOrder(@RequestBody OrderDto orderDto) {
         ResponseEntity<ResponseMessage> message = null;
-        Order checkUserAndStatus = this.orderService.findByUserAndStatus(orderDto.getUsersOrders(), OrderStatus.CART);
+        Order checkUserAndStatus = this.orderService.findByUserAndStatus(orderDto.getUsersOd(), OrderStatus.CART);
         try {
             if (checkUserAndStatus == null) {
                 Order order = new Order();
                 BeanUtils.copyProperties(orderDto, order);
                 Order saveOrder = this.orderService.createOrder(order);
                 OrderDetail orderDetails = new OrderDetail();
-                BeanUtils.copyProperties(orderDto.getOrderDetail(), orderDetails, "ordersDetail");
-                orderDetails.setOrdersDetail(saveOrder);
+                BeanUtils.copyProperties(orderDto.getOrderDetails(), orderDetails, "Odde");
+                orderDetails.setOdde(saveOrder);
                 OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(orderDetails);
                 if (saveOrder != null && saveOrderDetail != null) {
                     message = ResponseEntity.status(HttpStatus.OK)
@@ -65,19 +61,19 @@ public class OrderController {
                 OrderDetail checkOrderDetail = this.orderDetailService
                         .findByOrderAndProductAndUserAndStatus(
                                 checkUserAndStatus,
-                                orderDto.getOrderDetail().getProductsOrderDetail(),
-                                orderDto.getUsersOrders(),
+                                orderDto.getOrderDetails().getProdOdde(),
+                                orderDto.getUsersOd(),
                                 OrderStatus.CART
                         );
                 OrderDetail orderDetails;
                 if (checkOrderDetail == null) {
                     orderDetails = new OrderDetail();
-                    BeanUtils.copyProperties(orderDto.getOrderDetail(), orderDetails, "ordersDetail", "qty");
-                    orderDetails.setOrdersDetail(checkUserAndStatus);
-                    if (orderDto.getOrderDetail().getQty() == 0) {
+                    BeanUtils.copyProperties(orderDto.getOrderDetails(), orderDetails, "Odde", "qty");
+                    orderDetails.setOdde(checkUserAndStatus);
+                    if (orderDto.getOrderDetails().getQty() == 0) {
                         orderDetails.setQty(1);
                     } else {
-                        orderDetails.setQty(orderDto.getOrderDetail().getQty());
+                        orderDetails.setQty(orderDto.getOrderDetails().getQty());
                     }
                     OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(orderDetails);
                     if (saveOrderDetail != null) {
@@ -85,7 +81,7 @@ public class OrderController {
                                 .body(new ResponseMessage(StatusMessage.OK, "OK", saveOrderDetail));
                     }
                 } else {
-                    checkOrderDetail.setQty(checkOrderDetail.getQty() + orderDto.getOrderDetail().getQty());
+                    checkOrderDetail.setQty(checkOrderDetail.getQty() + orderDto.getOrderDetails().getQty());
                     OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(checkOrderDetail);
                     if (saveOrderDetail != null) {
                         message = ResponseEntity.status(HttpStatus.OK)
@@ -102,10 +98,9 @@ public class OrderController {
 
     private List<OrderDto> transfer(List<Order> orders) {
         List<OrderDto> orderDtoList = new ArrayList<>();
-
         for (Order order : orders) {
             OrderDto orderDto = new OrderDto();
-            orderDto.setOrderId(order.getOrderId());
+            orderDto.setOdId(order.getOdId());
             orderDto.setOrderDate(order.getOrderDate());
             orderDto.setDeliveryDate(order.getDeliveryDate());
             orderDto.setRecipientDate(order.getRecipientDate());
@@ -115,10 +110,11 @@ public class OrderController {
             orderDto.setStatus(order.getStatus());
             orderDto.setAmount(order.getAmount());
             orderDto.setPaymentReceived(order.getPaymentReceived());
-            orderDto.setUsersOrders(order.getUsersOrders());
+            orderDto.setUsersOd(order.getUsersOd());
+            List<OrderDetail> lsOrderDetails = this.orderDetailService.findAll(order.getOdId(), order.getUsersOd(), OrderStatus.CART);
+            orderDto.setLsOrderDetails(lsOrderDetails);
             orderDtoList.add(orderDto);
         }
         return orderDtoList;
     }
-
 }

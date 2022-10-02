@@ -3,6 +3,7 @@ package com.shop.dto;
 import com.shop.entity.OrderDetail;
 import com.shop.entity.Return;
 import com.shop.entity.User;
+import com.shop.enumEntity.DeviceEnum;
 import com.shop.enumEntity.OrderStatus;
 import com.shop.enumEntity.PaymentEnum;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
-    private Long orderId;
+    private Long odId;
     private Date orderDate;
     private Date deliveryDate;
     private Date recipientDate;
@@ -26,8 +27,10 @@ public class OrderDto {
     private OrderStatus status;
     private Double amount;
     private PaymentEnum paymentReceived;
-    private OrderDetail orderDetail;
-    private List<OrderDetail> lsOrderDetail;
-    private User usersOrders;
+    private DeviceEnum deviceUse;
+    private User usersOd;
+    private OrderDetail orderDetails;
+    private List<OrderDetail> lsOrderDetails;
     private Return returns;
+
 }

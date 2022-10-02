@@ -8,67 +8,67 @@ import java.util.Date;
 public class CommentDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long CommentDtId;
-    private String ContentReply;
+    private Long cmdeId;
+    private String contentReply;
     @Temporal(TemporalType.DATE)
-    private Date ContentDateReply;
+    private Date contentDateReply;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Comment commentDetails;
+    private Comment cmde;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private User userCommentDetails;
+    private User userCmde;
     ;
 
     public CommentDetail() {
     }
 
-    public CommentDetail(Long commentDtId, String contentReply, Date contentDateReply,
-                         Comment commentDetails, User userCommentDetails) {
-        CommentDtId = commentDtId;
-        ContentReply = contentReply;
-        ContentDateReply = contentDateReply;
-        this.commentDetails = commentDetails;
-        this.userCommentDetails = userCommentDetails;
+    public CommentDetail(Long cmdeId, String contentReply, Date contentDateReply,
+                         Comment cmde, User userCmde) {
+        this.cmdeId = cmdeId;
+        this.contentReply = contentReply;
+        this.contentDateReply = contentDateReply;
+        this.cmde = cmde;
+        this.userCmde = userCmde;
     }
 
-    public Long getCommentDtId() {
-        return CommentDtId;
+    public Long getCmdeId() {
+        return cmdeId;
     }
 
-    public void setCommentDtId(Long commentDtId) {
-        CommentDtId = commentDtId;
+    public void setCmdeId(Long cmdeId) {
+        this.cmdeId = cmdeId;
     }
 
     public String getContentReply() {
-        return ContentReply;
+        return contentReply;
     }
 
     public void setContentReply(String contentReply) {
-        ContentReply = contentReply;
+        this.contentReply = contentReply;
     }
 
     public Date getContentDateReply() {
-        return ContentDateReply;
+        return contentDateReply;
     }
 
     public void setContentDateReply(Date contentDateReply) {
-        ContentDateReply = contentDateReply;
+        this.contentDateReply = contentDateReply;
     }
 
 
-    public Comment getCommentDetails() {
-        return commentDetails;
+    public Comment getCmde() {
+        return cmde;
     }
 
-    public void setCommentDetails(Comment commentDetails) {
-        this.commentDetails = commentDetails;
+    public void setCmde(Comment cmde) {
+        this.cmde = cmde;
     }
 
-    public User getUserCommentDetails() {
-        return userCommentDetails;
+    public User getUserCmde() {
+        return userCmde;
     }
 
-    public void setUserCommentDetails(User userCommentDetails) {
-        this.userCommentDetails = userCommentDetails;
+    public void setUserCmde(User userCmde) {
+        this.userCmde = userCmde;
     }
 }
