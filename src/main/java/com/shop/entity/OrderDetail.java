@@ -6,32 +6,32 @@ import javax.persistence.*;
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderDetailId;
+    private Long oddeId;
     private Integer qty;
     private Double price;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Products productsOrderDetail;
+    private Products prodOdde;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Order ordersDetail;
+    private Order odde;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(Long orderDetailId, Integer qty, Double price, Products productsOrderDetail,
-                       Order ordersDetail) {
-        this.orderDetailId = orderDetailId;
+    public OrderDetail(Long oddeId, Integer qty, Double price, Products prodOdde,
+                       Order odde) {
+        this.oddeId = oddeId;
         this.qty = qty;
         this.price = price;
-        this.ordersDetail = ordersDetail;
-        this.productsOrderDetail = productsOrderDetail;
+        this.odde = odde;
+        this.prodOdde = prodOdde;
     }
 
-    public Long getOrderDetailId() {
-        return orderDetailId;
+    public Long getOddeId() {
+        return oddeId;
     }
 
-    public void setOrderDetailId(Long orderDetailId) {
-        this.orderDetailId = orderDetailId;
+    public void setOddeId(Long oddeId) {
+        this.oddeId = oddeId;
     }
 
     public Integer getQty() {
@@ -50,19 +50,19 @@ public class OrderDetail {
         this.price = price;
     }
 
-    public Products getProductsOrderDetail() {
-        return productsOrderDetail;
+    public Products getProdOdde() {
+        return prodOdde;
     }
 
-    public void setProductsOrderDetail(Products productsOrderDetail) {
-        this.productsOrderDetail = productsOrderDetail;
+    public void setProdOdde(Products prodOdde) {
+        this.prodOdde = prodOdde;
     }
 
-    public Order getOrdersDetail() {
-        return ordersDetail;
+    public Order getOdde() {
+        return odde;
     }
 
-    public void setOrdersDetail(Order ordersDetail) {
-        this.ordersDetail = ordersDetail;
+    public void setOdde(Order odde) {
+        this.odde = odde;
     }
 }

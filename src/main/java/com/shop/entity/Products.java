@@ -10,92 +10,82 @@ import java.util.Set;
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long productId;
-    private String productName;
-    private String imageMain;
-    private String imageUrl;
+    private Long prodId;
+    private String prodName;
+    private String imageUrlMain;
     private Boolean available;
     private Integer warranty;
 
-    @OneToMany(mappedBy = "productImages")
+    @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
     private Set<imageDetail> imageDetails;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Category categoriesProduct;
+    private Category catProd;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Producer productProducer;
+    private ProductionCompany prodPco;
 
-    @OneToMany(mappedBy = "smartPhoneProduct")
-    @JsonIgnore
-    private Set<SmartPhone> smartPhone;
+    @OneToOne(mappedBy = "spProd")
+    private SmartPhone smartPhone;
 
-    @OneToMany(mappedBy = "productAccessories")
-    @JsonIgnore
-    private Set<Accessory> accessories;
+    @OneToOne(mappedBy = "accessoryProduct")
+    private Accessory accessoryProd;
 
-    @OneToMany(mappedBy = "productLaptop")
-    @JsonIgnore
-    private Set<Laptop> laptops;
+    @OneToOne(mappedBy = "laptopProd")
+    private Laptop laptop;
 
-    @OneToMany(mappedBy = "productsOrderDetail")
+    @OneToMany(mappedBy = "prodOdde")
     @JsonIgnore
     private Set<OrderDetail> OrderDetails;
-    @OneToMany(mappedBy = "productComment")
+    @OneToMany(mappedBy = "prodComment")
     @JsonIgnore
-    private Set<Comment> commentProduct;
+    private Set<Comment> commentProd;
 
-    @OneToMany(mappedBy = "productReview")
+    @OneToMany(mappedBy = "prodReview")
     @JsonIgnore
     private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 
     public Products() {
     }
 
-    public Products(Long productId, String productName, String imageMain,
-                    String imageUrl, Boolean available, Integer warranty,
-                    Category categoriesProduct, Producer productProducer) {
-        this.productId = productId;
-        this.productName = productName;
-        this.imageMain = imageMain;
-        this.imageUrl = imageUrl;
+    public Products(Long prodId, String prodName, String imageUrlMain,
+                    Boolean available, Integer warranty,
+                    Category catProd, ProductionCompany prodPco, SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
+        this.prodId = prodId;
+        this.prodName = prodName;
+        this.imageUrlMain = imageUrlMain;
         this.available = available;
         this.warranty = warranty;
-        this.categoriesProduct = categoriesProduct;
-        this.productProducer = productProducer;
+        this.catProd = catProd;
+        this.prodPco = prodPco;
+        this.smartPhone = smartPhone;
+        this.accessoryProd = accessoryProd;
+        this.laptop = laptop;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getProdId() {
+        return prodId;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProdId(Long prodId) {
+        this.prodId = prodId;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProdName() {
+        return prodName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
     }
 
-    public String getImageMain() {
-        return imageMain;
+    public String getImageUrlMain() {
+        return imageUrlMain;
     }
 
-    public void setImageMain(String imageMain) {
-        this.imageMain = imageMain;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrlMain(String imageUrlMain) {
+        this.imageUrlMain = imageUrlMain;
     }
 
     public Boolean isAvailable() {
@@ -114,36 +104,12 @@ public class Products {
         this.imageDetails = imageDetails;
     }
 
-    public Category getCategoriesProduct() {
-        return categoriesProduct;
+    public Category getCatProd() {
+        return catProd;
     }
 
-    public void setCategoriesProduct(Category categoriesProduct) {
-        this.categoriesProduct = categoriesProduct;
-    }
-
-    public Set<SmartPhone> getSmartPhone() {
-        return smartPhone;
-    }
-
-    public void setSmartPhone(Set<SmartPhone> smartPhone) {
-        this.smartPhone = smartPhone;
-    }
-
-    public Set<Accessory> getAccessories() {
-        return accessories;
-    }
-
-    public void setAccessories(Set<Accessory> accessories) {
-        this.accessories = accessories;
-    }
-
-    public Set<Laptop> getLaptops() {
-        return laptops;
-    }
-
-    public void setLaptops(Set<Laptop> laptops) {
-        this.laptops = laptops;
+    public void setCatProd(Category catProd) {
+        this.catProd = catProd;
     }
 
     public Set<OrderDetail> getOrderDetails() {
@@ -154,20 +120,20 @@ public class Products {
         OrderDetails = orderDetails;
     }
 
-    public Set<Comment> getCommentProduct() {
-        return commentProduct;
+    public Set<Comment> getCommentProd() {
+        return commentProd;
     }
 
-    public void setCommentProduct(Set<Comment> commentProduct) {
-        this.commentProduct = commentProduct;
+    public void setCommentProd(Set<Comment> commentProd) {
+        this.commentProd = commentProd;
     }
 
-    public Producer getProductProducer() {
-        return productProducer;
+    public ProductionCompany getProductProducer() {
+        return prodPco;
     }
 
-    public void setProductProducer(Producer productProducer) {
-        this.productProducer = productProducer;
+    public void setProductProducer(ProductionCompany productProductionCompany) {
+        this.prodPco = productProductionCompany;
     }
 
     public Integer getWarranty() {
@@ -184,5 +150,29 @@ public class Products {
 
     public void setProductReviewsSet(Set<Reviews> reviewsSet) {
         this.reviewsSet = reviewsSet;
+    }
+
+    public SmartPhone getSmartPhone() {
+        return smartPhone;
+    }
+
+    public void setSmartPhone(SmartPhone smartPhone) {
+        this.smartPhone = smartPhone;
+    }
+
+    public Accessory getAccessoryProd() {
+        return accessoryProd;
+    }
+
+    public void setAccessoryProd(Accessory accessoryProd) {
+        this.accessoryProd = accessoryProd;
+    }
+
+    public Laptop getLaptop() {
+        return laptop;
+    }
+
+    public void setLaptop(Laptop laptop) {
+        this.laptop = laptop;
     }
 }

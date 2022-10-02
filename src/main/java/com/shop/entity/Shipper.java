@@ -61,7 +61,6 @@ public class Shipper {
         this.notes = notes;
     }
 
-
     public Set<Return> getReturns() {
         return returns;
     }

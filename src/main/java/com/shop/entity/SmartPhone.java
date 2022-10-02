@@ -1,59 +1,58 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 public class SmartPhone {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long smartPhoneId;
+    @Column(name = "sp_id")
+    private Long spId;
+
     private String monitor;
-    private String systemOperator;
+    private String sysop;//system operator
     private String beforeCamera;
     private String afterCamera;
     private String cpu;
     private String ram;
     private String disk;
-    private String batteryAndCharging;
+    private String batAChg;//batteryAndCharging
     private String video;
     private String gpu;
     private String connector;
     private String utils;
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Products smartPhoneProduct;
+
+    @OneToOne
+    @JoinColumn(name = "sp_id")
+    @JsonIgnore
+    @MapsId
+    private Products spProd;
 
     public SmartPhone() {
     }
 
-    public SmartPhone(Long smartPhoneId, String monitor, String systemOperator, String beforeCamera,
-                      String afterCamera, String cpu, String ram, String disk, String batteryAndCharging,
+    public SmartPhone(String monitor, String sysop, String beforeCamera,
+                      String afterCamera, String cpu, String ram, String disk, String batAChg,
                       String video, String gpu, String connector, String utils,
-                      String notes, Products smartPhoneProduct) {
-        this.smartPhoneId = smartPhoneId;
+                      String notes, Products spProd) {
         this.monitor = monitor;
-        this.systemOperator = systemOperator;
+        this.sysop = sysop;
         this.beforeCamera = beforeCamera;
         this.afterCamera = afterCamera;
         this.cpu = cpu;
         this.ram = ram;
         this.disk = disk;
-        this.batteryAndCharging = batteryAndCharging;
+        this.batAChg = batAChg;
         this.video = video;
         this.gpu = gpu;
         this.connector = connector;
         this.utils = utils;
         this.notes = notes;
-        this.smartPhoneProduct = smartPhoneProduct;
-    }
-
-    public Long getSmartPhoneId() {
-        return smartPhoneId;
-    }
-
-    public void setSmartPhoneId(Long smartPhoneId) {
-        this.smartPhoneId = smartPhoneId;
+        this.spProd = spProd;
     }
 
     public String getMonitor() {
@@ -64,12 +63,12 @@ public class SmartPhone {
         this.monitor = monitor;
     }
 
-    public String getSystemOperator() {
-        return systemOperator;
+    public String getSysop() {
+        return sysop;
     }
 
-    public void setSystemOperator(String systemOperator) {
-        this.systemOperator = systemOperator;
+    public void setSysop(String sysop) {
+        this.sysop = sysop;
     }
 
     public String getBeforeCamera() {
@@ -112,12 +111,12 @@ public class SmartPhone {
         this.disk = disk;
     }
 
-    public String getBatteryAndCharging() {
-        return batteryAndCharging;
+    public String getBatAChg() {
+        return batAChg;
     }
 
-    public void setBatteryAndCharging(String batteryAndCharging) {
-        this.batteryAndCharging = batteryAndCharging;
+    public void setBatAChg(String batAChg) {
+        this.batAChg = batAChg;
     }
 
     public String getVideo() {
@@ -152,19 +151,27 @@ public class SmartPhone {
         this.utils = utils;
     }
 
-    public Products getSmartPhoneProduct() {
-        return smartPhoneProduct;
-    }
-
-    public void setSmartPhoneProduct(Products products) {
-        this.smartPhoneProduct = products;
-    }
-
     public String getNotes() {
         return notes;
     }
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Long getSpId() {
+        return spId;
+    }
+
+    public void setSpId(Long spId) {
+        this.spId = spId;
+    }
+
+    public Products getSpProd() {
+        return spProd;
+    }
+
+    public void setSpProd(Products spProd) {
+        this.spProd = spProd;
     }
 }
