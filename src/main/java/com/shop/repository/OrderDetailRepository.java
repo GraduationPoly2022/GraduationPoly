@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
-    Optional<OrderDetail> findByOddeAndProdOddeAndOdde_UsersOdAndOdde_Status(Order order, Products products, User user, OrderStatus status);
+    Optional<OrderDetail> findByOddeAndProdOddeAndOdde_usersOdAndOdde_status(Order order, Products products, User user, OrderStatus status);
 
-    List<OrderDetail> findByOdde_OdIdAndOdde_UsersOdAndOdde_Status(Long odId, User user, OrderStatus status);
+    List<OrderDetail> findByOdde_odIdAndOdde_usersOd_emailAndOdde_status(Long odId, String email, OrderStatus status);
 }

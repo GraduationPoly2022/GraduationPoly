@@ -29,13 +29,20 @@ public class OrderController {
 
 
     //GetAll Order and Order Detail
-    @GetMapping("/get-data/{userId}")
-    public ResponseEntity<ResponseMessage> getAll(@PathVariable("userId") Long userId) {
+    @GetMapping("/{email}/{status}")
+    public ResponseEntity<ResponseMessage> getAll(
+            @PathVariable("email") String email,
+            @PathVariable("status") OrderStatus status) {
         ResponseEntity<ResponseMessage> message = null;
-        List<Order> list = this.orderService.findAll(OrderStatus.CART, userId);
-        List<OrderDto> orderDtoList = transfer(list);
-        message = ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
+        List<Order> list = this.orderService.findAll(email, status);
+        List<OrderDto> orderDtoList = transfer(list, email, status);
+        if (!list.isEmpty()) {
+            message = ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
+        } else {
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.NOT_FOUND, "Not found data", null));
+        }
         return message;
     }
 
@@ -47,7 +54,8 @@ public class OrderController {
         try {
             if (checkUserAndStatus == null) {
                 Order order = new Order();
-                BeanUtils.copyProperties(orderDto, order);
+                BeanUtils.copyProperties(orderDto, order, "status");
+                order.setStatus(OrderStatus.CART);
                 Order saveOrder = this.orderService.createOrder(order);
                 OrderDetail orderDetails = new OrderDetail();
                 BeanUtils.copyProperties(orderDto.getOrderDetails(), orderDetails, "Odde");
@@ -96,7 +104,7 @@ public class OrderController {
         return message;
     }
 
-    private List<OrderDto> transfer(List<Order> orders) {
+    private List<OrderDto> transfer(List<Order> orders, String email, OrderStatus status) {
         List<OrderDto> orderDtoList = new ArrayList<>();
         for (Order order : orders) {
             OrderDto orderDto = new OrderDto();
@@ -111,7 +119,7 @@ public class OrderController {
             orderDto.setAmount(order.getAmount());
             orderDto.setPaymentReceived(order.getPaymentReceived());
             orderDto.setUsersOd(order.getUsersOd());
-            List<OrderDetail> lsOrderDetails = this.orderDetailService.findAll(order.getOdId(), order.getUsersOd(), OrderStatus.CART);
+            List<OrderDetail> lsOrderDetails = this.orderDetailService.findAll(order.getOdId(), email, status);
             orderDto.setLsOrderDetails(lsOrderDetails);
             orderDtoList.add(orderDto);
         }

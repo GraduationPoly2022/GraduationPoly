@@ -3,7 +3,7 @@ package com.shop.entity;
 import javax.persistence.*;
 
 @Entity
-public class imageDetail {
+public class ImageDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String imdeId;
@@ -12,10 +12,10 @@ public class imageDetail {
     @ManyToOne(fetch = FetchType.EAGER)
     private Products prodImde;
 
-    public imageDetail() {
+    public ImageDetail() {
     }
 
-    public imageDetail(String imdeId, String imageName, Products prodImde) {
+    public ImageDetail(String imdeId, String imageName, Products prodImde) {
         this.imdeId = imdeId;
         this.imageName = imageName;
         this.prodImde = prodImde;

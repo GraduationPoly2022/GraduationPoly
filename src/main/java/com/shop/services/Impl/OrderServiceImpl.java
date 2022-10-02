@@ -27,7 +27,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Order> findAll(OrderStatus status, Long userId) {
-        return this.orderRepository.findByStatusAndUsersOd_UserId(status, userId);
+    public List<Order> findAll(String email, OrderStatus status) {
+        return this.orderRepository.findByUsersOd_emailAndStatus(email, status);
     }
 }
