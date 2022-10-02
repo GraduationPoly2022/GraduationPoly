@@ -8,9 +8,12 @@ import com.shop.enumEntity.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
-    Optional<OrderDetail> findByOrdersDetailAndProductsOrderDetailAndOrdersDetail_UsersOrdersAndOrdersDetail_status(Order order, Products products, User user, OrderStatus status);
+    Optional<OrderDetail> findByOddeAndProdOddeAndOdde_UsersOdAndOdde_Status(Order order, Products products, User user, OrderStatus status);
+
+    List<OrderDetail> findByOdde_OdIdAndOdde_UsersOdAndOdde_Status(Long odId, User user, OrderStatus status);
 }

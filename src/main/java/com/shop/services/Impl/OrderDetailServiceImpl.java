@@ -26,12 +26,13 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     @Override
     public OrderDetail findByOrderAndProductAndUserAndStatus(Order order, Products products, User user, OrderStatus status) {
         return this.orderDetailRepository
-                .findByOrdersDetailAndProductsOrderDetailAndOrdersDetail_UsersOrdersAndOrdersDetail_status(order, products, user, status).orElse(null);
+                .findByOddeAndProdOddeAndOdde_UsersOdAndOdde_Status(order, products, user, status).orElse(null);
     }
 
     @Override
-    public List<OrderDetail> findAll() {
-        return this.orderDetailRepository.findAll();
+    public List<OrderDetail> findAll(Long odId, User user, OrderStatus status) {
+        return this.orderDetailRepository
+                .findByOdde_OdIdAndOdde_UsersOdAndOdde_Status(odId, user, status);
     }
 
 }

@@ -11,5 +11,5 @@ public interface IOrderService {
 
     Order findByUserAndStatus(User user, OrderStatus status);
 
-    List<Order> findAll();
+    List<Order> findAll(OrderStatus status, Long userId);
 }

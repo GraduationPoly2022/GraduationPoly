@@ -15,5 +15,6 @@ public interface IOrderDetailService {
 
     OrderDetail findByOrderAndProductAndUserAndStatus(Order order, Products products, User user, OrderStatus status);
 
-    List<OrderDetail> findAll();
+
+    List<OrderDetail> findAll(Long odId, User user, OrderStatus status);
 }
