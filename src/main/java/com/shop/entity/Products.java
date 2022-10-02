@@ -18,7 +18,7 @@ public class Products {
 
     @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
-    private Set<imageDetail> imageDetails;
+    private Set<ImageDetail> imageDetails;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Category catProd;
@@ -96,12 +96,12 @@ public class Products {
         this.available = available;
     }
 
-    public Set<imageDetail> getImageDetails() {
+    public Set<ImageDetail> getImageDetails() {
         return imageDetails;
     }
 
-    public void setImageDetails(Set<imageDetail> imageDetails) {
-        this.imageDetails = imageDetails;
+    public void setImageDetails(Set<ImageDetail> ImageDetails) {
+        this.imageDetails = ImageDetails;
     }
 
     public Category getCatProd() {
