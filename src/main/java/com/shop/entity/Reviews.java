@@ -7,7 +7,7 @@ import java.util.Date;
 public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long RId;
+    private Long reviewId;
     @Column(columnDefinition = "varchar(500)")
     private String content;
     private Integer rating;
@@ -16,27 +16,27 @@ public class Reviews {
     @ManyToOne(fetch = FetchType.EAGER)
     private User userReview;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Products productReview;
+    private Products prodReview;
 
     public Reviews() {
     }
 
-    public Reviews(Long RId, String content, Integer rating, Date dateReview,
-                   User userReview, Products productReview) {
-        this.RId = RId;
+    public Reviews(Long reviewId, String content, Integer rating, Date dateReview,
+                   User userReview, Products prodReview) {
+        this.reviewId = reviewId;
         this.content = content;
         this.rating = rating;
         this.dateReview = dateReview;
         this.userReview = userReview;
-        this.productReview = productReview;
+        this.prodReview = prodReview;
     }
 
-    public Long getRId() {
-        return RId;
+    public Long getReviewId() {
+        return reviewId;
     }
 
-    public void setRId(Long RId) {
-        this.RId = RId;
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
     }
 
     public String getContent() {
@@ -71,11 +71,11 @@ public class Reviews {
         this.userReview = userReview;
     }
 
-    public Products getProductReview() {
-        return productReview;
+    public Products getProdReview() {
+        return prodReview;
     }
 
-    public void setProductReview(Products productReview) {
-        this.productReview = productReview;
+    public void setProdReview(Products prodReview) {
+        this.prodReview = prodReview;
     }
 }

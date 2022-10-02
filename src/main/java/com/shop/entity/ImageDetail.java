@@ -6,27 +6,27 @@ import javax.persistence.*;
 public class ImageDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long imageDetailId;
+    private String imdeId;
     private String imageName;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Products productImages;
+    private Products prodImde;
 
     public ImageDetail() {
     }
 
-    public ImageDetail(Long imageDetailId, String imageName, Products productImages) {
-        this.imageDetailId = imageDetailId;
+    public ImageDetail(String imdeId, String imageName, Products prodImde) {
+        this.imdeId = imdeId;
         this.imageName = imageName;
-        this.productImages = productImages;
+        this.prodImde = prodImde;
     }
 
-    public Long getImageDetailId() {
-        return imageDetailId;
+    public String getImdeId() {
+        return imdeId;
     }
 
-    public void setImageDetailId(Long imageDetailId) {
-        this.imageDetailId = imageDetailId;
+    public void setImdeId(String imdeId) {
+        this.imdeId = imdeId;
     }
 
     public String getImageName() {
@@ -37,11 +37,11 @@ public class ImageDetail {
         this.imageName = imageName;
     }
 
-    public Products getProductImages() {
-        return productImages;
+    public Products getProdImde() {
+        return prodImde;
     }
 
-    public void setProductImages(Products productImages) {
-        this.productImages = productImages;
+    public void setProdImde(Products prodImde) {
+        this.prodImde = prodImde;
     }
 }

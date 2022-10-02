@@ -112,7 +112,7 @@ public class AuthorityController {
         GoogleIdToken.Payload payload = idToken.getPayload();
 
         String userId = payload.getSubject();
-        User user;
+        com.shop.entity.User user;
         if (this.userService.findByEmail(payload.getEmail()) == null) {
             user = this.handleCreateUserPayload(payload, userId);
         } else {
@@ -142,7 +142,7 @@ public class AuthorityController {
         try {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
 //            if (Objects.equals(this.timeCode.getCode(), code)) {
-            User u = this.userService.createUser(user);
+            com.shop.entity.User u = this.userService.createUser(user);
             if (u != null) {
                 message = ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
@@ -163,7 +163,7 @@ public class AuthorityController {
     @PatchMapping("/user")
     public ResponseEntity<ResponseMessage> handleForgotPassword(@RequestParam("email") String email,
                                                                 @RequestParam("password") String password) {
-        User user = this.userService.findByEmail(email);
+        com.shop.entity.User user = this.userService.findByEmail(email);
         if (user != null) {
             user.setPassword(this.passwordEncoder.encode(password));
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -232,8 +232,8 @@ public class AuthorityController {
         return jwtResponse1;
     }
 
-    private User handleCreateUserPayload(GoogleIdToken.Payload payload, String userId) {
-        User user = new User();
+    private com.shop.entity.User handleCreateUserPayload(GoogleIdToken.Payload payload, String userId) {
+        com.shop.entity.User user = new User();
         user.setEmail(payload.getEmail());
         user.setPassword(this.passwordEncoder.encode(userId));
         user.setFullName((String) payload.get("name"));

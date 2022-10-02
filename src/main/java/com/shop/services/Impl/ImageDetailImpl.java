@@ -16,8 +16,12 @@ public class ImageDetailImpl implements IImageDetailService {
     private ImageDetailRepository imageDetailRepository;
 
     @Override
-
     public List<ImageDetail> creImageDetail(List<ImageDetail> imageDetail) {
         return this.imageDetailRepository.saveAll(imageDetail);
+    }
+
+    @Override
+    public List<ImageDetail> findByProduct(Long prodId) {
+        return this.imageDetailRepository.findByProdImde_prodId(prodId);
     }
 }

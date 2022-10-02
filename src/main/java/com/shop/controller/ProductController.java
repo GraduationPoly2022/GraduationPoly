@@ -9,10 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +43,7 @@ public class ProductController {
         }
         try {
             Products products = new Products();
-            BeanUtils.copyProperties(productDto, products, "productId", "accessoryDto",
+            BeanUtils.copyProperties(productDto, products, "prodId", "accessoryDto",
                     "smartPhoneDto", "laptopDto", "imageDetail", "productsEnum");
             Products productsSave = this.iProductService.createProducts(products);
             // crate product
@@ -57,8 +54,8 @@ public class ProductController {
             List<ImageDetail> imageDetails = new ArrayList<>();
             productDto.getImageDetail().forEach(imageDetail -> {
                 Products product = new Products();
-                product.setProductId(productsSave.getProductId());
-                imageDetail.setProductImages(product);
+                product.setProdId(productsSave.getProdId());
+                imageDetail.setProdImde(product);
                 imageDetails.add(imageDetail);
             });
             List<ImageDetail> imageDetailSave = this.imageDetailService.creImageDetail(imageDetails);
@@ -69,7 +66,7 @@ public class ProductController {
                     Laptop laptopSave = this.iLapTopService.createLaptop(laptop);
                     LaptopDto laptopDto = new LaptopDto();
                     BeanUtils.copyProperties(laptopSave, laptopDto, "imageDetailList");
-                    laptopDto.setImageDetailList(imageDetailSave);
+//                    laptopDto.setImageDetailList(imageDetailSave);
                     productDtoReturn.setLaptopDto(laptopDto);
                 }
                 case "SMARTPHONE" -> {
@@ -78,7 +75,7 @@ public class ProductController {
                     SmartPhone smartPhoneSave = this.iSmartPhoneService.createSmartPhone(smartPhone);
                     SmartPhoneDto smartPhoneDto = new SmartPhoneDto();
                     BeanUtils.copyProperties(smartPhoneSave, smartPhoneDto, "imageDetailList");
-                    smartPhoneDto.setImageDetailList(imageDetailSave);
+//                    accessoryDto.setImageDetailList(imageDetailSave);
                     productDtoReturn.setSmartPhoneDto(smartPhoneDto);
                 }
                 case "ACCESSORY" -> {
@@ -87,7 +84,7 @@ public class ProductController {
                     Accessory accessorySave = this.iAccessoryService.createAccessory(accessory);
                     AccessoryDto accessoryDto = new AccessoryDto();
                     BeanUtils.copyProperties(accessorySave, accessoryDto, "imageDetailList");
-                    accessoryDto.setImageDetailList(imageDetailSave);
+//                    accessoryDto.setImageDetailList(imageDetailSave);
                     productDtoReturn.setAccessoryDto(accessoryDto);
                 }
                 default -> message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(
@@ -100,6 +97,12 @@ public class ProductController {
                     e.getMessage(), null));
         }
         return message;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<ResponseMessage> findAll() {
+        List<ProductListDto> listDto = this.iProductService.findAll();
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", listDto));
     }
 }
 

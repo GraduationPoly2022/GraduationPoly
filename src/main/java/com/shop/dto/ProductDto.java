@@ -14,9 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
-    private Long productId;
-    private String productName;
-    private String imageMain;
+    private Long prodId;
+    private String prodName;
+    private String imageUrlMain;
     private Boolean available;
     private Integer warranty;
     private AccessoryDto accessoryDto;

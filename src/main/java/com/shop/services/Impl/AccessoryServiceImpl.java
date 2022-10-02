@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccessoryImpl implements IAccessoryService {
+public class AccessoryServiceImpl implements IAccessoryService {
     @Autowired
     private AccessoryRepository accessoryRepository;
 
@@ -15,4 +15,6 @@ public class AccessoryImpl implements IAccessoryService {
     public Accessory createAccessory(Accessory accessory) {
         return this.accessoryRepository.save(accessory);
     }
+
+
 }

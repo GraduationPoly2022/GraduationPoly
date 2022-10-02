@@ -1,12 +1,21 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 public class Accessory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "accessory_id")
     private Long accessoryId;
+
+    @OneToOne
+    @JoinColumn(name = "accessory_id")
+    @JsonIgnore
+    @MapsId
+    private Products accessoryProduct;
+
     private String connector;
     private String length;
     private String switches;
@@ -17,18 +26,13 @@ public class Accessory {
     private String charging;
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Products productAccessories;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Producer accessoriesProducer;
 
     public Accessory() {
     }
 
-    public Accessory(Long accessoryId, String connector, String length, String switches,
+    public Accessory(String connector, String length, String switches,
                      Double typeKeyboard, Double sizeKey, String special,
-                     Double sizeKeyboard, String charging, String notes, Products productAccessories, Producer accessoriesProducer) {
-        this.accessoryId = accessoryId;
+                     Double sizeKeyboard, String charging, String notes) {
         this.connector = connector;
         this.length = length;
         this.switches = switches;
@@ -38,8 +42,6 @@ public class Accessory {
         this.sizeKeyboard = sizeKeyboard;
         this.charging = charging;
         this.notes = notes;
-        this.productAccessories = productAccessories;
-        this.accessoriesProducer = accessoriesProducer;
     }
 
     public Long getAccessoryId() {
@@ -114,14 +116,6 @@ public class Accessory {
         this.charging = charging;
     }
 
-    public Products getProductAccessories() {
-        return productAccessories;
-    }
-
-    public void setProductAccessories(Products productAccessories) {
-        this.productAccessories = productAccessories;
-    }
-
     public String getNotes() {
         return notes;
     }
@@ -130,11 +124,11 @@ public class Accessory {
         this.notes = notes;
     }
 
-    public Producer getAccessoriesProducer() {
-        return accessoriesProducer;
+    public Products getAccessoryProduct() {
+        return accessoryProduct;
     }
 
-    public void setAccessoriesProducer(Producer accessoriesProducer) {
-        this.accessoriesProducer = accessoriesProducer;
+    public void setAccessoryProduct(Products accessoryProduct) {
+        this.accessoryProduct = accessoryProduct;
     }
 }

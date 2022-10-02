@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SmartPhoneImpl implements ISmartPhoneService {
+public class SmartPhoneServiceImpl implements ISmartPhoneService {
     @Autowired
     private SmartPhoneRepository smartPhoneRepository;
 
@@ -15,4 +15,5 @@ public class SmartPhoneImpl implements ISmartPhoneService {
     public SmartPhone createSmartPhone(SmartPhone smartPhone) {
         return this.smartPhoneRepository.save(smartPhone);
     }
+
 }

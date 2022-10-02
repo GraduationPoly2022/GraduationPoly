@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LapTopRepository extends JpaRepository<Laptop, Long> {
+
 }

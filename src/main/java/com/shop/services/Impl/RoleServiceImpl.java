@@ -13,10 +13,12 @@ public class RoleServiceImpl implements IRoleService {
     @Autowired
     private RoleRepository roleRepository;
 
+
     @Override
     public Role createRole(Role role) {
         return this.roleRepository.save(role);
     }
+
 
     @Override
     public Role findByRoleName(RoleName roleName) {

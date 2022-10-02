@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IImageDetailService {
     List<ImageDetail> creImageDetail(List<ImageDetail> imageDetail);
+
+    List<ImageDetail> findByProduct(Long prodId);
 }

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LapTopImpl implements ILapTopService {
+public class LapTopServiceImpl implements ILapTopService {
     @Autowired
     private LapTopRepository lapTopRepository;
 
@@ -15,4 +15,5 @@ public class LapTopImpl implements ILapTopService {
     public Laptop createLaptop(Laptop laptop) {
         return this.lapTopRepository.save(laptop);
     }
+
 }
