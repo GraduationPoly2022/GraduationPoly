@@ -9,6 +9,7 @@ public class SmartPhone {
 
     @Id
     @Column(name = "sp_id")
+    @JsonIgnore
     private Long spId;
 
     private String monitor;

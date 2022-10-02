@@ -8,6 +8,7 @@ import javax.persistence.*;
 public class Accessory {
     @Id
     @Column(name = "accessory_id")
+    @JsonIgnore
     private Long accessoryId;
 
     @OneToOne

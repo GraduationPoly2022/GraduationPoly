@@ -2,6 +2,7 @@ package com.shop.services.Impl;
 
 
 import com.shop.entity.ImageDetail;
+import com.shop.entity.Products;
 import com.shop.repository.ImageDetailRepository;
 import com.shop.services.IImageDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.List;
 
 
 @Service
-public class ImageDetailImpl implements IImageDetailService {
+public class ImageDetailServiceImpl implements IImageDetailService {
     @Autowired
     private ImageDetailRepository imageDetailRepository;
 
@@ -21,7 +22,7 @@ public class ImageDetailImpl implements IImageDetailService {
     }
 
     @Override
-    public List<ImageDetail> findByProduct(Long prodId) {
-        return this.imageDetailRepository.findByProdImde_prodId(prodId);
+    public List<ImageDetail> findByProd(Products products) {
+        return this.imageDetailRepository.findByProdImde(products);
     }
 }

@@ -1,8 +1,6 @@
 package com.shop.dto;
 
-
-import com.shop.entity.Category;
-import com.shop.entity.ImageDetail;
+import com.shop.entity.*;
 import com.shop.enumEntity.ProductsEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +17,11 @@ public class ProductDto {
     private String imageUrlMain;
     private Boolean available;
     private Integer warranty;
-    private AccessoryDto accessoryDto;
-    private SmartPhoneDto smartPhoneDto;
-    private LaptopDto laptopDto;
-    private Category categoriesProduct;
-    private List<ImageDetail> imageDetail;
+    private Laptop laptop;
+    private SmartPhone smartPhone;
+    private ProductionCompany prodPco;
+    private Accessory accessoryProd;
+    private Category catProd;
+    private List<ImageDetail> imageDetails;
     private ProductsEnum productsEnum;
 }

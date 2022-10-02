@@ -44,7 +44,7 @@ public class Products {
 
     @OneToMany(mappedBy = "prodReview")
     @JsonIgnore
-    private Set<Reviews> reviewsSet = new LinkedHashSet<>();
+    private Set<Reviews> prodReviewsSet = new LinkedHashSet<>();
 
     public Products() {
     }
@@ -128,14 +128,6 @@ public class Products {
         this.commentProd = commentProd;
     }
 
-    public ProductionCompany getProductProducer() {
-        return prodPco;
-    }
-
-    public void setProductProducer(ProductionCompany productProductionCompany) {
-        this.prodPco = productProductionCompany;
-    }
-
     public Integer getWarranty() {
         return warranty;
     }
@@ -144,12 +136,12 @@ public class Products {
         this.warranty = warranty;
     }
 
-    public Set<Reviews> getProductReviewsSet() {
-        return reviewsSet;
+    public Set<Reviews> getProdReviewsSet() {
+        return prodReviewsSet;
     }
 
-    public void setProductReviewsSet(Set<Reviews> reviewsSet) {
-        this.reviewsSet = reviewsSet;
+    public void setProdReviewsSet(Set<Reviews> reviewsSet) {
+        this.prodReviewsSet = reviewsSet;
     }
 
     public SmartPhone getSmartPhone() {
@@ -174,5 +166,13 @@ public class Products {
 
     public void setLaptop(Laptop laptop) {
         this.laptop = laptop;
+    }
+
+    public ProductionCompany getProdPco() {
+        return prodPco;
+    }
+
+    public void setProdPco(ProductionCompany prodPco) {
+        this.prodPco = prodPco;
     }
 }

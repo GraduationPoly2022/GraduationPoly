@@ -1,5 +1,6 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.enumEntity.RoleName;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -21,6 +22,7 @@ public class Role {
 
     @ManyToMany(mappedBy = "roleSet", fetch = FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.TRUE)
+    @JsonIgnore
     private Set<User> userSet = new HashSet<>();
 
     public Role() {
