@@ -11,5 +11,5 @@ public class JwtResponse {
     private String token;
     private Boolean rememberMe = false;
     private UserDto userDto;
-    private Boolean moblie = false;
+    private Boolean mobile = false;
 }

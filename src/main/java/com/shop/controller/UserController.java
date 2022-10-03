@@ -36,8 +36,8 @@ public class UserController {
     private BCryptPasswordEncoder passwordEncoder;
 
     public static void CreateUser(@RequestBody UserDto userDto, User user, IRoleService roleService, String password) {
-        userDto.setAddress(Convert.CapitalAllFirstLetter(userDto.getAddress()));
-        userDto.setFullName(Convert.CapitalAllFirstLetter(userDto.getFullName()));
+        userDto.setAddress(Convert.CapitalAll(userDto.getAddress()));
+        userDto.setFullName(Convert.CapitalAll(userDto.getFullName()));
         Role role = new Role();
         if (userDto.getAuthority() == null) {
             role.setRoleName(RoleName.CLIENT);

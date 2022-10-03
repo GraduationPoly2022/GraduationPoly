@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class Convert {
 
-    public static String CapitalAllFirstLetter(String name) {
+    public static String CapitalAll(String name) {
         if (name != null) {
             String[] split = name.split(" ");
             StringBuilder sb = new StringBuilder();
@@ -23,7 +23,7 @@ public class Convert {
         return null;
     }
 
-    public static String CapitalFirstLetter(String name) {
+    public static String CapitalOfFirst(String name) {
         if (!Objects.equals(name, "")) {
             String[] split = name.split(" ");
             StringBuilder sb = new StringBuilder();
@@ -31,7 +31,7 @@ public class Convert {
             if (split.length > 1) {
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 1; i < split.length; i++) {
-                    stringBuilder.append(split[i].substring(0).toLowerCase()).append(" ");
+                    stringBuilder.append(split[i].toLowerCase()).append(" ");
                 }
                 sb.append(Character.toUpperCase(split[0].charAt(0))).append(split[0].substring(1).toLowerCase()).append(" ").append(stringBuilder);
             } else {

@@ -78,12 +78,12 @@ public class AuthorityController {
         UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(jwtResponse.getUserDto().getEmail());
         if (this.passwordEncoder.matches(jwtResponse.getUserDto().getPassword(), userDetails.getPassword())) {
             JwtResponse jwtResponse1;
-            if (jwtResponse.getMoblie()) {
+            if (jwtResponse.getMobile()) {
                 jwtResponse1 = this.hanldeToken(userDetails, Expired.TIME_MOBILE,
-                        jwtResponse.getRememberMe(), jwtResponse.getMoblie());
+                        jwtResponse.getRememberMe(), jwtResponse.getMobile());
             } else {
                 jwtResponse1 = this.hanldeToken(userDetails, jwtResponse.getRememberMe() ? Expired.DAYS : Expired.HOURS,
-                        jwtResponse.getRememberMe(), jwtResponse.getMoblie());
+                        jwtResponse.getRememberMe(), jwtResponse.getMobile());
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -235,7 +235,7 @@ public class AuthorityController {
         userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
         jwtResponse1.setToken(tokens);
         jwtResponse1.setUserDto(userDto);
-        jwtResponse1.setMoblie(moblie);
+        jwtResponse1.setMobile(moblie);
         jwtResponse1.setRememberMe(rememberMe);
         return jwtResponse1;
     }

@@ -26,6 +26,7 @@ public class User implements UserDetails {
 
     @NotBlank
     private String email;
+    @JsonIgnore
     private String password;
     private String fullName;
     private String phoneNumber;

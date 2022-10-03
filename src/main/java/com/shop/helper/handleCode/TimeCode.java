@@ -1,7 +1,10 @@
 package com.shop.helper.handleCode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class TimeCode {
     private Long timeExpired;
+    @JsonIgnore
     private String code;
 
     public TimeCode() {
