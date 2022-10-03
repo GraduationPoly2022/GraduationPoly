@@ -18,10 +18,9 @@ public class CommentServiceImpl implements com.shop.services.ICommentService {
     }
 
     @Override
-    public List<Comment> findAllComment() {
-        return this.commentRepository.findAll();
+    public List<Comment> findCommentByProducts(Long prodId) {
+        return this.commentRepository.findByProdComment_prodId(prodId);
     }
-
 
 }
 

@@ -91,7 +91,7 @@ public class CommentController {
                 commentDto.setCommentId(comment.getCommentId());
                 commentDto.setContent(comment.getContent());
                 commentDto.setCommentDate(comment.getCommentDate());
-                commentDto.setProductComment(comment.getProductComment());
+                commentDto.setProdComment(comment.getProdComment());
                 commentDto.setUserComments(comment.getUserComments());
                 List<CommentDetail> CommentDetail = this.commentDTService.findCommentDtById(comment.getCommentId());
                 commentDto.setCommentDetails(CommentDetail);

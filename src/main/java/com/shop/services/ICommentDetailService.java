@@ -5,7 +5,10 @@ import com.shop.entity.CommentDetail;
 import java.util.List;
 
 public interface ICommentDetailService {
-    CommentDetail addCommentDetail(CommentDetail commentDetail);
 
-    List<CommentDetail> findAllCommentDetail();
+
+    public CommentDetail addCommentDetail(CommentDetail commentDetail);
+
+
+    public List<CommentDetail> findCommentDtById(Long CommentId);
 }

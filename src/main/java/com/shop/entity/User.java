@@ -31,6 +31,12 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String address;
     private String imageUrl;
+
+    @OneToMany(mappedBy = "userReply")
+    @JsonIgnore
+    private Set<CommentDetail> userCmdt;
+
+
     @Enumerated(EnumType.STRING)
     private AuthenticationProvider authProvider;
 
@@ -108,10 +114,6 @@ public class User implements UserDetails {
         return this.email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -131,7 +133,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
     public String getFullName() {
         return fullName;
@@ -219,5 +220,21 @@ public class User implements UserDetails {
 
     public void setReviewsSet(Set<Reviews> reviewsSet) {
         this.reviewsSet = reviewsSet;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<CommentDetail> getUserCmdt() {
+        return userCmdt;
+    }
+
+    public void setUserCmdt(Set<CommentDetail> userCmdt) {
+        this.userCmdt = userCmdt;
     }
 }
