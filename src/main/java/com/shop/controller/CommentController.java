@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -51,11 +52,13 @@ public class CommentController {
         return message;
     }
 
-    @PostMapping("/addComment")
+    @PostMapping("/add-comment")
     public ResponseEntity<ResponseMessage> handlerCreateCommentDetail(@RequestBody CommentDto commentDTDto) {
         ResponseEntity<ResponseMessage> message = null;
         CommentDetail commentDetail = new CommentDetail();
-        BeanUtils.copyProperties(commentDTDto, commentDetail);
+        BeanUtils.copyProperties(commentDTDto.getCommentDt(), commentDetail,
+                "commentDtId");
+
         CommentDetail commentDetailSave = this.commentDTService.addCommentDetail(commentDetail);
         try {
             if (commentDetailSave != null) {
@@ -78,34 +81,37 @@ public class CommentController {
         return message;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<ResponseMessage> findAllComment() {
-        ResponseEntity<ResponseMessage> message = null;
-        List<Comment> list = this.commentService.findAllComment();
-        if (list != null) {
-            message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Get data successful", list));
 
-        } else {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "No data", null));
+    private List<CommentDto> transfer(Long productId) {
+        List<CommentDto> CommentDtoList = new ArrayList<>();
+        List<Comment> comments = this.commentService.findCommentByProducts(productId);
+        if (!comments.isEmpty()) {
+            for (Comment comment : comments) {
+                CommentDto commentDto = new CommentDto();
+                commentDto.setCommentId(comment.getCommentId());
+                commentDto.setContent(comment.getContent());
+                commentDto.setCommentDate(comment.getCommentDate());
+                commentDto.setProductComment(comment.getProductComment());
+                commentDto.setUserComments(comment.getUserComments());
+                List<CommentDetail> CommentDetail = this.commentDTService.findCommentDtById(comment.getCommentId());
+                commentDto.setCommentDetails(CommentDetail);
+                CommentDtoList.add(commentDto);
+            }
         }
-        return message;
+        return CommentDtoList;
+
     }
 
-    @GetMapping("/listDetail")
-    public ResponseEntity<ResponseMessage> findAllCommentDetail() {
+    @GetMapping("/get-data/{productId}")
+    public ResponseEntity<ResponseMessage> getAllComment(@PathVariable("productId") Long productId) {
         ResponseEntity<ResponseMessage> message = null;
-        List<CommentDetail> listDt = this.commentDTService.findAllCommentDetail();
-        if (listDt != null) {
-            message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Get data detail successful", listDt));
-
-        } else {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "No data", null));
-        }
+        List<CommentDto> CommentDtoList = this.transfer(productId);
+        message = ResponseEntity.status(HttpStatus.OK)
+                .body(
+                        new ResponseMessage(StatusMessage.OK,
+                                "Get all data successfully", CommentDtoList));
         return message;
+
     }
 
 
