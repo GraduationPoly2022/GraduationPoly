@@ -17,18 +17,21 @@ public class CommentDetail {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User userCmde;
-    ;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User userReply;
 
     public CommentDetail() {
     }
 
     public CommentDetail(Long cmdeId, String contentReply, Date contentDateReply,
-                         Comment cmde, User userCmde) {
+                         Comment cmde, User userCmde, User userReply) {
         this.cmdeId = cmdeId;
         this.contentReply = contentReply;
         this.contentDateReply = contentDateReply;
         this.cmde = cmde;
         this.userCmde = userCmde;
+        this.userReply = userReply;
     }
 
     public Long getCmdeId() {
@@ -70,5 +73,13 @@ public class CommentDetail {
 
     public void setUserCmde(User userCmde) {
         this.userCmde = userCmde;
+    }
+
+    public User getUserReply() {
+        return userReply;
+    }
+
+    public void setUserReply(User userReply) {
+        this.userReply = userReply;
     }
 }
