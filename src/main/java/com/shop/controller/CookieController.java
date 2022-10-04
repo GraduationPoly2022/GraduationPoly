@@ -1,34 +1,27 @@
 package com.shop.controller;
-import com.google.common.collect.Lists;
+
 import com.shop.dto.MailDto;
 import com.shop.dto.ResponseMessage;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.helper.HandleCookie;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/cookie")
 public class CookieController {
     @Autowired
     private HandleCookie handleCookie;
+
     //Tạo Cookie
     @GetMapping("/")
-    public ResponseEntity<ResponseMessage> setCookie(){
+    public ResponseEntity<ResponseMessage> setCookie() {
         List<MailDto> st = new ArrayList<>();
         MailDto mailDto = new MailDto();
         mailDto.setToMail("ngfbgnnmj");
@@ -49,20 +42,17 @@ public class CookieController {
         mb.setToMail("long");
         mb.setContentHtml("okib");
         st.add(mb);
-        this.handleCookie.add("okccv", st);
+        this.handleCookie.add("testCookie", st);
 
-        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK,"Create add Cookie thanh cong", null));
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Tao Cookie thanh cong", null));
     }
-//    @GetMapping("/get")
-//    public <T> ResponseEntity<ResponseMessage> getCookie(Class<T> aClass){
-//        List<MailDto> st = new ArrayList<>();
-//        MailDto mailDto = new MailDto();
-//        mailDto.getToMail();
-//        mailDto.getContentHtml();
-//        this.handleCookie.get("oke", aClass);
-//        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK,"get Cookie thanh cong", null));
-//    }
 
+    @GetMapping("/get")
+    public ResponseEntity<ResponseMessage> getCookie() {
+        List<MailDto> st;
+        st = this.handleCookie.get("testCookie", MailDto.class);
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Cookie thanh cong", st));
+    }
 
 
 //    //Xóa Cookie
