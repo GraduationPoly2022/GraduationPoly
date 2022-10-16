@@ -17,6 +17,7 @@ import com.shop.helper.handleCode.TimeCode;
 import com.shop.services.IMailService;
 import com.shop.services.IRoleService;
 import com.shop.services.IUserService;
+import com.shop.services.Impl.UserDetailServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +28,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +50,7 @@ public class AuthorityController {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserDetailsService userDetailServiceImpl;
+    private UserDetailServiceImpl userDetailServiceImpl;
 
     @Autowired
     private IUserService userService;
@@ -114,9 +114,10 @@ public class AuthorityController {
         }
 
         try {
-            this.authenticate(user.getUsername(), user.getPassword());
+            this.authenticate(user.getUsername(), userId);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR, "Lỗi " + e.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, "Lỗi " + e.getMessage(), null));
         }
         UserDetails userDetails = this.userDetailServiceImpl.loadUserByUsername(user.getUsername());
         JwtResponse jwtResponse1 = this.hanldeToken(userDetails, payload.getExpirationTimeSeconds(), true, false);
@@ -128,17 +129,18 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
-        if (this.handleTimeCode.fileNotFound()) {
+        if (this.handleTimeCode.fileNotFound() && this.timeCode == null) {
             this.timeCode = this.handleTimeCode.timeCodeExCode;
+            this.timeCode.setEmail(userDto.getEmail());
         }
-        if (!this.timeCode.getCode().equals(code)) {
+        if (!this.timeCode.getCode().equals(code) && !this.timeCode.getEmail().equals(userDto.getEmail())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
             );
         }
         try {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
-            if (Objects.equals(this.timeCode.getCode(), code)) {
+            if (Objects.equals(this.timeCode.getCode(), code) && this.timeCode.getEmail().equals(userDto.getEmail())) {
                 User u = this.userService.createUser(user);
                 if (u != null) message = ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
@@ -190,13 +192,14 @@ public class AuthorityController {
                                                     @PathVariable("name") String name,
                                                     @PathVariable("status") TypeUsers status) {
         ResponseEntity<ResponseMessage> message;
-        this.timeCode = this.handleTimeCode.timeCode();
+
         if (!emailExists(toForm)) {
             UserDto userError = new UserDto();
             userError.setEmail("Email address does not exist");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.FAILED, "Email address does not exist", userError));
         } else {
+
             if (this.userService.findByEmail(toForm) != null && status == TypeUsers.CREATE) {
                 UserDto userError = new UserDto();
                 userError.setEmail("Email already exists");
@@ -204,7 +207,9 @@ public class AuthorityController {
                         .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
             }
             try {
+                this.timeCode = this.handleTimeCode.timeCode();
                 this.mailService.sendCodeConfirm(toForm, name, this.timeCode.getCode());
+                this.timeCode.setEmail(toForm);
                 message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Account verification code", this.timeCode));
             } catch (Exception e) {
                 message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -230,7 +235,7 @@ public class AuthorityController {
         User users = (User) this.userDetailServiceImpl.loadUserByUsername(userDetails.getUsername());
         JwtResponse jwtResponse1 = new JwtResponse();
         UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(users, userDto);
+        BeanUtils.copyProperties(users, userDto, "password");
         userDto.setEmail(users.getUsername());
         userDto.setAuthority(RoleName.valueOf(users.getAuthorities().stream().iterator().next().getAuthority()));
         jwtResponse1.setToken(tokens);

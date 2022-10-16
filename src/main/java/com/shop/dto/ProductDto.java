@@ -16,7 +16,9 @@ public class ProductDto {
     private String prodName;
     private String imageUrlMain;
     private Boolean available;
-    private Integer warranty;
+    private String warranty;
+    private Double priceProd;
+    private String notes;
     private Laptop laptop;
     private SmartPhone smartPhone;
     private ProductionCompany prodPco;

@@ -14,8 +14,10 @@ public class Products {
     private String prodName;
     private String imageUrlMain;
     private Boolean available;
-    private Integer warranty;
-
+    private String warranty;
+    private Double priceProd;
+    @Column(columnDefinition = "varchar(8000)")
+    private String notes;
     @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
     private Set<ImageDetail> imageDetails;
@@ -50,13 +52,16 @@ public class Products {
     }
 
     public Products(Long prodId, String prodName, String imageUrlMain,
-                    Boolean available, Integer warranty,
-                    Category catProd, ProductionCompany prodPco, SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
+                    Boolean available, String warranty,
+                    Double priceProd, String notes, Category catProd, ProductionCompany prodPco,
+                    SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
         this.prodId = prodId;
         this.prodName = prodName;
         this.imageUrlMain = imageUrlMain;
         this.available = available;
         this.warranty = warranty;
+        this.priceProd = priceProd;
+        this.notes = notes;
         this.catProd = catProd;
         this.prodPco = prodPco;
         this.smartPhone = smartPhone;
@@ -128,11 +133,11 @@ public class Products {
         this.commentProd = commentProd;
     }
 
-    public Integer getWarranty() {
+    public String getWarranty() {
         return warranty;
     }
 
-    public void setWarranty(Integer warranty) {
+    public void setWarranty(String warranty) {
         this.warranty = warranty;
     }
 
@@ -174,5 +179,21 @@ public class Products {
 
     public void setProdPco(ProductionCompany prodPco) {
         this.prodPco = prodPco;
+    }
+
+    public Double getPriceProd() {
+        return priceProd;
+    }
+
+    public void setPriceProd(Double priceProd) {
+        this.priceProd = priceProd;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

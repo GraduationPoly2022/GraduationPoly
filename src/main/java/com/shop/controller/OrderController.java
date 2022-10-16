@@ -1,13 +1,17 @@
 package com.shop.controller;
 
+import com.shop.dto.OrderDetailDto;
 import com.shop.dto.OrderDto;
+import com.shop.dto.ProductDto;
 import com.shop.dto.ResponseMessage;
 import com.shop.entity.Order;
 import com.shop.entity.OrderDetail;
+import com.shop.entity.Products;
 import com.shop.enumEntity.OrderStatus;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.services.IOrderDetailService;
 import com.shop.services.IOrderService;
+import com.shop.services.IProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +30,9 @@ public class OrderController {
 
     @Autowired
     private IOrderDetailService orderDetailService;
+
+    @Autowired
+    private IProductService productService;
 
 
     //GetAll Order and Order Detail
@@ -55,46 +62,45 @@ public class OrderController {
             if (checkUserAndStatus == null) {
                 Order order = new Order();
                 BeanUtils.copyProperties(orderDto, order, "status");
-                order.setStatus(OrderStatus.CART);
+                order.setStatus(orderDto.getStatus());
                 Order saveOrder = this.orderService.createOrder(order);
-                OrderDetail orderDetails = new OrderDetail();
-                BeanUtils.copyProperties(orderDto.getOrderDetails(), orderDetails, "Odde");
-                orderDetails.setOdde(saveOrder);
-                OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(orderDetails);
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOdde(saveOrder);
+                Products p = new Products();
+                BeanUtils.copyProperties(orderDto.getProduct(), p);
+                orderDetail.setProdOdde(p);
+                orderDetail.setQty(orderDto.getQty());
+                orderDetail.setPrice(orderDto.getProduct().getPriceProd());
+                OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(orderDetail);
                 if (saveOrder != null && saveOrderDetail != null) {
                     message = ResponseEntity.status(HttpStatus.OK)
                             .body(new ResponseMessage(StatusMessage.OK, "Create Order OK", saveOrder));
                 }
             } else {
+                Products p = new Products();
+                BeanUtils.copyProperties(orderDto.getProduct(), p);
                 OrderDetail checkOrderDetail = this.orderDetailService
                         .findByOrderAndProductAndUserAndStatus(
                                 checkUserAndStatus,
-                                orderDto.getOrderDetails().getProdOdde(),
+                                p,
                                 orderDto.getUsersOd(),
                                 OrderStatus.CART
                         );
-                OrderDetail orderDetails;
+                OrderDetail saveOrderDetail;
                 if (checkOrderDetail == null) {
-                    orderDetails = new OrderDetail();
-                    BeanUtils.copyProperties(orderDto.getOrderDetails(), orderDetails, "Odde", "qty");
-                    orderDetails.setOdde(checkUserAndStatus);
-                    if (orderDto.getOrderDetails().getQty() == 0) {
-                        orderDetails.setQty(1);
-                    } else {
-                        orderDetails.setQty(orderDto.getOrderDetails().getQty());
-                    }
-                    OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(orderDetails);
-                    if (saveOrderDetail != null) {
-                        message = ResponseEntity.status(HttpStatus.OK)
-                                .body(new ResponseMessage(StatusMessage.OK, "OK", saveOrderDetail));
-                    }
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setOdde(checkUserAndStatus);
+                    orderDetail.setQty(orderDto.getQty());
+                    orderDetail.setProdOdde(p);
+                    orderDetail.setPrice(orderDto.getProduct().getPriceProd());
+                    saveOrderDetail = this.orderDetailService.createOrderDetail(orderDetail);
                 } else {
-                    checkOrderDetail.setQty(checkOrderDetail.getQty() + orderDto.getOrderDetails().getQty());
-                    OrderDetail saveOrderDetail = this.orderDetailService.createOrderDetail(checkOrderDetail);
-                    if (saveOrderDetail != null) {
-                        message = ResponseEntity.status(HttpStatus.OK)
-                                .body(new ResponseMessage(StatusMessage.OK, "OK", saveOrderDetail));
-                    }
+                    checkOrderDetail.setQty(checkOrderDetail.getQty() + orderDto.getQty());
+                    saveOrderDetail = this.orderDetailService.createOrderDetail(checkOrderDetail);
+                }
+                if (saveOrderDetail != null) {
+                    message = ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseMessage(StatusMessage.OK, "OK", saveOrderDetail));
                 }
             }
         } catch (Exception e) {
@@ -112,17 +118,28 @@ public class OrderController {
             orderDto.setOrderDate(order.getOrderDate());
             orderDto.setDeliveryDate(order.getDeliveryDate());
             orderDto.setRecipientDate(order.getRecipientDate());
-            orderDto.setReceive(order.getReceive());
+            orderDto.setReceiver(order.getReceiver());
             orderDto.setPhoneReceive(order.getPhoneReceive());
             orderDto.setAddressReceive(order.getAddressReceive());
             orderDto.setStatus(order.getStatus());
             orderDto.setAmount(order.getAmount());
             orderDto.setPaymentReceived(order.getPaymentReceived());
             orderDto.setUsersOd(order.getUsersOd());
-            List<OrderDetail> lsOrderDetails = this.orderDetailService.findAll(order.getOdId(), email, status);
-            orderDto.setLsOrderDetails(lsOrderDetails);
+            List<OrderDetailDto> orderDetailDtos = new ArrayList<>();
+            order.getOrderDetails().forEach(ls -> {
+                OrderDetailDto orderDetailDto = new OrderDetailDto();
+                orderDetailDto.setOddeId(ls.getOddeId());
+                orderDetailDto.setQty(ls.getQty());
+                orderDetailDto.setPrice(ls.getProdOdde().getPriceProd());
+                ProductDto productDto = new ProductDto();
+                BeanUtils.copyProperties(ls.getProdOdde(), productDto);
+                orderDetailDto.setProdOdde(productDto);
+                orderDetailDtos.add(orderDetailDto);
+            });
+            orderDto.setLsOrderDetails(orderDetailDtos);
             orderDtoList.add(orderDto);
         }
         return orderDtoList;
     }
 }
+

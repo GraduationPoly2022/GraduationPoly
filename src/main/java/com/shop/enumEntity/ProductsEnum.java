@@ -6,8 +6,8 @@ public enum ProductsEnum {
     public String getSelection() {
         String selected = "";
         switch (this) {
-            case LAPTOP -> selected = "ACCESSORY";
-            case ACCESSORY -> selected = "LAPTOP";
+            case LAPTOP -> selected = "LAPTOP";
+            case ACCESSORY -> selected = "ACCESSORY";
             case SMARTPHONE -> selected = "SMARTPHONE";
             default -> {
             }

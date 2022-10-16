@@ -1,7 +1,5 @@
 package com.shop.dto;
 
-import com.shop.entity.OrderDetail;
-import com.shop.entity.Return;
 import com.shop.entity.User;
 import com.shop.enumEntity.DeviceEnum;
 import com.shop.enumEntity.OrderStatus;
@@ -21,7 +19,7 @@ public class OrderDto {
     private Date orderDate;
     private Date deliveryDate;
     private Date recipientDate;
-    private String receive;
+    private String receiver;
     private String phoneReceive;
     private String addressReceive;
     private OrderStatus status;
@@ -29,8 +27,7 @@ public class OrderDto {
     private PaymentEnum paymentReceived;
     private DeviceEnum deviceUse;
     private User usersOd;
-    private OrderDetail orderDetails;
-    private List<OrderDetail> lsOrderDetails;
-    private Return returns;
-
+    private ProductDto product;
+    private Integer qty = 1;
+    private List<OrderDetailDto> lsOrderDetails;
 }

@@ -31,8 +31,7 @@ public class ProductController {
     private IImageDetailService imageDetailService;
 
     @PostMapping("/")
-    public ResponseEntity<ResponseMessage> createProduct(@RequestBody ProductDto productDto
-    ) {
+    public ResponseEntity<ResponseMessage> createProduct(@RequestBody ProductDto productDto) {
         ResponseEntity<ResponseMessage> message;
         if (!productDto.getProductsEnum().equals(ProductsEnum.ACCESSORY)
                 && !productDto.getProductsEnum().equals(ProductsEnum.LAPTOP)

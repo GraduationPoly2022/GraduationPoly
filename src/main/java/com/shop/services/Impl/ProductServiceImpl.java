@@ -38,4 +38,9 @@ public class ProductServiceImpl implements IProductService {
         }
         return productDtoList;
     }
+
+    @Override
+    public Products findById(Long prodId) {
+        return this.productRepository.findById(prodId).orElse(null);
+    }
 }

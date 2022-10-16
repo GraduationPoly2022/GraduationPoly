@@ -14,6 +14,7 @@ import java.util.Set;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "od_id")
     private Long odId;
     @Temporal(TemporalType.DATE)
     private Date orderDate;
@@ -21,7 +22,7 @@ public class Order {
     private Date deliveryDate;
     @Temporal(TemporalType.DATE)
     private Date recipientDate;
-    private String receive;
+    private String receiver;
     private String phoneReceive;
     private String addressReceive;
     @Enumerated(EnumType.STRING)
@@ -51,7 +52,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Long odId, Date orderDate, Date deliveryDate, Date recipientDate, String receive,
+    public Order(Long odId, Date orderDate, Date deliveryDate, Date recipientDate, String receiver,
                  String phoneReceive, String addressReceive, OrderStatus status,
                  Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse,
                  User usersOd, Return returns) {
@@ -59,7 +60,7 @@ public class Order {
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.recipientDate = recipientDate;
-        this.receive = receive;
+        this.receiver = receiver;
         this.phoneReceive = phoneReceive;
         this.addressReceive = addressReceive;
         this.status = status;
@@ -102,12 +103,12 @@ public class Order {
         this.recipientDate = recipientDate;
     }
 
-    public String getReceive() {
-        return receive;
+    public String getReceiver() {
+        return receiver;
     }
 
-    public void setReceive(String receive) {
-        this.receive = receive;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
     public String getPhoneReceive() {

@@ -1,18 +1,18 @@
 package com.shop.helper.handleCode;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class TimeCode {
     private Long timeExpired;
-    @JsonIgnore
     private String code;
+
+    private String email;
 
     public TimeCode() {
     }
 
-    public TimeCode(Long timeExpired, String code) {
+    public TimeCode(Long timeExpired, String code, String email) {
         this.timeExpired = timeExpired;
         this.code = code;
+        this.email = email;
     }
 
     public Long getTimeExpired() {
@@ -29,5 +29,13 @@ public class TimeCode {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

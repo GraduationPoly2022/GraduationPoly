@@ -8,7 +8,6 @@ import javax.persistence.*;
 public class Accessory {
     @Id
     @Column(name = "accessory_id")
-    @JsonIgnore
     private Long accessoryId;
 
     @OneToOne
@@ -20,20 +19,20 @@ public class Accessory {
     private String connector;
     private String length;
     private String switches;
-    private Double typeKeyboard;
-    private Double sizeKey;
+    private String typeKeyboard;
+    private String sizeKey;
     private String special;
-    private Double sizeKeyboard;
+    private String sizeKeyboard;
     private String charging;
-    @Column(columnDefinition = "varchar(8000)")
-    private String notes;
 
     public Accessory() {
     }
 
-    public Accessory(String connector, String length, String switches,
-                     Double typeKeyboard, Double sizeKey, String special,
-                     Double sizeKeyboard, String charging, String notes) {
+    public Accessory(Long accessoryId, Products accessoryProduct, String connector, String length,
+                     String switches, String typeKeyboard, String sizeKey, String special,
+                     String sizeKeyboard, String charging) {
+        this.accessoryId = accessoryId;
+        this.accessoryProduct = accessoryProduct;
         this.connector = connector;
         this.length = length;
         this.switches = switches;
@@ -42,7 +41,6 @@ public class Accessory {
         this.special = special;
         this.sizeKeyboard = sizeKeyboard;
         this.charging = charging;
-        this.notes = notes;
     }
 
     public Long getAccessoryId() {
@@ -51,6 +49,14 @@ public class Accessory {
 
     public void setAccessoryId(Long accessoryId) {
         this.accessoryId = accessoryId;
+    }
+
+    public Products getAccessoryProduct() {
+        return accessoryProduct;
+    }
+
+    public void setAccessoryProduct(Products accessoryProduct) {
+        this.accessoryProduct = accessoryProduct;
     }
 
     public String getConnector() {
@@ -77,19 +83,19 @@ public class Accessory {
         this.switches = switches;
     }
 
-    public Double getTypeKeyboard() {
+    public String getTypeKeyboard() {
         return typeKeyboard;
     }
 
-    public void setTypeKeyboard(Double typeKeyboard) {
+    public void setTypeKeyboard(String typeKeyboard) {
         this.typeKeyboard = typeKeyboard;
     }
 
-    public Double getSizeKey() {
+    public String getSizeKey() {
         return sizeKey;
     }
 
-    public void setSizeKey(Double sizeKey) {
+    public void setSizeKey(String sizeKey) {
         this.sizeKey = sizeKey;
     }
 
@@ -101,11 +107,11 @@ public class Accessory {
         this.special = special;
     }
 
-    public Double getSizeKeyboard() {
+    public String getSizeKeyboard() {
         return sizeKeyboard;
     }
 
-    public void setSizeKeyboard(Double sizeKeyboard) {
+    public void setSizeKeyboard(String sizeKeyboard) {
         this.sizeKeyboard = sizeKeyboard;
     }
 
@@ -115,21 +121,5 @@ public class Accessory {
 
     public void setCharging(String charging) {
         this.charging = charging;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public Products getAccessoryProduct() {
-        return accessoryProduct;
-    }
-
-    public void setAccessoryProduct(Products accessoryProduct) {
-        this.accessoryProduct = accessoryProduct;
     }
 }
