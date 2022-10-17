@@ -16,6 +16,12 @@ public class Products {
     private Boolean available;
     private Integer warranty;
 
+    private Double prodPrice;
+
+    @Column(columnDefinition = "varchar(8000)")
+    private String notes;
+
+
     @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
     private Set<ImageDetail> imageDetails;
@@ -49,14 +55,16 @@ public class Products {
     public Products() {
     }
 
-    public Products(Long prodId, String prodName, String imageUrlMain,
-                    Boolean available, Integer warranty,
-                    Category catProd, ProductionCompany prodPco, SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
+    public Products(Long prodId, String prodName, String imageUrlMain, Boolean available, Integer warranty, Double prodPrice,
+                    String notes, Category catProd, ProductionCompany prodPco,
+                    SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
         this.prodId = prodId;
         this.prodName = prodName;
         this.imageUrlMain = imageUrlMain;
         this.available = available;
         this.warranty = warranty;
+        this.prodPrice = prodPrice;
+        this.notes = notes;
         this.catProd = catProd;
         this.prodPco = prodPco;
         this.smartPhone = smartPhone;
@@ -174,5 +182,21 @@ public class Products {
 
     public void setProdPco(ProductionCompany prodPco) {
         this.prodPco = prodPco;
+    }
+
+    public Double getProdPrice() {
+        return prodPrice;
+    }
+
+    public void setProdPrice(Double prodPrice) {
+        this.prodPrice = prodPrice;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

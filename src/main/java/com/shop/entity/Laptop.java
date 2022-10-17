@@ -3,7 +3,7 @@ package com.shop.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Year;
 
 @Entity
 public class Laptop {
@@ -29,16 +29,14 @@ public class Laptop {
     private String design;
     private String special;
     private String sizeAndWeight;
-    private Date yom; //year Of Manufacture
-    @Column(columnDefinition = "varchar(8000)")
-    private String notes;
+    private Year yom; //year Of Manufacture
 
     public Laptop() {
     }
 
     public Laptop(String monitor, String cpu, String ram, String disk, String gpu,
                   String sysop, String gateway, String design, String special,
-                  String sizeAndWeight, Date yom, String notes) {
+                  String sizeAndWeight, Year yom) {
         this.monitor = monitor;
         this.cpu = cpu;
         this.ram = ram;
@@ -50,7 +48,6 @@ public class Laptop {
         this.special = special;
         this.sizeAndWeight = sizeAndWeight;
         this.yom = yom;
-        this.notes = notes;
     }
 
     public String getMonitor() {
@@ -133,21 +130,14 @@ public class Laptop {
         this.sizeAndWeight = sizeAndWeight;
     }
 
-    public Date getYom() {
+    public Year getYom() {
         return yom;
     }
 
-    public void setYom(Date yom) {
+    public void setYom(Year yom) {
         this.yom = yom;
     }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
+    
 
     public Products getLaptopProd() {
         return laptopProd;

@@ -82,8 +82,7 @@ public class ProductController {
                     productDtoReturn.setAccessoryProd(accessorySave);
                 }
             }
-            message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK,
-                    "Create Product is successful!", productDtoReturn));
+            message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK, "Create Product is successful!", productDtoReturn));
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR,
                     e.getMessage(), null));
@@ -96,5 +95,7 @@ public class ProductController {
         List<ProductDto> productDtoList = this.iProductService.findAllProducts();
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
+
+
 }
 
