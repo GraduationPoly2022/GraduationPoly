@@ -14,6 +14,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long commentId;
     private String content;
+
+    private boolean hidden;
     @Temporal(TemporalType.DATE)
     private Date commentDate;
 
@@ -30,14 +32,17 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long commentId, String content, Date commentDate,
+
+    public Comment(Long commentId, String content, boolean hidden, Date commentDate,
                    Products prodComment, User userComments) {
         this.commentId = commentId;
         this.content = content;
+        this.hidden = hidden;
         this.commentDate = commentDate;
         this.prodComment = prodComment;
         this.userComments = userComments;
     }
+
 
     public Long getCommentId() {
         return commentId;
@@ -85,5 +90,13 @@ public class Comment {
 
     public void setProdComment(Products prodComment) {
         this.prodComment = prodComment;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 }

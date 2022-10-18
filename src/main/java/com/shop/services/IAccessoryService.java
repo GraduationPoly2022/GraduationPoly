@@ -5,5 +5,5 @@ import com.shop.entity.Accessory;
 public interface IAccessoryService {
     Accessory createAccessory(Accessory accessory);
 
-  
+
 }

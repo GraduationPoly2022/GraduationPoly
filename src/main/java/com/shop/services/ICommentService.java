@@ -9,4 +9,8 @@ public interface ICommentService {
 
 
     List<Comment> findCommentByProducts(Long prodId);
+
+    List<Comment> findAllComment();
+
+    Comment findByCommentId(Long commentId);
 }

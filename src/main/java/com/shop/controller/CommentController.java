@@ -52,6 +52,7 @@ public class CommentController {
         return message;
     }
 
+    //add comment dt
     @PostMapping("/add-comment")
     public ResponseEntity<ResponseMessage> handlerCreateCommentDetail(@RequestBody CommentDto commentDTDto) {
         ResponseEntity<ResponseMessage> message = null;
@@ -81,10 +82,9 @@ public class CommentController {
         return message;
     }
 
-
-    private List<CommentDto> transfer(Long productId) {
+    // List all comment id
+    private List<CommentDto> transfer(List<Comment> comments) {
         List<CommentDto> CommentDtoList = new ArrayList<>();
-        List<Comment> comments = this.commentService.findCommentByProducts(productId);
         if (!comments.isEmpty()) {
             for (Comment comment : comments) {
                 CommentDto commentDto = new CommentDto();
@@ -99,20 +99,49 @@ public class CommentController {
             }
         }
         return CommentDtoList;
-
     }
 
-    @GetMapping("/get-data/{productId}")
+    @GetMapping("/{productId}")
     public ResponseEntity<ResponseMessage> getAllComment(@PathVariable("productId") Long productId) {
-        ResponseEntity<ResponseMessage> message = null;
-        List<CommentDto> CommentDtoList = this.transfer(productId);
-        message = ResponseEntity.status(HttpStatus.OK)
-                .body(
-                        new ResponseMessage(StatusMessage.OK,
-                                "Get all data successfully", CommentDtoList));
-        return message;
+        List<Comment> list = this.commentService.findCommentByProducts(productId);
+        return transferList(list);
 
     }
 
+    //list all comment admin
+    @GetMapping("/get-data")
+    public ResponseEntity<ResponseMessage> AllCommentAdmin() {
+        List<Comment> list = this.commentService.findAllComment();
+        return transferList(list);
+    }
+
+
+    // delete
+    @PatchMapping("/hidden/{commentId}")
+    public ResponseEntity<ResponseMessage> unHidden(@PathVariable("commentId") Long commentId) {
+        ResponseEntity<ResponseMessage> message;
+        Comment commentFindById = this.commentService.findByCommentId(commentId);
+        if (commentFindById != null) {
+            commentFindById.setHidden(!commentFindById.isHidden());
+        }
+        Comment commentSave = this.commentService.createComment(commentFindById);
+        message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK,
+                "Deleted comment is successful!", commentSave));
+        return message;
+    }
+
+    // method chung
+    private ResponseEntity<ResponseMessage> transferList(List<Comment> list) {
+        ResponseEntity<ResponseMessage> message;
+        List<CommentDto> orderDtoList = transfer(list);
+        if (!list.isEmpty()) {
+            message = ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseMessage(StatusMessage.OK, "Get all data successful!", orderDtoList));
+        } else {
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.NOT_FOUND, "Not found data", null));
+        }
+        return message;
+    }
 
 }
