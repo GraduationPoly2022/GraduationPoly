@@ -16,4 +16,10 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     Optional<OrderDetail> findByOddeAndProdOddeAndOdde_usersOdAndOdde_status(Order order, Products products, User user, OrderStatus status);
 
     List<OrderDetail> findByOdde_odIdAndOdde_usersOd_emailAndOdde_status(Long odId, String email, OrderStatus status);
+
+    Optional<OrderDetail> findByProdOdde_prodIdAndOdde_odIdAndOdde_status(Long prodId, Long id, OrderStatus status);
+
+    List<OrderDetail> findByOdde_odIdAndOdde_usersOd_userIdAndOdde_status(Long odId, Long userId, OrderStatus status);
+
+
 }

@@ -1,5 +1,7 @@
 package com.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,6 +12,7 @@ public class OrderDetail {
     private Integer qty;
     private Double price;
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Products prodOdde;
     @ManyToOne(fetch = FetchType.EAGER)
     private Order odde;

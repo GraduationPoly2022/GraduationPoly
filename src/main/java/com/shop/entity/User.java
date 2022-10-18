@@ -31,7 +31,9 @@ public class User implements UserDetails {
     private String fullName;
     private String phoneNumber;
     private String address;
+    @Column(columnDefinition = "varchar(2000)")
     private String imageUrl;
+
 
     @OneToMany(mappedBy = "userReply")
     @JsonIgnore

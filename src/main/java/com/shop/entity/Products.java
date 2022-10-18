@@ -15,33 +15,26 @@ public class Products {
     private String imageUrlMain;
     private Boolean available;
     private Integer warranty;
-
+    private Double prodPrice;
     @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
     private Set<ImageDetail> imageDetails;
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Category catProd;
-
     @ManyToOne(fetch = FetchType.EAGER)
     private ProductionCompany prodPco;
-
     @OneToOne(mappedBy = "spProd")
     private SmartPhone smartPhone;
-
     @OneToOne(mappedBy = "accessoryProduct")
     private Accessory accessoryProd;
-
     @OneToOne(mappedBy = "laptopProd")
     private Laptop laptop;
-
     @OneToMany(mappedBy = "prodOdde")
     @JsonIgnore
     private Set<OrderDetail> OrderDetails;
     @OneToMany(mappedBy = "prodComment")
     @JsonIgnore
     private Set<Comment> commentProd;
-
     @OneToMany(mappedBy = "prodReview")
     @JsonIgnore
     private Set<Reviews> prodReviewsSet = new LinkedHashSet<>();
@@ -51,17 +44,26 @@ public class Products {
 
     public Products(Long prodId, String prodName, String imageUrlMain,
                     Boolean available, Integer warranty,
-                    Category catProd, ProductionCompany prodPco, SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
+                    Double prodPrice, Category catProd, ProductionCompany prodPco, SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
         this.prodId = prodId;
         this.prodName = prodName;
         this.imageUrlMain = imageUrlMain;
         this.available = available;
         this.warranty = warranty;
+        this.prodPrice = prodPrice;
         this.catProd = catProd;
         this.prodPco = prodPco;
         this.smartPhone = smartPhone;
         this.accessoryProd = accessoryProd;
         this.laptop = laptop;
+    }
+
+    public Double getProdPrice() {
+        return prodPrice;
+    }
+
+    public void setProdPrice(Double prodPrice) {
+        this.prodPrice = prodPrice;
     }
 
     public Long getProdId() {
