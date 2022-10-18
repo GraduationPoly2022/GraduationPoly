@@ -6,6 +6,7 @@ import com.shop.entity.Products;
 import com.shop.repository.ProductRepository;
 import com.shop.services.IImageDetailService;
 import com.shop.services.IProductService;
+import com.shop.services.IReviewService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,11 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements IProductService {
+
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private IReviewService iReviewService;
     @Autowired
     private IImageDetailService imageDetailService;
 
@@ -33,9 +37,92 @@ public class ProductServiceImpl implements IProductService {
             ProductDto productDto = new ProductDto();
             BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
             List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
-            productDto.setImageDetails(imageDetails);
+            if (!imageDetails.isEmpty()) {
+                productDto.setImageDetails(imageDetails);
+            }
+            Integer rating = this.iReviewService.HandleRating(products.getProdId());
+            productDto.setRating(rating);
             productDtoList.add(productDto);
         }
         return productDtoList;
+    }
+
+    @Override
+    public ProductDto findAcSpLtByProduct(Long prodId) {
+        Products prodFindById = this.productRepository.findById(prodId).orElse(null);
+        ProductDto productDto = null;
+        if (prodFindById != null) {
+            productDto = new ProductDto();
+            BeanUtils.copyProperties(prodFindById, productDto, "imageDetails", "productsEnum");
+            List<ImageDetail> imageDetails = this.imageDetailService.findByProd(prodFindById);
+            if (!imageDetails.isEmpty()) {
+                productDto.setImageDetails(imageDetails);
+            }
+            Integer rating = this.iReviewService.HandleRating(prodFindById.getProdId());
+            productDto.setRating(rating);
+        }
+        return productDto;
+    }
+
+    @Override
+    public List<ProductDto> findByCategory(Long catId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> productFindByCatId = this.productRepository.findByCatProd_catId(catId);
+        for (Products products : productFindByCatId) {
+            ProductDto productDto = new ProductDto();
+            BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
+            List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
+            if (!imageDetails.isEmpty()) {
+                productDto.setImageDetails(imageDetails);
+            }
+            Integer rating = this.iReviewService.HandleRating(products.getProdId());
+            productDto.setRating(rating);
+            productDtoList.add(productDto);
+        }
+        return productDtoList;
+    }
+
+    @Override
+    public List<ProductDto> findByProdPco(Long pcoId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> productFind = this.productRepository.findByProdPco_pcoId(pcoId);
+        for (Products products : productFind) {
+            ProductDto productDto = new ProductDto();
+            BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
+            List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
+            if (!imageDetails.isEmpty()) {
+                productDto.setImageDetails(imageDetails);
+            }
+            Integer rating = this.iReviewService.HandleRating(products.getProdId());
+            productDto.setRating(rating);
+            productDtoList.add(productDto);
+        }
+        return productDtoList;
+    }
+
+    @Override
+    public List<ProductDto> findByProdName(String value) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> productsFind = this.productRepository.findByProdNameContaining(value);
+        if (productsFind != null) {
+            for (Products products : productsFind) {
+                ProductDto productDto = new ProductDto();
+                BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
+                List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
+                if (!imageDetails.isEmpty()) {
+                    productDto.setImageDetails(imageDetails);
+                }
+                Integer rating = this.iReviewService.HandleRating(products.getProdId());
+                productDto.setRating(rating);
+                productDtoList.add(productDto);
+            }
+
+        }
+        return productDtoList;
+    }
+
+    @Override
+    public Products findByProducts(Long prodId) {
+        return this.productRepository.findById(prodId).orElse(null);
     }
 }

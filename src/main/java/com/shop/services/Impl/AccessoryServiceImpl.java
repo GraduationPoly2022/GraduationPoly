@@ -16,5 +16,8 @@ public class AccessoryServiceImpl implements IAccessoryService {
         return this.accessoryRepository.save(accessory);
     }
 
-
+    @Override
+    public Accessory findByProductId(Long prodId) {
+        return this.accessoryRepository.findByAccessoryProduct_prodId(prodId).orElse(null);
+    }
 }

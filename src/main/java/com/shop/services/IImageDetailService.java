@@ -10,4 +10,6 @@ public interface IImageDetailService {
     List<ImageDetail> creImageDetail(List<ImageDetail> imageDetail);
 
     List<ImageDetail> findByProd(Products products);
+
+    List<ImageDetail> findByProductId(Long prodId);
 }

@@ -15,20 +15,24 @@ public class Reviews {
     private Date dateReview;
     @ManyToOne(fetch = FetchType.EAGER)
     private User userReview;
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Products prodReview;
+
+    private Boolean hidden;
 
     public Reviews() {
     }
 
-    public Reviews(Long reviewId, String content, Integer rating, Date dateReview,
-                   User userReview, Products prodReview) {
+    public Reviews(Long reviewId, String content, Integer rating, Date dateReview, User userReview, Products prodReview, Boolean hidden) {
         this.reviewId = reviewId;
         this.content = content;
         this.rating = rating;
         this.dateReview = dateReview;
         this.userReview = userReview;
         this.prodReview = prodReview;
+        this.hidden = hidden;
     }
 
     public Long getReviewId() {
@@ -77,5 +81,13 @@ public class Reviews {
 
     public void setProdReview(Products prodReview) {
         this.prodReview = prodReview;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
     }
 }

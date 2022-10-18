@@ -25,4 +25,9 @@ public class ImageDetailServiceImpl implements IImageDetailService {
     public List<ImageDetail> findByProd(Products products) {
         return this.imageDetailRepository.findByProdImde(products);
     }
+
+    @Override
+    public List<ImageDetail> findByProductId(Long prodId) {
+        return this.imageDetailRepository.findByProdImde_prodId(prodId);
+    }
 }

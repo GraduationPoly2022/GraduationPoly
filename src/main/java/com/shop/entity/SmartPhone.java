@@ -11,7 +11,6 @@ public class SmartPhone {
     @Column(name = "sp_id")
     @JsonIgnore
     private Long spId;
-
     private String monitor;
     private String sysop;//system operator
     private String beforeCamera;
@@ -24,9 +23,6 @@ public class SmartPhone {
     private String gpu;
     private String connector;
     private String utils;
-    @Column(columnDefinition = "varchar(8000)")
-    private String notes;
-
     @OneToOne
     @JoinColumn(name = "sp_id")
     @JsonIgnore
@@ -39,7 +35,7 @@ public class SmartPhone {
     public SmartPhone(String monitor, String sysop, String beforeCamera,
                       String afterCamera, String cpu, String ram, String disk, String batAChg,
                       String video, String gpu, String connector, String utils,
-                      String notes, Products spProd) {
+                      Products spProd) {
         this.monitor = monitor;
         this.sysop = sysop;
         this.beforeCamera = beforeCamera;
@@ -52,7 +48,6 @@ public class SmartPhone {
         this.gpu = gpu;
         this.connector = connector;
         this.utils = utils;
-        this.notes = notes;
         this.spProd = spProd;
     }
 
@@ -152,13 +147,6 @@ public class SmartPhone {
         this.utils = utils;
     }
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
 
     public Long getSpId() {
         return spId;

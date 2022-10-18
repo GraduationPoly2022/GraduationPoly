@@ -17,7 +17,6 @@ public class CommentDetail {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User userCmde;
-    ;
 
     public CommentDetail() {
     }

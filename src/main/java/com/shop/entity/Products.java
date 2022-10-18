@@ -15,6 +15,10 @@ public class Products {
     private String imageUrlMain;
     private Boolean available;
     private Integer warranty;
+    private Double prodPrice;
+
+    @Column(columnDefinition = "varchar(8000)")
+    private String notes;
 
     @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
@@ -49,19 +53,27 @@ public class Products {
     public Products() {
     }
 
-    public Products(Long prodId, String prodName, String imageUrlMain,
-                    Boolean available, Integer warranty,
-                    Category catProd, ProductionCompany prodPco, SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
+    public Products(Long prodId, String prodName, String imageUrlMain, Boolean available,
+                    Integer warranty, Double proPrice, String notes, Set<ImageDetail> imageDetails,
+                    Category catProd, ProductionCompany prodPco, SmartPhone smartPhone,
+                    Accessory accessoryProd, Laptop laptop, Set<OrderDetail> orderDetails,
+                    Set<Comment> commentProd, Set<Reviews> prodReviewsSet) {
         this.prodId = prodId;
         this.prodName = prodName;
         this.imageUrlMain = imageUrlMain;
         this.available = available;
         this.warranty = warranty;
+        this.prodPrice = proPrice;
+        this.notes = notes;
+        this.imageDetails = imageDetails;
         this.catProd = catProd;
         this.prodPco = prodPco;
         this.smartPhone = smartPhone;
         this.accessoryProd = accessoryProd;
         this.laptop = laptop;
+        OrderDetails = orderDetails;
+        this.commentProd = commentProd;
+        this.prodReviewsSet = prodReviewsSet;
     }
 
     public Long getProdId() {
@@ -174,5 +186,21 @@ public class Products {
 
     public void setProdPco(ProductionCompany prodPco) {
         this.prodPco = prodPco;
+    }
+
+    public Double getProdPrice() {
+        return prodPrice;
+    }
+
+    public void setProdPrice(Double prodPrice) {
+        this.prodPrice = prodPrice;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
