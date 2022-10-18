@@ -84,6 +84,6 @@ public class Convert {
         byte[] decode = Base64.getDecoder().decode(encode);
         String str = new String(decode);
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(str, mapper.getTypeFactory().constructCollectionType(List.class, clazz));
+        return mapper.readValue(str, clazz);
     }
 }
