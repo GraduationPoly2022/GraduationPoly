@@ -4,7 +4,6 @@ import com.shop.dto.CommentDto;
 import com.shop.dto.ResponseMessage;
 import com.shop.entity.Comment;
 import com.shop.entity.CommentDetail;
-import com.shop.enumEntity.RoleName;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.services.ICommentDetailService;
 import com.shop.services.ICommentService;
@@ -53,6 +52,7 @@ public class CommentController {
         return message;
     }
 
+    //add comment dt
     @PostMapping("/add-comment")
     public ResponseEntity<ResponseMessage> handlerCreateCommentDetail(@RequestBody CommentDto commentDTDto) {
         ResponseEntity<ResponseMessage> message = null;
@@ -82,10 +82,9 @@ public class CommentController {
         return message;
     }
 
-
-    private List<CommentDto> transfer(Long productId) {
+    // List all comment id
+    private List<CommentDto> transfer(List<Comment> comments) {
         List<CommentDto> CommentDtoList = new ArrayList<>();
-        List<Comment> comments = this.commentService.findCommentByProducts(productId);
         if (!comments.isEmpty()) {
             for (Comment comment : comments) {
                 CommentDto commentDto = new CommentDto();
@@ -104,41 +103,22 @@ public class CommentController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ResponseMessage> getAllComment(@PathVariable("productId") Long productId) {
-        ResponseEntity<ResponseMessage> message = null;
         List<Comment> list = this.commentService.findCommentByProducts(productId);
-        return getResponseMessageResponseEntity(list);
+        return transferList(list);
 
     }
 
-
+    //list all comment admin
     @GetMapping("/get-data")
     public ResponseEntity<ResponseMessage> AllCommentAdmin() {
-        ResponseEntity<ResponseMessage> message = null;
         List<Comment> list = this.commentService.findAllComment();
-        return getResponseMessageResponseEntity(list);
+        return transferList(list);
     }
 
-    private List<CommentDto> transfer() {
-        List<CommentDto> CommentDtoLists = new ArrayList<>();
-        List<Comment> comments = this.commentService.findAllComment();
-        if (!comments.isEmpty()) {
-            for (Comment comment : comments) {
-                CommentDto commentDto = new CommentDto();
-                commentDto.setCommentId(comment.getCommentId());
-                commentDto.setContent(comment.getContent());
-                commentDto.setCommentDate(comment.getCommentDate());
-                commentDto.setProdComment(comment.getProdComment());
-                commentDto.setUserComments(comment.getUserComments());
-                List<CommentDetail> CommentDetail = this.commentDTService.findCommentDtById(comment.getCommentId());
-                commentDto.setCommentDetails(CommentDetail);
-                CommentDtoLists.add(commentDto);
-            }
-        }
-        return CommentDtoLists;
-    }
 
+    // delete
     @PatchMapping("/hidden/{commentId}")
-    public ResponseEntity<ResponseMessage> unHidden(@PathVariable("commentId") Long commentId, RoleName roleName) {
+    public ResponseEntity<ResponseMessage> unHidden(@PathVariable("commentId") Long commentId) {
         ResponseEntity<ResponseMessage> message;
         Comment commentFindById = this.commentService.findByCommentId(commentId);
         if (commentFindById != null) {
@@ -150,9 +130,10 @@ public class CommentController {
         return message;
     }
 
-    private ResponseEntity<ResponseMessage> getResponseMessageResponseEntity(List<Comment> list) {
+    // method chung
+    private ResponseEntity<ResponseMessage> transferList(List<Comment> list) {
         ResponseEntity<ResponseMessage> message;
-        List<CommentDto> orderDtoList = transfer();
+        List<CommentDto> orderDtoList = transfer(list);
         if (!list.isEmpty()) {
             message = ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseMessage(StatusMessage.OK, "Get all data successful!", orderDtoList));
