@@ -18,7 +18,6 @@ public class Category {
     private Set<Products> catProd;
 
     public Category() {
-
     }
 
     public Category(Long catId, String name) {
