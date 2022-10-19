@@ -48,9 +48,4 @@ public class OrderServiceImpl implements IOrderService {
         return this.orderRepository.findAll();
     }
 
-    @Override
-    public Order checkOrderAndUserAndStatus(Long odId, String email, OrderStatus status) {
-        return this.orderRepository.findByOdIdAndUsersOd_emailAndStatus(odId, email, status).orElse(null);
-    }
-
 }

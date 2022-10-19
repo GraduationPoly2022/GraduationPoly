@@ -10,6 +10,8 @@ import com.shop.services.IOrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderDetailServiceImpl implements IOrderDetailService {
 
@@ -46,5 +48,10 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
                         item.getQty() * item.getPrice() + (item.getQty() * item.getPrice() * 0.1)
                 ).sum();
         return total + transportFee;
+    }
+
+    @Override
+    public List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status) {
+        return this.orderDetailRepository.findByOdde_odIdAndOdde_status(odId, status);
     }
 }

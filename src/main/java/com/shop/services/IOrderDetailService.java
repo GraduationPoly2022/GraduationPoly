@@ -6,6 +6,8 @@ import com.shop.entity.Products;
 import com.shop.entity.User;
 import com.shop.enumEntity.OrderStatus;
 
+import java.util.List;
+
 public interface IOrderDetailService {
 
     OrderDetail saveOrUpdate(OrderDetail orderDetail);
@@ -17,4 +19,6 @@ public interface IOrderDetailService {
     void deleteOrders(OrderDetail orderDetail);
 
     Double totalPrice(Long odId, Long userId, double transportFee);
+
+    List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status);
 }

@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface ShipperRepository extends JpaRepository<Shipper, Long> {
-
-    Optional<Shipper> findByShipperId(Long id);
+    Optional<Shipper> findByOrderShipper_odId(Long odId);
 
 }

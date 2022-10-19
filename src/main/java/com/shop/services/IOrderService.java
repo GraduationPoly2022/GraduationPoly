@@ -18,6 +18,4 @@ public interface IOrderService {
     Order delete(Long id);
 
     List<Order> findAllAdmin();
-
-    Order checkOrderAndUserAndStatus(Long odId, String email, OrderStatus status);
 }
