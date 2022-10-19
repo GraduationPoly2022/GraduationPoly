@@ -9,7 +9,6 @@ import com.shop.enumEntity.RoleName;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.services.IRoleService;
 import com.shop.services.IUserService;
-import com.shop.utils.Convert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.shop.helper.CheckMail.emailExists;
+import static com.shop.utils.Convert.CapitalAll;
 import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
 
 @RestController
@@ -36,8 +36,8 @@ public class UserController {
     private BCryptPasswordEncoder passwordEncoder;
 
     public static void CreateUser(@RequestBody UserDto userDto, User user, IRoleService roleService, String password) {
-        userDto.setAddress(Convert.CapitalAllFirstLetter(userDto.getAddress()));
-        userDto.setFullName(Convert.CapitalAllFirstLetter(userDto.getFullName()));
+        userDto.setAddress(CapitalAll(userDto.getAddress()));
+        userDto.setFullName(CapitalAll(userDto.getFullName()));
         Role role = new Role();
         if (userDto.getAuthority() == null) {
             role.setRoleName(RoleName.CLIENT);
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
+    public ResponseEntity<ResponseMessage> createUser(@RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
         if (this.userService.findByEmail(userDto.getEmail()) != null) {
@@ -78,8 +78,11 @@ public class UserController {
             CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             User u = this.userService.createUser(user);
             if (u != null) {
+                UserDto userDtoExport = new UserDto();
+                BeanUtils.copyProperties(u, userDtoExport, "authority");
+                userDtoExport.setAuthority(RoleName.valueOf(u.getAuthorities().stream().iterator().next().getAuthority()));
                 message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Successful user creation", u));
+                        .body(new ResponseMessage(StatusMessage.OK, "Successful user creation", userDtoExport));
             }
 
         } catch (Exception e) {
@@ -94,11 +97,25 @@ public class UserController {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
         try {
-            CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
+            User userFind = this.userService.findById(userDto.getUserId());
+            BeanUtils.copyProperties(userDto, user, "password", "fullName", "address");
+            user.setFullName(CapitalAll(userDto.getFullName()));
+            user.setAddress(CapitalAll(userDto.getAddress()));
+            user.setPassword(userFind.getPassword());
+            if (userDto.getImageUrl() == null) {
+                user.setImageUrl(userFind.getImageUrl());
+            }
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleService.findByRoleName(userDto.getAuthority()));
+            user.setAuthProvider(userFind.getAuthProvider());
+            user.setRoleSet(roles);
             User u = this.userService.createUser(user);
             if (u != null) {
+                UserDto userDtoExport = new UserDto();
+                BeanUtils.copyProperties(u, userDtoExport, "authority");
+                userDtoExport.setAuthority(RoleName.valueOf(u.getAuthorities().stream().iterator().next().getAuthority()));
                 message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "User update successful", u));
+                        .body(new ResponseMessage(StatusMessage.OK, "User update successful", userDtoExport));
             }
 
         } catch (Exception e) {

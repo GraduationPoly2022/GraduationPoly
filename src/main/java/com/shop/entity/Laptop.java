@@ -9,7 +9,6 @@ public class Laptop {
 
     @Id
     @Column(name = "laptop_id")
-    @JsonIgnore
     private Long laptopId;
 
     @OneToOne
@@ -28,6 +27,7 @@ public class Laptop {
     private String design;
     private String special;
     private String sizeAndWeight;
+    private String batteryInfo;
     private Integer yom; //year Of Manufacture
 
     public Laptop() {
@@ -35,7 +35,7 @@ public class Laptop {
 
     public Laptop(String monitor, String cpu, String ram, String disk, String gpu,
                   String sysop, String gateway, String design, String special,
-                  String sizeAndWeight, Integer yom) {
+                  String sizeAndWeight, String batteryInfo, Integer yom) {
         this.monitor = monitor;
         this.cpu = cpu;
         this.ram = ram;
@@ -46,6 +46,7 @@ public class Laptop {
         this.design = design;
         this.special = special;
         this.sizeAndWeight = sizeAndWeight;
+        this.batteryInfo = batteryInfo;
         this.yom = yom;
     }
 
@@ -137,7 +138,6 @@ public class Laptop {
         this.yom = yom;
     }
 
-
     public Products getLaptopProd() {
         return laptopProd;
     }
@@ -152,5 +152,13 @@ public class Laptop {
 
     public void setLaptopId(Long laptopId) {
         this.laptopId = laptopId;
+    }
+
+    public String getBatteryInfo() {
+        return batteryInfo;
+    }
+
+    public void setBatteryInfo(String batteryInfo) {
+        this.batteryInfo = batteryInfo;
     }
 }

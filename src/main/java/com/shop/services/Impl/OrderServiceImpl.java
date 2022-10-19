@@ -17,7 +17,7 @@ public class OrderServiceImpl implements IOrderService {
     private OrderRepository orderRepository;
 
     @Override
-    public Order createOrder(Order order) {
+    public Order saveOrUpdate(Order order) {
         return this.orderRepository.save(order);
     }
 
@@ -30,4 +30,22 @@ public class OrderServiceImpl implements IOrderService {
     public List<Order> findAll(String email, OrderStatus status) {
         return this.orderRepository.findByUsersOd_emailAndStatus(email, status);
     }
+
+    @Override
+    public Order checkOrders(Long id) {
+        return this.orderRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Order delete(Long id) {
+        Order order = this.orderRepository.findById(id).orElse(null);
+        this.orderRepository.deleteById(id);
+        return order;
+    }
+
+    @Override
+    public List<Order> findAllAdmin() {
+        return this.orderRepository.findAll();
+    }
+
 }

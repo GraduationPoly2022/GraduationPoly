@@ -32,8 +32,7 @@ public class ProductController {
     private IImageDetailService imageDetailService;
 
     @PostMapping("/")
-    public ResponseEntity<ResponseMessage> createProduct(@RequestBody ProductDto productDto
-    ) {
+    public ResponseEntity<ResponseMessage> createProduct(@RequestBody ProductDto productDto) {
         ResponseEntity<ResponseMessage> message;
         if (!productDto.getProductsEnum().equals(ProductsEnum.ACCESSORY)
                 && !productDto.getProductsEnum().equals(ProductsEnum.LAPTOP)
@@ -84,8 +83,7 @@ public class ProductController {
                     productDtoReturn.setAccessoryProd(accessorySave);
                 }
             }
-            message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK,
-                    "Create Product is successful!", productDtoReturn));
+            message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK, "Create Product is successful!", productDtoReturn));
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR,
                     e.getMessage(), null));
@@ -117,7 +115,6 @@ public class ProductController {
             List<ImageDetail> imageDetailList = new ArrayList<>(productDto.getImageDetails());
             if (!imageDetailFind.isEmpty()) {
                 for (ImageDetail detail : imageDetailFind) {
-//                    imageDetailList.removeIf(imageDetail -> imageDetail.getImageName().equals(detail.getImageName()));
                     for (int i = 0; i < imageDetailList.size(); i++) {
                         if (imageDetailList.get(i).getImageName().equals(detail.getImageName())) {
                             imageDetailList.remove(i);
@@ -168,7 +165,7 @@ public class ProductController {
         return message;
     }
 
-    @PatchMapping("/setAvailable/{prodId}")
+    @PatchMapping("/set-available/{prodId}")
     public ResponseEntity<ResponseMessage> unAvailable(@PathVariable("prodId") Long prodId) {
         ResponseEntity<ResponseMessage> message;
         Products productFindById = this.iProductService.findByProducts(prodId);
@@ -191,8 +188,8 @@ public class ProductController {
         return message;
     }
 
-    @GetMapping("/image/{prodId}")
-    public ResponseEntity<ResponseMessage> findImage(@PathVariable("prodId") Long prodId) {
+    @GetMapping("/product-id/{prodId}")
+    public ResponseEntity<ResponseMessage> findProductByProdId(@PathVariable("prodId") Long prodId) {
         ResponseEntity<ResponseMessage> message = null;
         ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId);
         if (productDtoList != null) {
@@ -221,8 +218,7 @@ public class ProductController {
         return message;
     }
 
-
-    @GetMapping("/findByProdName")
+    @GetMapping("/find-by-name")
     public ResponseEntity<ResponseMessage> findByProdName(@RequestBody ProductDto productDto) {
         ResponseEntity<ResponseMessage> message = null;
         List<ProductDto> productDtoList = this.iProductService.findByProdName(productDto.getProdName());

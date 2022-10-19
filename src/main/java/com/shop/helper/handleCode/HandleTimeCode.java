@@ -6,13 +6,20 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class HandleTimeCode {
+    private static final TimeUnit UNITS = TimeUnit.SECONDS; // your time unit
     private final Date now = new Date();
+    private final Map<Path, ScheduledFuture<?>> futures = new HashMap<>();
+    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
     public TimeCode timeCodeExCode;
 
     public HandleTimeCode() {
@@ -45,15 +52,14 @@ public class HandleTimeCode {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 this.timeCodeExCode = objectMapper.readValue(file, TimeCode.class);
-                Date code = new Date(this.timeCodeExCode.getTimeExpired());
-                if (this.now.after(code)) {
-                    this.timeCodeExCode.setCode("");
-                    new File("timeCode.json").deleteOnExit();
-                }
+//                Date code = new Date(this.timeCodeExCode.getTimeExpired());
+//                if (this.now.after(code)) {
+//                    this.timeCodeExCode.setCode("");
+//                    new File("timeCode.json").deleteOnExit();
+//                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            this.deleteWhenTimeExpired();
         }
         return filsExists;
     }
@@ -66,6 +72,11 @@ public class HandleTimeCode {
             timeCode.setCode(this.ramdomCode());
             try {
                 this.writeToFileJson(timeCode);
+                Date code = new Date(timeCode.getTimeExpired());
+                if (this.now.after(code)) {
+                    timeCode.setCode("");
+                    new File("timeCode.json").deleteOnExit();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -77,7 +88,7 @@ public class HandleTimeCode {
                 new File("timeCode.json").deleteOnExit();
             }
         }
-//        this.deleteWhenTimeExpired();
+        this.onFileAccess();
         return timeCode;
     }
 
@@ -105,6 +116,36 @@ public class HandleTimeCode {
             code = String.valueOf(100000 + Math.round(Math.random() * 899900));
         }
         return code;
+    }
+
+    public void scheduleForDeletion(Path path, long delay) {
+        ScheduledFuture<?> future = executor.schedule(() -> {
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                // failed to delete
+            }
+        }, delay, UNITS);
+
+        futures.put(path, future);
+    }
+
+    public void onFileAccess() {
+        File file = new File("timeCode.json");
+        Path path = file.toPath();
+        ScheduledFuture<?> future = futures.get(path);
+        if (future != null) {
+
+            boolean result = future.cancel(false);
+            if (result) {
+                // reschedule the task
+                futures.remove(path);
+                scheduleForDeletion(path, 1000L * 60L * 5L);
+                this.timeCodeExCode.setCode("");
+            } else {
+                // too late, task was already running
+            }
+        }
     }
 }
 

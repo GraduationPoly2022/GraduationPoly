@@ -1,10 +1,9 @@
 package com.shop.repository;
 
-
-import com.shop.entity.SmartPhone;
+import com.shop.entity.ProductionCompany;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SmartPhoneRepository extends JpaRepository<SmartPhone, Long> {
+public interface ProductionCompanyRepository extends JpaRepository<ProductionCompany, Long> {
 }

@@ -8,7 +8,6 @@ import javax.persistence.*;
 public class Accessory {
     @Id
     @Column(name = "accessory_id")
-    @JsonIgnore
     private Long accessoryId;
 
     @OneToOne
@@ -21,7 +20,7 @@ public class Accessory {
     private String length;
     private String switches;
     private String typeKeyboard;
-    private Double sizeKey;
+    private String sizeKey;
     private String special;
     private String sizeKeyboard;
     private String charging;
@@ -29,9 +28,11 @@ public class Accessory {
     public Accessory() {
     }
 
-    public Accessory(String connector, String length, String switches,
-                     String typeKeyboard, Double sizeKey, String special,
+    public Accessory(Long accessoryId, Products accessoryProduct, String connector, String length,
+                     String switches, String typeKeyboard, String sizeKey, String special,
                      String sizeKeyboard, String charging) {
+        this.accessoryId = accessoryId;
+        this.accessoryProduct = accessoryProduct;
         this.connector = connector;
         this.length = length;
         this.switches = switches;
@@ -48,6 +49,14 @@ public class Accessory {
 
     public void setAccessoryId(Long accessoryId) {
         this.accessoryId = accessoryId;
+    }
+
+    public Products getAccessoryProduct() {
+        return accessoryProduct;
+    }
+
+    public void setAccessoryProduct(Products accessoryProduct) {
+        this.accessoryProduct = accessoryProduct;
     }
 
     public String getConnector() {
@@ -82,11 +91,11 @@ public class Accessory {
         this.typeKeyboard = typeKeyboard;
     }
 
-    public Double getSizeKey() {
+    public String getSizeKey() {
         return sizeKey;
     }
 
-    public void setSizeKey(Double sizeKey) {
+    public void setSizeKey(String sizeKey) {
         this.sizeKey = sizeKey;
     }
 
@@ -112,14 +121,5 @@ public class Accessory {
 
     public void setCharging(String charging) {
         this.charging = charging;
-    }
-
-
-    public Products getAccessoryProduct() {
-        return accessoryProduct;
-    }
-
-    public void setAccessoryProduct(Products accessoryProduct) {
-        this.accessoryProduct = accessoryProduct;
     }
 }

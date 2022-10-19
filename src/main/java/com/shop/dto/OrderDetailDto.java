@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtResponse {
-    private String token;
-    private Boolean rememberMe = false;
-    private UserDto userDto;
-    private Boolean mobile = false;
+public class OrderDetailDto {
+    private Long oddeId;
+    private Integer qty;
+    private Double price;
+    private ProductDto prodOdde;
 }

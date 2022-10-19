@@ -14,12 +14,10 @@ public class Products {
     private String prodName;
     private String imageUrlMain;
     private Boolean available;
-    private Integer warranty;
-    private Double prodPrice;
-
+    private String warranty;
+    private Double priceProd;
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
-
     @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
     private Set<ImageDetail> imageDetails;
@@ -53,27 +51,22 @@ public class Products {
     public Products() {
     }
 
-    public Products(Long prodId, String prodName, String imageUrlMain, Boolean available,
-                    Integer warranty, Double proPrice, String notes, Set<ImageDetail> imageDetails,
-                    Category catProd, ProductionCompany prodPco, SmartPhone smartPhone,
-                    Accessory accessoryProd, Laptop laptop, Set<OrderDetail> orderDetails,
-                    Set<Comment> commentProd, Set<Reviews> prodReviewsSet) {
+    public Products(Long prodId, String prodName, String imageUrlMain,
+                    Boolean available, String warranty,
+                    Double priceProd, String notes, Category catProd, ProductionCompany prodPco,
+                    SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
         this.prodId = prodId;
         this.prodName = prodName;
         this.imageUrlMain = imageUrlMain;
         this.available = available;
         this.warranty = warranty;
-        this.prodPrice = proPrice;
+        this.priceProd = priceProd;
         this.notes = notes;
-        this.imageDetails = imageDetails;
         this.catProd = catProd;
         this.prodPco = prodPco;
         this.smartPhone = smartPhone;
         this.accessoryProd = accessoryProd;
         this.laptop = laptop;
-        OrderDetails = orderDetails;
-        this.commentProd = commentProd;
-        this.prodReviewsSet = prodReviewsSet;
     }
 
     public Long getProdId() {
@@ -140,11 +133,11 @@ public class Products {
         this.commentProd = commentProd;
     }
 
-    public Integer getWarranty() {
+    public String getWarranty() {
         return warranty;
     }
 
-    public void setWarranty(Integer warranty) {
+    public void setWarranty(String warranty) {
         this.warranty = warranty;
     }
 
@@ -188,12 +181,12 @@ public class Products {
         this.prodPco = prodPco;
     }
 
-    public Double getProdPrice() {
-        return prodPrice;
+    public Double getPriceProd() {
+        return priceProd;
     }
 
-    public void setProdPrice(Double prodPrice) {
-        this.prodPrice = prodPrice;
+    public void setPriceProd(Double priceProd) {
+        this.priceProd = priceProd;
     }
 
     public String getNotes() {

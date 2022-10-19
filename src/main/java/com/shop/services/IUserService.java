@@ -1,5 +1,6 @@
 package com.shop.services;
 
+import com.shop.dto.UserDto;
 import com.shop.entity.User;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface IUserService {
 
     User createUser(User user);
 
-    List<User> findAlUsers();
+    List<UserDto> findAlUsers();
 
     User findById(Long id);
 }

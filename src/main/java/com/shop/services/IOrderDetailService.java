@@ -10,11 +10,15 @@ import java.util.List;
 
 public interface IOrderDetailService {
 
-    OrderDetail createOrderDetail(OrderDetail orderDetail);
-
+    OrderDetail saveOrUpdate(OrderDetail orderDetail);
 
     OrderDetail findByOrderAndProductAndUserAndStatus(Order order, Products products, User user, OrderStatus status);
 
+    OrderDetail checkOrders(Long prodId, Long id, OrderStatus status);
 
-    List<OrderDetail> findAll(Long odId, String email, OrderStatus status);
+    void deleteOrders(OrderDetail orderDetail);
+
+    Double totalPrice(Long odId, Long userId, double transportFee);
+
+    List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status);
 }

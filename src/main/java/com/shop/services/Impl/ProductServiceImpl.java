@@ -33,18 +33,7 @@ public class ProductServiceImpl implements IProductService {
     public List<ProductDto> findAllProducts() {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productsList = this.productRepository.findAll();
-        for (Products products : productsList) {
-            ProductDto productDto = new ProductDto();
-            BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
-            List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
-            if (!imageDetails.isEmpty()) {
-                productDto.setImageDetails(imageDetails);
-            }
-            Integer rating = this.iReviewService.HandleRating(products.getProdId());
-            productDto.setRating(rating);
-            productDtoList.add(productDto);
-        }
-        return productDtoList;
+        return getProductDtos(productDtoList, productsList);
     }
 
     @Override
@@ -68,24 +57,22 @@ public class ProductServiceImpl implements IProductService {
     public List<ProductDto> findByCategory(Long catId) {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productFindByCatId = this.productRepository.findByCatProd_catId(catId);
-        for (Products products : productFindByCatId) {
-            ProductDto productDto = new ProductDto();
-            BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
-            List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
-            if (!imageDetails.isEmpty()) {
-                productDto.setImageDetails(imageDetails);
-            }
-            Integer rating = this.iReviewService.HandleRating(products.getProdId());
-            productDto.setRating(rating);
-            productDtoList.add(productDto);
-        }
-        return productDtoList;
+        return getProductDtos(productDtoList, productFindByCatId);
     }
 
     @Override
     public List<ProductDto> findByProdPco(Long pcoId) {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productFind = this.productRepository.findByProdPco_pcoId(pcoId);
+        return getProductDtos(productDtoList, productFind);
+    }
+
+    private List<ProductDto> getProductDtos(List<ProductDto> productDtoList, List<Products> productFind) {
+        getProductFind(productDtoList, productFind);
+        return productDtoList;
+    }
+
+    private void getProductFind(List<ProductDto> productDtoList, List<Products> productFind) {
         for (Products products : productFind) {
             ProductDto productDto = new ProductDto();
             BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
@@ -97,7 +84,6 @@ public class ProductServiceImpl implements IProductService {
             productDto.setRating(rating);
             productDtoList.add(productDto);
         }
-        return productDtoList;
     }
 
     @Override
@@ -105,17 +91,7 @@ public class ProductServiceImpl implements IProductService {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productsFind = this.productRepository.findByProdNameContaining(value);
         if (productsFind != null) {
-            for (Products products : productsFind) {
-                ProductDto productDto = new ProductDto();
-                BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
-                List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
-                if (!imageDetails.isEmpty()) {
-                    productDto.setImageDetails(imageDetails);
-                }
-                Integer rating = this.iReviewService.HandleRating(products.getProdId());
-                productDto.setRating(rating);
-                productDtoList.add(productDto);
-            }
+            getProductFind(productDtoList, productsFind);
 
         }
         return productDtoList;

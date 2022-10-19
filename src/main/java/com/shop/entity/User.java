@@ -26,11 +26,20 @@ public class User implements UserDetails {
 
     @NotBlank
     private String email;
+    @JsonIgnore
     private String password;
     private String fullName;
     private String phoneNumber;
     private String address;
+
+    @Column(columnDefinition = "varchar(2000)")
     private String imageUrl;
+
+    @OneToMany(mappedBy = "userReply")
+    @JsonIgnore
+    private Set<CommentDetail> userCmdt;
+
+
     @Enumerated(EnumType.STRING)
     private AuthenticationProvider authProvider;
 
@@ -103,13 +112,13 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String getUsername() {
         return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Override
@@ -131,7 +140,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
     public String getFullName() {
         return fullName;
@@ -219,5 +227,13 @@ public class User implements UserDetails {
 
     public void setReviewsSet(Set<Reviews> reviewsSet) {
         this.reviewsSet = reviewsSet;
+    }
+
+    public Set<CommentDetail> getUserCmdt() {
+        return userCmdt;
+    }
+
+    public void setUserCmdt(Set<CommentDetail> userCmdt) {
+        this.userCmdt = userCmdt;
     }
 }

@@ -9,8 +9,8 @@ public class SmartPhone {
 
     @Id
     @Column(name = "sp_id")
-    @JsonIgnore
     private Long spId;
+
     private String monitor;
     private String sysop;//system operator
     private String beforeCamera;
@@ -34,8 +34,7 @@ public class SmartPhone {
 
     public SmartPhone(String monitor, String sysop, String beforeCamera,
                       String afterCamera, String cpu, String ram, String disk, String batAChg,
-                      String video, String gpu, String connector, String utils,
-                      Products spProd) {
+                      String video, String gpu, String connector, String utils, Products spProd) {
         this.monitor = monitor;
         this.sysop = sysop;
         this.beforeCamera = beforeCamera;
@@ -146,7 +145,6 @@ public class SmartPhone {
     public void setUtils(String utils) {
         this.utils = utils;
     }
-
 
     public Long getSpId() {
         return spId;
