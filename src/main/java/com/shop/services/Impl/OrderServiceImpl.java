@@ -3,7 +3,6 @@ package com.shop.services.Impl;
 import com.shop.entity.Order;
 import com.shop.entity.User;
 import com.shop.enumEntity.OrderStatus;
-import com.shop.repository.OrderDetailRepository;
 import com.shop.repository.OrderRepository;
 import com.shop.services.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,8 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private OrderDetailRepository orderDetailRepository;
-
     @Override
-    public Order createOrder(Order order) {
+    public Order saveOrUpdate(Order order) {
         return this.orderRepository.save(order);
     }
 
@@ -33,6 +29,23 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public List<Order> findAll(String email, OrderStatus status) {
         return this.orderRepository.findByUsersOd_emailAndStatus(email, status);
+    }
+
+    @Override
+    public Order checkOrders(Long id) {
+        return this.orderRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Order delete(Long id) {
+        Order order = this.orderRepository.findById(id).orElse(null);
+        this.orderRepository.deleteById(id);
+        return order;
+    }
+
+    @Override
+    public List<Order> findAllAdmin() {
+        return this.orderRepository.findAll();
     }
 
 }

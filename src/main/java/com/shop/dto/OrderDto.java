@@ -20,14 +20,16 @@ public class OrderDto {
     private Date deliveryDate;
     private Date recipientDate;
     private String receiver;
-    private String phoneReceive;
-    private String addressReceive;
+    private String phoneReceiver;
+    private String addressReceiver;
     private OrderStatus status;
     private Double amount;
     private PaymentEnum paymentReceived;
     private DeviceEnum deviceUse;
     private User usersOd;
+    private List<OrderDetailDto> lsOrderDetails;
     private ProductDto product;
     private Integer qty = 1;
-    private List<OrderDetailDto> lsOrderDetails;
+    private ReturnDto returns;
+    private ShipperDto shippers;
 }

@@ -14,7 +14,6 @@ import java.util.Set;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "od_id")
     private Long odId;
     @Temporal(TemporalType.DATE)
     private Date orderDate;
@@ -23,8 +22,8 @@ public class Order {
     @Temporal(TemporalType.DATE)
     private Date recipientDate;
     private String receiver;
-    private String phoneReceive;
-    private String addressReceive;
+    private String phoneReceiver;
+    private String addressReceiver;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     private Double amount;
@@ -53,7 +52,7 @@ public class Order {
     }
 
     public Order(Long odId, Date orderDate, Date deliveryDate, Date recipientDate, String receiver,
-                 String phoneReceive, String addressReceive, OrderStatus status,
+                 String phoneReceiver, String addressReceiver, OrderStatus status,
                  Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse,
                  User usersOd, Return returns) {
         this.odId = odId;
@@ -61,8 +60,8 @@ public class Order {
         this.deliveryDate = deliveryDate;
         this.recipientDate = recipientDate;
         this.receiver = receiver;
-        this.phoneReceive = phoneReceive;
-        this.addressReceive = addressReceive;
+        this.phoneReceiver = phoneReceiver;
+        this.addressReceiver = addressReceiver;
         this.status = status;
         this.amount = amount;
         this.paymentReceived = paymentReceived;
@@ -111,20 +110,20 @@ public class Order {
         this.receiver = receiver;
     }
 
-    public String getPhoneReceive() {
-        return phoneReceive;
+    public String getPhoneReceiver() {
+        return phoneReceiver;
     }
 
-    public void setPhoneReceive(String phoneReceive) {
-        this.phoneReceive = phoneReceive;
+    public void setPhoneReceiver(String phoneReceiver) {
+        this.phoneReceiver = phoneReceiver;
     }
 
-    public String getAddressReceive() {
-        return addressReceive;
+    public String getAddressReceiver() {
+        return addressReceiver;
     }
 
-    public void setAddressReceive(String addressReceive) {
-        this.addressReceive = addressReceive;
+    public void setAddressReceiver(String addressReceiver) {
+        this.addressReceiver = addressReceiver;
     }
 
     public OrderStatus getStatus() {

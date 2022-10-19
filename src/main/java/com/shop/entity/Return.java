@@ -9,7 +9,6 @@ import java.util.Date;
 @Table(name = "returns")
 public class Return {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "return_id")
     private Long returnId;
     @Temporal(TemporalType.DATE)

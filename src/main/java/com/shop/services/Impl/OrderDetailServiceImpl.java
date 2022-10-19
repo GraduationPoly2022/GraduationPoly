@@ -19,7 +19,7 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     private OrderDetailRepository orderDetailRepository;
 
     @Override
-    public OrderDetail createOrderDetail(OrderDetail orderDetail) {
+    public OrderDetail saveOrUpdate(OrderDetail orderDetail) {
         return this.orderDetailRepository.save(orderDetail);
     }
 
@@ -30,9 +30,28 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     }
 
     @Override
-    public List<OrderDetail> findAll(Long odId, String email, OrderStatus status) {
-        return this.orderDetailRepository
-                .findByOdde_odIdAndOdde_usersOd_emailAndOdde_status(odId, email, status);
+    public OrderDetail checkOrders(Long prodId, Long id, OrderStatus status) {
+        return this.orderDetailRepository.findByProdOdde_prodIdAndOdde_odIdAndOdde_status(prodId, id, status).orElse(null);
     }
 
+    @Override
+    public void deleteOrders(OrderDetail orderDetail) {
+        this.orderDetailRepository.delete(orderDetail);
+    }
+
+
+    @Override
+    public Double totalPrice(Long odId, Long userId, double transportFee) {
+        double total = this.orderDetailRepository
+                .findByOdde_odIdAndOdde_usersOd_userIdAndOdde_status(odId, userId, OrderStatus.CART)
+                .stream().mapToDouble(item ->
+                        item.getQty() * item.getPrice() + (item.getQty() * item.getPrice() * 0.1)
+                ).sum();
+        return total + transportFee;
+    }
+
+    @Override
+    public List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status) {
+        return this.orderDetailRepository.findByOdde_odIdAndOdde_status(odId, status);
+    }
 }
