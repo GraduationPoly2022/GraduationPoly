@@ -6,4 +6,5 @@ public interface IAccessoryService {
     Accessory createAccessory(Accessory accessory);
 
 
+    Accessory findByProductId(Long prodId);
 }
