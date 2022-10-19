@@ -56,19 +56,26 @@ public class OrderController {
     }
 
     //Add Quantity
-    @PatchMapping("/plus")
-    public ResponseEntity<ResponseMessage> addQuantity(@RequestBody OrderDto orderDto) {
+    @PatchMapping("/")
+    public ResponseEntity<ResponseMessage> updateQuantity(@RequestBody OrderDto orderDto) {
+        ResponseEntity<ResponseMessage> message = null;
         OrderDetail orderDetail = this.orderDetailService.checkOrders(orderDto.getProduct().getProdId(), orderDto.getOdId(), OrderStatus.CART);
-        int quantity = orderDetail.getQty() + orderDto.getQty();
-        return updateQuantity(orderDetail, quantity);
-    }
-
-    //Remove Quantity
-    @PatchMapping("/minus")
-    public ResponseEntity<ResponseMessage> removeQuantity(@RequestBody OrderDto orderDto) {
-        OrderDetail orderDetail = this.orderDetailService.checkOrders(orderDto.getProduct().getProdId(), orderDto.getOdId(), OrderStatus.CART);
-        int quantity = orderDetail.getQty() - orderDto.getQty();
-        return updateQuantity(orderDetail, quantity);
+        if (orderDetail != null) {
+            if (orderDetail.getQty() == 0) {
+                message = delete(orderDetail);
+            } else {
+                orderDetail.setQty(orderDto.getQty());
+                OrderDetail updateOdd = this.orderDetailService.saveOrUpdate(orderDetail);
+                if (updateOdd != null) {
+                    message = ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseMessage(StatusMessage.OK, "Update successfully", updateOdd));
+                }
+            }
+        } else {
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.NOT_FOUND, "Not found order", null));
+        }
+        return message;
     }
 
     //Delete Order
@@ -77,7 +84,7 @@ public class OrderController {
             @RequestParam("odId") Long odId,
             @RequestParam("prodId") Long prodId) {
         OrderDetail orderDetails = this.orderDetailService.checkOrders(prodId, odId, OrderStatus.CART);
-        return delete(orderDetails);
+        return this.delete(orderDetails);
     }
 
     //Insert Order and Order Detail
@@ -325,42 +332,24 @@ public class OrderController {
         return message;
     }
 
-    //General method Update Quantity
-    private ResponseEntity<ResponseMessage> updateQuantity(OrderDetail orderDetail, int qty) {
-        ResponseEntity<ResponseMessage> message = null;
-        if (orderDetail != null) {
-            if (orderDetail.getQty() <= 1) {
-                message = delete(orderDetail);
-            } else {
-                orderDetail.setQty(qty);
-                OrderDetail updateOdd = this.orderDetailService.saveOrUpdate(orderDetail);
-                if (updateOdd != null) {
-                    message = ResponseEntity.status(HttpStatus.OK)
-                            .body(new ResponseMessage(StatusMessage.OK, "Update successfully", updateOdd));
-                }
-            }
-        } else {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.NOT_FOUND, "Not found order", null));
-        }
-        return message;
-    }
-
     //General method Delete
     private ResponseEntity<ResponseMessage> delete(OrderDetail orderDetails) {
         ResponseEntity<ResponseMessage> message = null;
-        if (orderDetails != null) {
-            List<OrderDetail> odDetails = this.orderDetailService.checkOrderDetails(orderDetails.getOdde().getOdId(), OrderStatus.CART);
-            if (odDetails.size() <= 1) {
-                this.orderDetailService.deleteOrders(orderDetails);
-                Order order = this.orderService.delete(orderDetails.getOdde().getOdId());
+        try {
+            if (orderDetails != null) {
+                List<OrderDetail> odDetails = this.orderDetailService.checkOrderDetails(orderDetails.getOdde().getOdId(), OrderStatus.CART);
+                if (odDetails.size() <= 1) {
+                    this.orderDetailService.deleteOrders(orderDetails);
+                    Order order = this.orderService.delete(orderDetails.getOdde().getOdId());
+                } else {
+                    this.orderDetailService.deleteOrders(orderDetails);
+                }
                 message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Delete successfully", order));
-            } else {
-                this.orderDetailService.deleteOrders(orderDetails);
+                        .body(new ResponseMessage(StatusMessage.OK, "Delete successfully", orderDetails));
             }
-            message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Delete successfully", orderDetails));
+        } catch (Exception e) {
+            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
         }
         return message;
     }
