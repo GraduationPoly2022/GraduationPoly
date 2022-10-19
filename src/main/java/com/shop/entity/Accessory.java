@@ -19,14 +19,17 @@ public class Accessory {
     private String connector;
     private String length;
     private String switches;
+
     private String typeKeyboard;
     private String sizeKey;
+
     private String special;
     private String sizeKeyboard;
     private String charging;
 
     public Accessory() {
     }
+
 
     public Accessory(Long accessoryId, Products accessoryProduct, String connector, String length,
                      String switches, String typeKeyboard, String sizeKey, String special,
@@ -49,14 +52,6 @@ public class Accessory {
 
     public void setAccessoryId(Long accessoryId) {
         this.accessoryId = accessoryId;
-    }
-
-    public Products getAccessoryProduct() {
-        return accessoryProduct;
-    }
-
-    public void setAccessoryProduct(Products accessoryProduct) {
-        this.accessoryProduct = accessoryProduct;
     }
 
     public String getConnector() {
@@ -121,5 +116,13 @@ public class Accessory {
 
     public void setCharging(String charging) {
         this.charging = charging;
+    }
+
+    public Products getAccessoryProduct() {
+        return accessoryProduct;
+    }
+
+    public void setAccessoryProduct(Products accessoryProduct) {
+        this.accessoryProduct = accessoryProduct;
     }
 }

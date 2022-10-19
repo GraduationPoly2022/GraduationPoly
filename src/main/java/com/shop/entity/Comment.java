@@ -15,7 +15,7 @@ public class Comment {
     private Long commentId;
     private String content;
 
-    private boolean hidden;
+    private Boolean hidden;
     @Temporal(TemporalType.DATE)
     private Date commentDate;
 
@@ -33,7 +33,7 @@ public class Comment {
     }
 
 
-    public Comment(Long commentId, String content, boolean hidden, Date commentDate,
+    public Comment(Long commentId, String content, Boolean hidden, Date commentDate,
                    Products prodComment, User userComments) {
         this.commentId = commentId;
         this.content = content;
@@ -92,11 +92,11 @@ public class Comment {
         this.prodComment = prodComment;
     }
 
-    public boolean isHidden() {
+    public Boolean isHidden() {
         return hidden;
     }
 
-    public void setHidden(boolean hidden) {
+    public void setHidden(Boolean hidden) {
         this.hidden = hidden;
     }
 }
