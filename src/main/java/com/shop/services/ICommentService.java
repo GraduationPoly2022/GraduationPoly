@@ -7,7 +7,6 @@ import java.util.List;
 public interface ICommentService {
     Comment createComment(Comment comment);
 
-
     List<Comment> findCommentByProducts(Long prodId);
 
     List<Comment> findAllComment();

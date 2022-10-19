@@ -26,6 +26,6 @@ public class ProductDto {
     private Category catProd;
     private List<ImageDetail> imageDetails;
     private ProductsEnum productsEnum;
-    private String notes;
+    private Integer rating;
     private Double prodPrice;
 }

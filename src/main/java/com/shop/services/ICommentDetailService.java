@@ -7,8 +7,8 @@ import java.util.List;
 public interface ICommentDetailService {
 
 
-    public CommentDetail addCommentDetail(CommentDetail commentDetail);
+    CommentDetail addCommentDetail(CommentDetail commentDetail);
 
 
-    public List<CommentDetail> findCommentDtById(Long CommentId);
+    List<CommentDetail> findCommentDtById(Long CommentId);
 }
