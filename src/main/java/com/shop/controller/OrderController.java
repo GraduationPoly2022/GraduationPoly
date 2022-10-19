@@ -45,14 +45,14 @@ public class OrderController {
             @PathVariable("email") String email,
             @PathVariable("status") OrderStatus status) {
         List<Order> list = this.orderService.findAll(email, status);
-        return transferList(list);
+        return this.transferList(list);
     }
 
     //GetAll Order and Order Detail Admin
     @GetMapping("/admin")
     public ResponseEntity<ResponseMessage> getAllAdmin() {
         List<Order> list = this.orderService.findAllAdmin();
-        return transferList(list);
+        return this.transferList(list);
     }
 
     //Add Quantity
@@ -62,7 +62,7 @@ public class OrderController {
         OrderDetail orderDetail = this.orderDetailService.checkOrders(orderDto.getProduct().getProdId(), orderDto.getOdId(), OrderStatus.CART);
         if (orderDetail != null) {
             if (orderDetail.getQty() == 0) {
-                message = delete(orderDetail);
+                message = this.delete(orderDetail);
             } else {
                 orderDetail.setQty(orderDto.getQty());
                 OrderDetail updateOdd = this.orderDetailService.saveOrUpdate(orderDetail);
@@ -154,7 +154,7 @@ public class OrderController {
             if (order != null && order.getStatus().equals(OrderStatus.WAIT_FOR_PRODUCT)) {
                 Shipper shipper = new Shipper();
                 BeanUtils.copyProperties(orderDto.getShippers(), shipper,
-                        "total", "shipperId", "orderShipper", "transportFee");
+                        "total", "shipperId", "orderShipper");
                 shipper.setTotal(order.getAmount());
                 shipper.setShipperId(orderDto.getShippers().getShipperId());
                 shipper.setOrderShipper(order);
@@ -243,7 +243,8 @@ public class OrderController {
                         order.setAddressReceiver(orderDto.getAddressReceiver());
                         order.setPhoneReceiver(orderDto.getPhoneReceiver());
                         double amount = this.orderDetailService
-                                .totalPrice(orderDto.getOdId(), order.getUsersOd().getUserId(), orderDto.getShippers().getTransportFee());
+                                .totalPrice(orderDto.getOdId(), order.getUsersOd().getUserId(),
+                                        this.transportFee(orderDto.getProduct().getProdPrice()));
                         order.setAmount(amount);
                         order.setStatus(OrderStatus.WAIT_FOR_CONFIRM);
                         break;
@@ -340,17 +341,33 @@ public class OrderController {
                 List<OrderDetail> odDetails = this.orderDetailService.checkOrderDetails(orderDetails.getOdde().getOdId(), OrderStatus.CART);
                 if (odDetails.size() <= 1) {
                     this.orderDetailService.deleteOrders(orderDetails);
-                    Order order = this.orderService.delete(orderDetails.getOdde().getOdId());
+                    this.orderService.delete(orderDetails.getOdde().getOdId());
                 } else {
                     this.orderDetailService.deleteOrders(orderDetails);
                 }
                 message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Delete successfully", orderDetails));
+                        .body(new ResponseMessage(StatusMessage.OK, "Deleted product id is ", orderDetails.getProdOdde().getProdId()));
             }
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
         }
         return message;
+    }
+
+    private Double transportFee(double price) {
+        double ship;
+        if (price > 10000000 && price < 20000000) {
+            ship = 300000;
+        } else if (price >= 20000000 && price < 30000000) {
+            ship = 500000;
+        } else if (price >= 30000000 && price < 50000000) {
+            ship = 1000000;
+        } else if (price >= 50000000) {
+            ship = price * 0.05;
+        } else {
+            ship = 0.0;
+        }
+        return ship;
     }
 }

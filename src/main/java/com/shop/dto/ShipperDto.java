@@ -15,5 +15,4 @@ public class ShipperDto {
     private String notes;
     private User userShippers;
     private Order orderShipper;
-    private Double transportFee;
 }
