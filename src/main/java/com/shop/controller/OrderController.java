@@ -6,12 +6,14 @@ import com.shop.dto.ProductDto;
 import com.shop.dto.ResponseMessage;
 import com.shop.entity.*;
 import com.shop.enumEntity.OrderStatus;
+import com.shop.enumEntity.PaymentEnum;
 import com.shop.enumEntity.Reason;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.repository.ShipperRepository;
 import com.shop.services.IOrderDetailService;
 import com.shop.services.IOrderService;
 import com.shop.services.IReturnService;
+import com.shop.utils.Convert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,13 +57,31 @@ public class OrderController {
         return this.transferList(list);
     }
 
+    //GetAll Order in Shipper
+    @GetMapping("/find-shipper")
+    public ResponseEntity<ResponseMessage> findAllShipper(
+            @RequestParam("userId") Long userId) {
+        List<Shipper> list = this.shipperRepository.findByUserShippers_userId(userId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseMessage(StatusMessage.OK, "Get all order shipper", list));
+    }
+
+    //Count product in cart
+    @GetMapping("/count")
+    public ResponseEntity<ResponseMessage> countProductInCart(
+            @RequestParam("userId") Long userId) {
+        int count = this.orderDetailService.countProductInCart(userId, OrderStatus.CART);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseMessage(StatusMessage.OK, "Product In Cart", count));
+    }
+
     //Add Quantity
     @PatchMapping("/")
     public ResponseEntity<ResponseMessage> updateQuantity(@RequestBody OrderDto orderDto) {
         ResponseEntity<ResponseMessage> message = null;
         OrderDetail orderDetail = this.orderDetailService.checkOrders(orderDto.getProduct().getProdId(), orderDto.getOdId(), OrderStatus.CART);
         if (orderDetail != null) {
-            if (orderDetail.getQty() == 0) {
+            if (orderDto.getQty() == 0) {
                 message = this.delete(orderDetail);
             } else {
                 orderDetail.setQty(orderDto.getQty());
@@ -105,7 +125,7 @@ public class OrderController {
                 BeanUtils.copyProperties(orderDto.getProduct(), products);
                 orderDetail.setProdOdde(products);
                 orderDetail.setQty(orderDto.getQty());
-                orderDetail.setPrice(orderDto.getProduct().getProdPrice());
+                orderDetail.setPrice(orderDto.getProduct().getPriceProd());
                 OrderDetail saveOrderDetail = this.orderDetailService.saveOrUpdate(orderDetail);
                 if (saveOrder != null && saveOrderDetail != null) {
                     message = ResponseEntity.status(HttpStatus.OK)
@@ -127,7 +147,7 @@ public class OrderController {
                     orderDetail.setOdde(checkUserAndStatus);
                     orderDetail.setQty(orderDto.getQty());
                     orderDetail.setProdOdde(products);
-                    orderDetail.setPrice(orderDto.getProduct().getProdPrice());
+                    orderDetail.setPrice(orderDto.getProduct().getPriceProd());
                     saveOrderDetail = this.orderDetailService.saveOrUpdate(orderDetail);
                 } else {
                     checkOrderDetail.setQty(checkOrderDetail.getQty() + orderDto.getQty());
@@ -151,12 +171,15 @@ public class OrderController {
         ResponseEntity<ResponseMessage> message = null;
         Order order = this.orderService.checkOrders(orderDto.getOdId());
         try {
-            if (order != null && order.getStatus().equals(OrderStatus.WAIT_FOR_PRODUCT)) {
+            if (order != null && order.getStatus().equals(OrderStatus.WAITING_FOR_PRODUCT)) {
                 Shipper shipper = new Shipper();
                 BeanUtils.copyProperties(orderDto.getShippers(), shipper,
-                        "total", "shipperId", "orderShipper");
-                shipper.setTotal(order.getAmount());
-                shipper.setShipperId(orderDto.getShippers().getShipperId());
+                        "total", "orderShipper");
+                if (order.getPaymentReceived().equals(PaymentEnum.PAID)) {
+                    shipper.setTotal(0.0);
+                } else {
+                    shipper.setTotal(order.getAmount());
+                }
                 shipper.setOrderShipper(order);
                 Shipper save = this.shipperRepository.save(shipper);
                 message = ResponseEntity.status(HttpStatus.OK)
@@ -239,23 +262,21 @@ public class OrderController {
             if (order != null) {
                 switch (order.getStatus()) {
                     case CART:
-                        order.setReceiver(orderDto.getReceiver());
+                        order.setReceiver(Convert.CapitalAll(orderDto.getReceiver()));
                         order.setAddressReceiver(orderDto.getAddressReceiver());
                         order.setPhoneReceiver(orderDto.getPhoneReceiver());
-                        double amount = this.orderDetailService
-                                .totalPrice(orderDto.getOdId(), order.getUsersOd().getUserId(),
-                                        this.transportFee(orderDto.getProduct().getProdPrice()));
-                        order.setAmount(amount);
-                        order.setStatus(OrderStatus.WAIT_FOR_CONFIRM);
+                        order.setAmount(orderDto.getAmount());
+                        order.setStatus(OrderStatus.WAITING_FOR_CONFIRM);
+                        order.setPaymentReceived(orderDto.getPaymentReceived());
                         break;
-                    case WAIT_FOR_CONFIRM:
+                    case WAITING_FOR_CONFIRM:
                         if (orderDto.getStatus().equals(OrderStatus.CANCEL_ORDER)) {
                             order.setStatus(OrderStatus.CANCEL_ORDER);
                         } else {
-                            order.setStatus(OrderStatus.WAIT_FOR_PRODUCT);
+                            order.setStatus(OrderStatus.WAITING_FOR_PRODUCT);
                         }
                         break;
-                    case WAIT_FOR_PRODUCT:
+                    case WAITING_FOR_PRODUCT:
                         order.setDeliveryDate(new Date());
                         order.setStatus(OrderStatus.DELIVERING);
                         break;
@@ -321,16 +342,9 @@ public class OrderController {
 
     //General method FindAll
     private ResponseEntity<ResponseMessage> transferList(List<Order> list) {
-        ResponseEntity<ResponseMessage> message;
         List<OrderDto> orderDtoList = transfer(list);
-        if (!list.isEmpty()) {
-            message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
-        } else {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.NOT_FOUND, "Not found data", null));
-        }
-        return message;
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
     }
 
     //General method Delete
@@ -355,6 +369,7 @@ public class OrderController {
         return message;
     }
 
+    //TranportFee
     private Double transportFee(double price) {
         double ship;
         if (price > 10000000 && price < 20000000) {

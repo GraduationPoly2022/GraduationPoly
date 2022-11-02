@@ -21,5 +21,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
     List<OrderDetail> findByOdde_odIdAndOdde_status(Long odId, OrderStatus status);
 
+    Integer countByOdde_usersOd_userIdAndOdde_status(Long userId, OrderStatus status);
+
 
 }

@@ -18,4 +18,8 @@ public interface IOrderService {
     Order delete(Long id);
 
     List<Order> findAllAdmin();
+
+    List<Object[]> revenueStatisticsByYear(int year);
+
+    List<Object[]> statisticsShipperOrder(Long userShipperId, int years);
 }

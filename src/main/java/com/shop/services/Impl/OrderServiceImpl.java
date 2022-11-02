@@ -7,6 +7,7 @@ import com.shop.repository.OrderRepository;
 import com.shop.services.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,6 +47,18 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public List<Order> findAllAdmin() {
         return this.orderRepository.findAll();
+    }
+
+    @Transactional
+    @Override
+    public List<Object[]> revenueStatisticsByYear(int year) {
+        return this.orderRepository.revenueStatisticsByYear(year);
+    }
+
+    @Transactional
+    @Override
+    public List<Object[]> statisticsShipperOrder(Long userShipperId, int years) {
+        return this.orderRepository.statisticsShipperOrder(userShipperId, years);
     }
 
 }

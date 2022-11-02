@@ -21,4 +21,6 @@ public interface IOrderDetailService {
     Double totalPrice(Long odId, Long userId, double transportFee);
 
     List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status);
+
+    Integer countProductInCart(Long userId, OrderStatus status);
 }
