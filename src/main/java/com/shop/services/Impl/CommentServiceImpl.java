@@ -1,11 +1,13 @@
 package com.shop.services.Impl;
 
+import com.shop.dto.CommentDetailDto;
 import com.shop.dto.CommentDto;
 import com.shop.entity.Comment;
-import com.shop.entity.CommentDetail;
 import com.shop.entity.Products;
 import com.shop.repository.CommentRepository;
 import com.shop.services.ICommentDetailService;
+import com.shop.services.ILikeCommentService;
+import com.shop.services.ILikeReplyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,11 @@ public class CommentServiceImpl implements com.shop.services.ICommentService {
 
     @Autowired
     private ICommentDetailService iCommentDetailService;
+    @Autowired
+    private ILikeCommentService iLikeCommentService;
+
+    @Autowired
+    private ILikeReplyService iLikeReplyService;
 
     @Override
     public Comment createComment(Comment comment) {
@@ -41,11 +48,12 @@ public class CommentServiceImpl implements com.shop.services.ICommentService {
     }
 
     @Override
+    //  List all comment and Like DisLike Comment,CommentReply
     public List<CommentDto> listComment(List<Comment> comments) {
         List<CommentDto> CommentDtoList = new ArrayList<>();
         if (!comments.isEmpty()) {
             for (Comment comment : comments) {
-                List<CommentDetail> commentDetailList = new ArrayList<>();
+                List<CommentDetailDto> commentDetailList = new ArrayList<>();
                 CommentDto commentDto = new CommentDto();
                 commentDto.setCommentId(comment.getCommentId());
                 commentDto.setContent(comment.getContent());
@@ -54,9 +62,18 @@ public class CommentServiceImpl implements com.shop.services.ICommentService {
                 product.setProdId(comment.getProdComment().getProdId());
                 commentDto.setProdComment(product);
                 commentDto.setUserComments(comment.getUserComments());
-                List<CommentDetail> commentDetail = this.iCommentDetailService.findCommentDtById(comment.getCommentId());
-                for (CommentDetail detail : commentDetail) {
-                    CommentDetail cd = new CommentDetail();
+                Integer countLikeComment = this.iLikeCommentService.countLike(comment.getCommentId());
+                Integer countDisLikeComment = this.iLikeCommentService.countDislike(comment.getCommentId());
+                List<CommentDetailDto> commentDetail = this.iCommentDetailService
+                        .findCommentDtById(comment.getCommentId());
+                if (countDisLikeComment != null) {
+                    commentDto.setDisLikeComment(countDisLikeComment);
+                }
+                if (countLikeComment != null) {
+                    commentDto.setLikeComment(countLikeComment);
+                }
+                for (CommentDetailDto detail : commentDetail) {
+                    CommentDetailDto cd = new CommentDetailDto();
                     BeanUtils.copyProperties(detail, cd, "cmde");
                     Comment c = new Comment();
                     c.setCommentId(detail.getCmde().getCommentId());

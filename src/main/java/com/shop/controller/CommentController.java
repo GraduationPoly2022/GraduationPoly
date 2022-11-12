@@ -1,6 +1,5 @@
 package com.shop.controller;
 
-import com.shop.dto.CommentDetailDto;
 import com.shop.dto.CommentDto;
 import com.shop.dto.ResponseMessage;
 import com.shop.entity.Comment;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -93,33 +91,6 @@ public class CommentController {
         return message;
     }
 
-    //  List all comment and Like DisLike Comment,CommentReply
-    private List<CommentDto> transfer(List<Comment> comments) {
-        List<CommentDto> CommentDtoList = new ArrayList<>();
-        if (!comments.isEmpty()) {
-            for (Comment comment : comments) {
-                CommentDto commentDto = new CommentDto();
-                commentDto.setCommentId(comment.getCommentId());
-                commentDto.setContent(comment.getContent());
-                commentDto.setCommentDate(comment.getCommentDate());
-                commentDto.setProdComment(comment.getProdComment());
-                commentDto.setUserComments(comment.getUserComments());
-                Integer countLikeComment = this.iLikeCommentService.countLike(comment.getCommentId());
-                Integer countDisLikeComment = this.iLikeCommentService.countDislike(comment.getCommentId());
-                if (countDisLikeComment != null) {
-                    commentDto.setDisLikeComment(countDisLikeComment);
-                }
-                if (countLikeComment != null) {
-                    commentDto.setLikeComment(countLikeComment);
-                }
-                List<CommentDetailDto> commentDetail = this.commentDTService.findCommentDtById(comment.getCommentId());
-                commentDto.setCommentDetails(commentDetail);
-                CommentDtoList.add(commentDto);
-            }
-        }
-        return CommentDtoList;
-    }
-
     @GetMapping("/{productId}")
     public ResponseEntity<ResponseMessage> getAllComment(@PathVariable("productId") Long productId) {
         List<Comment> list = this.commentService.findCommentByProducts(productId);
@@ -152,7 +123,7 @@ public class CommentController {
 
     //     method chung
     private ResponseEntity<ResponseMessage> transferList(List<Comment> list) {
-        List<CommentDto> orderDtoList = transfer(list);
+        List<CommentDto> orderDtoList = this.commentService.listComment(list);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseMessage(StatusMessage.OK, "Get all data successful!", orderDtoList)
         );
