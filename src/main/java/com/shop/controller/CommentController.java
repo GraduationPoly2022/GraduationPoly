@@ -1,5 +1,6 @@
 package com.shop.controller;
 
+import com.shop.dto.CommentDetailDto;
 import com.shop.dto.CommentDto;
 import com.shop.dto.ResponseMessage;
 import com.shop.entity.Comment;
@@ -7,6 +8,8 @@ import com.shop.entity.CommentDetail;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.services.ICommentDetailService;
 import com.shop.services.ICommentService;
+import com.shop.services.ILikeCommentService;
+import com.shop.services.ILikeReplyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,14 @@ public class CommentController {
     @Autowired
     private ICommentDetailService commentDTService;
 
+    @Autowired
+    private ILikeCommentService iLikeCommentService;
+
+    @Autowired
+    private ILikeReplyService iLikeReplyService;
+
+
+    //add comment
     @PostMapping("/")
     public ResponseEntity<ResponseMessage> handlerCreateComment(@RequestBody CommentDto commentDto) {
         ResponseEntity<ResponseMessage> message = null;
@@ -52,7 +63,7 @@ public class CommentController {
         return message;
     }
 
-    //add comment dt
+    //add comment detail
     @PostMapping("/add-comment")
     public ResponseEntity<ResponseMessage> handlerCreateCommentDetail(@RequestBody CommentDto commentDTDto) {
         ResponseEntity<ResponseMessage> message = null;
@@ -82,7 +93,7 @@ public class CommentController {
         return message;
     }
 
-    // List all comment id
+    //  List all comment and Like DisLike Comment,CommentReply
     private List<CommentDto> transfer(List<Comment> comments) {
         List<CommentDto> CommentDtoList = new ArrayList<>();
         if (!comments.isEmpty()) {
@@ -93,8 +104,16 @@ public class CommentController {
                 commentDto.setCommentDate(comment.getCommentDate());
                 commentDto.setProdComment(comment.getProdComment());
                 commentDto.setUserComments(comment.getUserComments());
-                List<CommentDetail> CommentDetail = this.commentDTService.findCommentDtById(comment.getCommentId());
-                commentDto.setCommentDetails(CommentDetail);
+                Integer countLikeComment = this.iLikeCommentService.countLike(comment.getCommentId());
+                Integer countDisLikeComment = this.iLikeCommentService.countDislike(comment.getCommentId());
+                if (countDisLikeComment != null) {
+                    commentDto.setDisLikeComment(countDisLikeComment);
+                }
+                if (countLikeComment != null) {
+                    commentDto.setLikeComment(countLikeComment);
+                }
+                List<CommentDetailDto> commentDetail = this.commentDTService.findCommentDtById(comment.getCommentId());
+                commentDto.setCommentDetails(commentDetail);
                 CommentDtoList.add(commentDto);
             }
         }
@@ -116,7 +135,7 @@ public class CommentController {
     }
 
 
-    // delete
+    //     delete
     @PatchMapping("/hidden/{commentId}")
     public ResponseEntity<ResponseMessage> unHidden(@PathVariable("commentId") Long commentId) {
         ResponseEntity<ResponseMessage> message;
@@ -130,7 +149,8 @@ public class CommentController {
         return message;
     }
 
-    // method chung
+
+    //     method chung
     private ResponseEntity<ResponseMessage> transferList(List<Comment> list) {
         List<CommentDto> orderDtoList = transfer(list);
         return ResponseEntity.status(HttpStatus.OK).body(

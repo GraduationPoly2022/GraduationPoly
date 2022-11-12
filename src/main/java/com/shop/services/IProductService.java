@@ -21,4 +21,6 @@ public interface IProductService {
     List<ProductDto> findByProdName(String value);
 
     Products findByProducts(Long prodId);
+
+    List<ProductDto> findTop4Products(Long catId);
 }

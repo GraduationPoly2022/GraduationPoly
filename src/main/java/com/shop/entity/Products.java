@@ -48,9 +48,10 @@ public class Products {
     @JsonIgnore
     private Set<Comment> commentProd;
 
-    @OneToMany(mappedBy = "prodReview")
+    @OneToMany(mappedBy = "prodReview", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<Reviews> prodReviewsSet = new LinkedHashSet<>();
+
 
     public Products() {
     }

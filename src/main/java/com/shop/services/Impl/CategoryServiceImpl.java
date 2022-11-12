@@ -22,4 +22,9 @@ public class CategoryServiceImpl implements com.shop.services.ICategoryService {
     public List<Category> findAll() {
         return this.categoryRepository.findAll();
     }
+
+    @Override
+    public Category findBycatId(Long catId) {
+        return this.categoryRepository.findById(catId).orElse(null);
+    }
 }

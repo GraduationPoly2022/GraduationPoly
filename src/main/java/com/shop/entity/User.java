@@ -69,6 +69,14 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "userLk", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<LikeComment> likeComment;
+
+    @OneToMany(mappedBy = "userRep", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<LikeReply> likeReps;
+
     public User() {
     }
 
@@ -235,5 +243,21 @@ public class User implements UserDetails {
 
     public void setUserCmdt(Set<CommentDetail> userCmdt) {
         this.userCmdt = userCmdt;
+    }
+
+    public Set<LikeComment> getLikeComment() {
+        return likeComment;
+    }
+
+    public void setLikeComment(Set<LikeComment> likeComment) {
+        this.likeComment = likeComment;
+    }
+
+    public Set<LikeReply> getLikeReps() {
+        return likeReps;
+    }
+
+    public void setLikeReps(Set<LikeReply> likeReps) {
+        this.likeReps = likeReps;
     }
 }

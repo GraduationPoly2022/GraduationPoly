@@ -129,15 +129,15 @@ public class AuthorityController {
     public ResponseEntity<ResponseMessage> createUser(@RequestParam("code") String code, @RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
         User user = new User();
-        if (this.handleTimeCode.fileNotFound() && this.timeCode == null) {
-            this.timeCode = this.handleTimeCode.timeCodeExCode;
-            this.timeCode.setEmail(userDto.getEmail());
-        }
-        if (!this.timeCode.getCode().equals(code) && !this.timeCode.getEmail().equals(userDto.getEmail())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
-            );
-        }
+//        if (this.handleTimeCode.fileNotFound() && this.timeCode == null) {
+//            this.timeCode = this.handleTimeCode.timeCodeExCode;
+//            this.timeCode.setEmail(userDto.getEmail());
+//        }
+//        if (!this.timeCode.getCode().equals(code) && !this.timeCode.getEmail().equals(userDto.getEmail())) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//                    new ResponseMessage(StatusMessage.FAILED, "Invalid authentication code", null)
+//            );
+//        }
         try {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             if (Objects.equals(this.timeCode.getCode(), code) && this.timeCode.getEmail().equals(userDto.getEmail())) {

@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-
 @Entity
 public class Comment {
     @Id
@@ -15,7 +14,8 @@ public class Comment {
     private Long commentId;
     private String content;
 
-    private boolean hidden;
+    private Boolean hidden;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date commentDate;
 
@@ -29,11 +29,16 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     private User userComments;
 
+
+    @OneToMany(mappedBy = "cmtLk", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<LikeComment> likeComment;
+
     public Comment() {
     }
 
 
-    public Comment(Long commentId, String content, boolean hidden, Date commentDate,
+    public Comment(Long commentId, String content, Boolean hidden, Date commentDate,
                    Products prodComment, User userComments) {
         this.commentId = commentId;
         this.content = content;
@@ -92,11 +97,19 @@ public class Comment {
         this.prodComment = prodComment;
     }
 
-    public boolean isHidden() {
+    public Boolean isHidden() {
         return hidden;
     }
 
-    public void setHidden(boolean hidden) {
+    public void setHidden(Boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public Set<LikeComment> getLikeComment() {
+        return likeComment;
+    }
+
+    public void setLikeComment(Set<LikeComment> likeComment) {
+        this.likeComment = likeComment;
     }
 }
