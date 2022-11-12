@@ -1,10 +1,8 @@
 package com.shop.services.Impl;
 
-import com.shop.dto.ReviewDto;
 import com.shop.entity.Reviews;
 import com.shop.repository.ReviewRepository;
 import com.shop.services.IReviewService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,23 +16,41 @@ public class ReviewServiceImpl implements IReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+
+    @SafeVarargs
+    public final void getModelFind(List<Reviews> reviewsList, List<Reviews>... reviewFind) {
+        if (reviewFind.length > 0) {
+            for (List<Reviews> list : reviewFind
+            ) {
+                for (Reviews reviews : list) {
+                    Reviews review = new Reviews();
+                    review.setReviewId(reviews.getReviewId());
+                    review.setUserReview(reviews.getUserReview());
+                    review.setProdReview(reviews.getProdReview());
+                    review.setDateReview(reviews.getDateReview());
+                    review.setContent(reviews.getContent());
+                    review.setRating(reviews.getRating());
+                    review.setHidden(reviews.getHidden());
+                    reviewsList.add(review);
+                }
+            }
+
+        }
+    }
+
     @Override
     public Reviews createReview(Reviews reviews) {
         return this.reviewRepository.save(reviews);
     }
 
     @Override
-    public List<ReviewDto> findAllReviews() {
-        List<ReviewDto> reviewDtoList = new ArrayList<>();
-        List<Reviews> reviewFind = this.reviewRepository.findAll();
-        for (Reviews reviews : reviewFind) {
-            ReviewDto reviewDto = new ReviewDto();
-            BeanUtils.copyProperties(reviews, reviewDto);
-            reviewDto.setProdReview(reviews.getProdReview());
-            reviewDto.setUserReview(reviews.getUserReview());
-            reviewDtoList.add(reviewDto);
-        }
-        return reviewDtoList;
+    public Reviews findByUserAndProd(Long userId, Long prodId) {
+        return this.reviewRepository.findByUserReview_userIdAndProdReview_prodId(userId, prodId).orElse(null);
+    }
+
+    @Override
+    public List<Reviews> findAllReviews() {
+        return this.reviewRepository.findAll();
     }
 
     @Override
@@ -43,6 +59,37 @@ public class ReviewServiceImpl implements IReviewService {
                 .filter(item -> Objects.equals(item.getProdReview().getProdId(), prodId))
                 .collect(Collectors.averagingInt(Reviews::getRating));
         return reviewFind.intValue();
+    }
+
+    @Override
+    public List<Reviews> findByUser(Long userId) {
+        return this.getModelByUser(userId);
+    }
+
+    @Override
+    public List<Reviews> findByProduct(Long prodId) {
+        return this.getModelByProd(prodId);
+    }
+
+    @Override
+    public Integer countReviewsByProduct(Long prodId) {
+        return reviewRepository.countByProdReview_prodId(prodId).orElse(null);
+    }
+
+    private List<Reviews> getModelByUser(Long userId) {
+        //get review by user
+        List<Reviews> reviewList = new ArrayList<>();
+        List<Reviews> reviewFind = this.reviewRepository.findByUserReview_userId(userId);
+        getModelFind(reviewList, reviewFind);
+        return reviewList;
+    }
+
+    private List<Reviews> getModelByProd(Long prodId) {
+        //get review by product
+        List<Reviews> reviewList = new ArrayList<>();
+        List<Reviews> reviewFind = this.reviewRepository.findByProdReview_prodId(prodId);
+        getModelFind(reviewList, reviewFind);
+        return reviewList;
     }
 
 }

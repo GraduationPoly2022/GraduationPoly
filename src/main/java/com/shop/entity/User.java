@@ -40,6 +40,10 @@ public class User implements UserDetails {
     private Set<CommentDetail> userCmdt;
 
 
+    @OneToMany(mappedBy = "userFavorite", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Favorites> userFav;
+
     @Enumerated(EnumType.STRING)
     private AuthenticationProvider authProvider;
 
@@ -65,7 +69,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
-    @OneToMany(mappedBy = "userReview")
+    @OneToMany(mappedBy = "userReview", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 
@@ -259,5 +263,13 @@ public class User implements UserDetails {
 
     public void setLikeReps(Set<LikeReply> likeReps) {
         this.likeReps = likeReps;
+    }
+
+    public Set<Favorites> getUserFav() {
+        return userFav;
+    }
+
+    public void setUserFav(Set<Favorites> userFav) {
+        this.userFav = userFav;
     }
 }

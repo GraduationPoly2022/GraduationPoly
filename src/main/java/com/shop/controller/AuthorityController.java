@@ -142,8 +142,10 @@ public class AuthorityController {
             UserController.CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             if (Objects.equals(this.timeCode.getCode(), code) && this.timeCode.getEmail().equals(userDto.getEmail())) {
                 User u = this.userService.createUser(user);
-                if (u != null) message = ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
+                if (u != null) {
+                    message = ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseMessage(StatusMessage.OK, "Successful account registration", u));
+                }
             }
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)

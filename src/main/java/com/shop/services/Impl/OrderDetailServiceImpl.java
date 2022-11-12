@@ -47,7 +47,6 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
                 .stream().mapToDouble(item -> item.getQty() * item.getPrice()).sum();
     }
 
-
     @Override
     public List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status) {
         return this.orderDetailRepository.findByOdde_odIdAndOdde_status(odId, status);

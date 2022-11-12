@@ -32,6 +32,10 @@ public class Products {
     @ManyToOne(fetch = FetchType.EAGER)
     private ProductionCompany prodPco;
 
+    @OneToMany(mappedBy = "favProd", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Favorites> prodFav;
+
     @OneToOne(mappedBy = "spProd")
     private SmartPhone smartPhone;
 
@@ -44,6 +48,7 @@ public class Products {
     @OneToMany(mappedBy = "prodOdde")
     @JsonIgnore
     private Set<OrderDetail> OrderDetails;
+
     @OneToMany(mappedBy = "prodComment")
     @JsonIgnore
     private Set<Comment> commentProd;
@@ -52,13 +57,12 @@ public class Products {
     @JsonIgnore
     private Set<Reviews> prodReviewsSet = new LinkedHashSet<>();
 
-
     public Products() {
     }
 
     public Products(Long prodId, String prodName, String imageUrlMain,
                     Boolean available, String warranty,
-                    Double priceProd, String notes, Category catProd, ProductionCompany prodPco,
+                    Double priceProd, Date dateAdded, String notes, Category catProd, ProductionCompany prodPco,
                     SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
         this.prodId = prodId;
         this.prodName = prodName;
@@ -66,6 +70,7 @@ public class Products {
         this.available = available;
         this.warranty = warranty;
         this.priceProd = priceProd;
+        this.dateAdded = dateAdded;
         this.notes = notes;
         this.catProd = catProd;
         this.prodPco = prodPco;
@@ -200,6 +205,18 @@ public class Products {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Set<Favorites> getProdFav() {
+        return prodFav;
+    }
+
+    public void setProdFav(Set<Favorites> prodFav) {
+        this.prodFav = prodFav;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public Date getDateAdded() {
