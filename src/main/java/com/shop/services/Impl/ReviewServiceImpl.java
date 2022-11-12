@@ -17,6 +17,27 @@ public class ReviewServiceImpl implements IReviewService {
     private ReviewRepository reviewRepository;
 
 
+    @SafeVarargs
+    public final void getModelFind(List<Reviews> reviewsList, List<Reviews>... reviewFind) {
+        if (reviewFind.length > 0) {
+            for (List<Reviews> list : reviewFind
+            ) {
+                for (Reviews reviews : list) {
+                    Reviews review = new Reviews();
+                    review.setReviewId(reviews.getReviewId());
+                    review.setUserReview(reviews.getUserReview());
+                    review.setProdReview(reviews.getProdReview());
+                    review.setDateReview(reviews.getDateReview());
+                    review.setContent(reviews.getContent());
+                    review.setRating(reviews.getRating());
+                    review.setHidden(reviews.getHidden());
+                    reviewsList.add(review);
+                }
+            }
+
+        }
+    }
+
     @Override
     public Reviews createReview(Reviews reviews) {
         return this.reviewRepository.save(reviews);
@@ -29,7 +50,7 @@ public class ReviewServiceImpl implements IReviewService {
 
     @Override
     public List<Reviews> findAllReviews() {
-        return this.getModel();
+        return this.reviewRepository.findAll();
     }
 
     @Override
@@ -55,55 +76,19 @@ public class ReviewServiceImpl implements IReviewService {
         return reviewRepository.countByProdReview_prodId(prodId).orElse(null);
     }
 
-    private List<Reviews> getModel() {
-        List<Reviews> reviewList = new ArrayList<>();
-        List<Reviews> reviewFind = this.reviewRepository.findAll();
-        for (Reviews reviews : reviewFind) {
-            Reviews review = new Reviews();
-            review.setReviewId(reviews.getReviewId());
-            review.setUserReview(reviews.getUserReview());
-            review.setProdReview(reviews.getProdReview());
-            review.setDateReview(reviews.getDateReview());
-            review.setContent(reviews.getContent());
-            review.setRating(reviews.getRating());
-            review.setHidden(reviews.getHidden());
-            reviewList.add(review);
-        }
-        return reviewList;
-    }
-
     private List<Reviews> getModelByUser(Long userId) {
+        //get review by user
         List<Reviews> reviewList = new ArrayList<>();
         List<Reviews> reviewFind = this.reviewRepository.findByUserReview_userId(userId);
-        for (Reviews reviews : reviewFind) {
-            Reviews review = new Reviews();
-            review.setReviewId(reviews.getReviewId());
-            review.setUserReview(reviews.getUserReview());
-            review.setProdReview(reviews.getProdReview());
-            review.setDateReview(reviews.getDateReview());
-            review.setContent(reviews.getContent());
-            review.setRating(reviews.getRating());
-            review.setHidden(reviews.getHidden());
-            reviewList.add(review);
-        }
+        getModelFind(reviewList, reviewFind);
         return reviewList;
     }
 
-
     private List<Reviews> getModelByProd(Long prodId) {
+        //get review by product
         List<Reviews> reviewList = new ArrayList<>();
         List<Reviews> reviewFind = this.reviewRepository.findByProdReview_prodId(prodId);
-        for (Reviews reviews : reviewFind) {
-            Reviews review = new Reviews();
-            review.setReviewId(reviews.getReviewId());
-            review.setUserReview(reviews.getUserReview());
-            review.setProdReview(reviews.getProdReview());
-            review.setDateReview(reviews.getDateReview());
-            review.setContent(reviews.getContent());
-            review.setRating(reviews.getRating());
-            review.setHidden(reviews.getHidden());
-            reviewList.add(review);
-        }
+        getModelFind(reviewList, reviewFind);
         return reviewList;
     }
 
