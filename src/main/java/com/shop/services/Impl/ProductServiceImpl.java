@@ -74,20 +74,24 @@ public class ProductServiceImpl implements IProductService {
                 default -> productDto.setNotes(prodFindById.getNotes());
             }
 
-            List<ImageDetail> imageDetails = this.imageDetailService.findByProd(prodFindById);
-            if (!imageDetails.isEmpty()) {
-                productDto.setImageDetails(imageDetails);
-            }
-            Integer rating = this.iReviewService.HandleRating(prodFindById.getProdId());
-            Favorites yourFav = this.iFavoriteService.findYourFavorite(prodFindById.getProdId());
-            if (yourFav != null) {
-                productDto.setYourFavorite(yourFav.getYourFavorite());
-            }
-            if (rating != null) {
-                productDto.setRating(rating);
-            }
+            getProductImage(prodFindById, productDto);
         }
         return productDto;
+    }
+
+    private void getProductImage(Products prodFindById, ProductDto productDto) {
+        List<ImageDetail> imageDetails = this.imageDetailService.findByProd(prodFindById);
+        if (!imageDetails.isEmpty()) {
+            productDto.setImageDetails(imageDetails);
+        }
+        Integer rating = this.iReviewService.HandleRating(prodFindById.getProdId());
+        Favorites yourFav = this.iFavoriteService.findYourFavorite(prodFindById.getProdId());
+        if (yourFav != null) {
+            productDto.setYourFavorite(yourFav.getYourFavorite());
+        }
+        if (rating != null) {
+            productDto.setRating(rating);
+        }
     }
 
     @Override
@@ -140,18 +144,7 @@ public class ProductServiceImpl implements IProductService {
                 for (Products products : productsList) {
                     ProductDto productDto = new ProductDto();
                     BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
-                    List<ImageDetail> imageDetails = this.imageDetailService.findByProd(products);
-                    if (!imageDetails.isEmpty()) {
-                        productDto.setImageDetails(imageDetails);
-                    }
-                    Integer rating = this.iReviewService.HandleRating(products.getProdId());
-                    Favorites yourFav = this.iFavoriteService.findYourFavorite(products.getProdId());
-                    if (yourFav != null) {
-                        productDto.setYourFavorite(yourFav.getYourFavorite());
-                    }
-                    if (rating != null) {
-                        productDto.setRating(rating);
-                    }
+                    getProductImage(products, productDto);
                     productDtoList.add(productDto);
                 }
             }
