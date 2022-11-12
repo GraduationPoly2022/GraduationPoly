@@ -132,16 +132,10 @@ public class CommentController {
 
     // method chung
     private ResponseEntity<ResponseMessage> transferList(List<Comment> list) {
-        ResponseEntity<ResponseMessage> message;
         List<CommentDto> orderDtoList = transfer(list);
-        if (!list.isEmpty()) {
-            message = ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseMessage(StatusMessage.OK, "Get all data successful!", orderDtoList));
-        } else {
-            message = ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.NOT_FOUND, "Not found data", null));
-        }
-        return message;
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseMessage(StatusMessage.OK, "Get all data successful!", orderDtoList)
+        );
     }
 
 }

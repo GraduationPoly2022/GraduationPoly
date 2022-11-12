@@ -1,5 +1,6 @@
 package com.shop.services;
 
+import com.shop.dto.CommentDto;
 import com.shop.entity.Comment;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface ICommentService {
     List<Comment> findAllComment();
 
     Comment findByCommentId(Long commentId);
+
+    List<CommentDto> listComment(List<Comment> comments);
 }

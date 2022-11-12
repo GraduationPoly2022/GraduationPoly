@@ -23,6 +23,8 @@ public class Order {
     private Date recipientDate;
     private String receiver;
     private String phoneReceiver;
+    @Column(columnDefinition = "varchar(5000)")
+    private String notes;
     private String addressReceiver;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -52,7 +54,7 @@ public class Order {
     }
 
     public Order(Long odId, Date orderDate, Date deliveryDate, Date recipientDate, String receiver,
-                 String phoneReceiver, String addressReceiver, OrderStatus status,
+                 String phoneReceiver, String notes, String addressReceiver, OrderStatus status,
                  Double amount, PaymentEnum paymentReceived, DeviceEnum deviceUse,
                  User usersOd, Return returns) {
         this.odId = odId;
@@ -61,6 +63,7 @@ public class Order {
         this.recipientDate = recipientDate;
         this.receiver = receiver;
         this.phoneReceiver = phoneReceiver;
+        this.notes = notes;
         this.addressReceiver = addressReceiver;
         this.status = status;
         this.amount = amount;
@@ -188,5 +191,13 @@ public class Order {
 
     public void setShippers(Set<Shipper> shippers) {
         this.shippers = shippers;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

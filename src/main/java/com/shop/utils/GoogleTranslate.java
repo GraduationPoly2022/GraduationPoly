@@ -1,5 +1,7 @@
 package com.shop.utils;
 
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -11,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Locale;
 
+@Service
 public final class GoogleTranslate {
     private static final String GOOGLE_TRANSLATE_URL = "http://translate.google.com/translate_a/single";
 

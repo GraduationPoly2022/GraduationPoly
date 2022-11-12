@@ -1,5 +1,6 @@
 package com.shop.services;
 
+import com.shop.dto.OrderDto;
 import com.shop.entity.Order;
 import com.shop.entity.User;
 import com.shop.enumEntity.OrderStatus;
@@ -18,4 +19,12 @@ public interface IOrderService {
     Order delete(Long id);
 
     List<Order> findAllAdmin();
+
+    List<User> findAllShipperse();
+
+    Integer countOrderConfirmation();
+
+    //Convert
+    List<OrderDto> transfer(List<Order> orders);
+
 }

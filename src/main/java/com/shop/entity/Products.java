@@ -3,6 +3,7 @@ package com.shop.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -18,6 +19,9 @@ public class Products {
     private Double priceProd;
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateAdded;
     @OneToMany(mappedBy = "prodImde")
     @JsonIgnore
     private Set<ImageDetail> imageDetails;
@@ -195,5 +199,9 @@ public class Products {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
     }
 }

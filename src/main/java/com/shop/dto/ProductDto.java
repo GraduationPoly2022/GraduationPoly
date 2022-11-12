@@ -27,5 +27,4 @@ public class ProductDto {
     private List<ImageDetail> imageDetails;
     private ProductsEnum productsEnum;
     private Integer rating;
-    private Double prodPrice;
 }

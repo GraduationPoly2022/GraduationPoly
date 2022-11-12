@@ -3,6 +3,7 @@ package com.shop.services;
 import com.shop.dto.ProductDto;
 import com.shop.entity.Products;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IProductService {
@@ -11,7 +12,7 @@ public interface IProductService {
     List<ProductDto> findAllProducts();
 
 
-    ProductDto findAcSpLtByProduct(Long prodId);
+    ProductDto findAcSpLtByProduct(Long prodId, String lang) throws IOException;
 
     List<ProductDto> findByCategory(Long catId);
 

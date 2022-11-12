@@ -10,7 +10,7 @@ public class CommentDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cmdeId;
     private String contentReply;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date contentDateReply;
     @ManyToOne(fetch = FetchType.EAGER)
     private Comment cmde;

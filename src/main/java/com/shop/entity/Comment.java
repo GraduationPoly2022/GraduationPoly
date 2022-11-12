@@ -16,7 +16,7 @@ public class Comment {
     private String content;
 
     private boolean hidden;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date commentDate;
 
     @OneToMany(mappedBy = "cmde")

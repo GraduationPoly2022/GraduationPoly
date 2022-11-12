@@ -7,10 +7,12 @@ import com.shop.repository.ProductRepository;
 import com.shop.services.IImageDetailService;
 import com.shop.services.IProductService;
 import com.shop.services.IReviewService;
+import com.shop.utils.GoogleTranslate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,12 +39,36 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDto findAcSpLtByProduct(Long prodId) {
+    public ProductDto findAcSpLtByProduct(Long prodId, String lang) throws IOException {
         Products prodFindById = this.productRepository.findById(prodId).orElse(null);
         ProductDto productDto = null;
         if (prodFindById != null) {
             productDto = new ProductDto();
-            BeanUtils.copyProperties(prodFindById, productDto, "imageDetails", "productsEnum");
+            BeanUtils.copyProperties(prodFindById, productDto, "imageDetails", "productsEnum", "notes");
+            switch (lang) {
+                case "en", "zh" -> {
+                    String[] split = prodFindById.getNotes().split(",");
+                    StringBuilder sb = new StringBuilder();
+                    for (String s : split) {
+                        sb.append(GoogleTranslate.translate("vi", lang, s)).append(",");
+                    }
+                    String str = sb.toString().replaceAll("\\\\n,", " ");
+                    productDto.setNotes(str);
+                    if (prodFindById.getLaptop() != null) {
+                        productDto.getLaptop().setGpu(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getGpu()));
+                        productDto.getLaptop().setDesign(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getDesign()));
+                        productDto.getLaptop().setSizeAndWeight(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getSizeAndWeight()));
+                        productDto.getLaptop().setSpecial(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getSpecial()));
+                        productDto.getLaptop().setGateway(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getGateway()));
+                    }
+                    productDto.setWarranty(GoogleTranslate.translate("vi", lang, prodFindById.getWarranty()));
+                    if (prodFindById.getSmartPhone() != null) {
+                        productDto.getSmartPhone().setGpu(GoogleTranslate.translate("vi", lang, prodFindById.getSmartPhone().getGpu()));
+                    }
+                }
+                default -> productDto.setNotes(prodFindById.getNotes());
+            }
+
             List<ImageDetail> imageDetails = this.imageDetailService.findByProd(prodFindById);
             if (!imageDetails.isEmpty()) {
                 productDto.setImageDetails(imageDetails);

@@ -12,7 +12,6 @@ public class Category {
     private Long catId;
     private String name;
 
-
     @OneToMany(mappedBy = "catProd")
     @JsonIgnore
     private Set<Products> catProd;

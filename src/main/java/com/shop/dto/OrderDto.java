@@ -32,4 +32,5 @@ public class OrderDto {
     private Integer qty = 1;
     private ReturnDto returns;
     private ShipperDto shippers;
+    private String notes;
 }

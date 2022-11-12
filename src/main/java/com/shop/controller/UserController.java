@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.shop.helper.CheckMail.emailExists;
 import static com.shop.utils.Convert.CapitalAll;
 import static com.shop.utils.ImageDefault.IMAGE_DEFAULT_URL;
 
@@ -68,12 +67,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage(StatusMessage.ERROR, "Email already exists", userError));
         }
-        if (!emailExists(userDto.getEmail())) {
-            UserDto userError = new UserDto();
-            userError.setEmail("Email address dones not exist");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage(StatusMessage.ERROR, "Email address done not exist", userError));
-        }
+//        if (!emailExists(userDto.getEmail())) {
+//            UserDto userError = new UserDto();
+//            userError.setEmail("Email address dones not exist");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new ResponseMessage(StatusMessage.ERROR, "Email address done not exist", userError));
+//        }
         try {
             CreateUser(userDto, user, this.roleService, this.passwordEncoder.encode(userDto.getPassword()));
             User u = this.userService.createUser(user);
@@ -95,24 +94,19 @@ public class UserController {
     @PutMapping("/")
     public ResponseEntity<ResponseMessage> handleUpdateUser(@RequestBody UserDto userDto) {
         ResponseEntity<ResponseMessage> message = null;
-        User user = new User();
         try {
             User userFind = this.userService.findById(userDto.getUserId());
-            BeanUtils.copyProperties(userDto, user, "password", "fullName", "address");
-            user.setFullName(CapitalAll(userDto.getFullName()));
-            user.setAddress(CapitalAll(userDto.getAddress()));
-            user.setPassword(userFind.getPassword());
-            if (userDto.getImageUrl() == null) {
-                user.setImageUrl(userFind.getImageUrl());
+            userFind.setFullName(CapitalAll(userDto.getFullName()));
+            userFind.setAddress(CapitalAll(userDto.getAddress()));
+            userFind.setPhoneNumber(userDto.getPhoneNumber());
+            if (userDto.getImageUrl() != null) {
+                userFind.setImageUrl(userDto.getImageUrl());
             }
-            Set<Role> roles = new HashSet<>();
-            roles.add(roleService.findByRoleName(userDto.getAuthority()));
-            user.setAuthProvider(userFind.getAuthProvider());
-            user.setRoleSet(roles);
-            User u = this.userService.createUser(user);
+            User u = this.userService.createUser(userFind);
             if (u != null) {
                 UserDto userDtoExport = new UserDto();
                 BeanUtils.copyProperties(u, userDtoExport, "authority");
+                userDtoExport.setEmail(u.getUsername());
                 userDtoExport.setAuthority(RoleName.valueOf(u.getAuthorities().stream().iterator().next().getAuthority()));
                 message = ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseMessage(StatusMessage.OK, "User update successful", userDtoExport));

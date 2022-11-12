@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -180,52 +181,34 @@ public class ProductController {
 
     @GetMapping("/")
     public ResponseEntity<ResponseMessage> findAllProduct() {
-        ResponseEntity<ResponseMessage> message = null;
         List<ProductDto> productDtoList = this.iProductService.findAllProducts();
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/product-id/{prodId}")
-    public ResponseEntity<ResponseMessage> findProductByProdId(@PathVariable("prodId") Long prodId) {
-        ResponseEntity<ResponseMessage> message = null;
-        ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId);
-        if (productDtoList != null) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+    public ResponseEntity<ResponseMessage> findProductByProdId(@PathVariable("prodId") Long prodId,
+                                                               @RequestParam("lang") String lang) throws IOException {
+        ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId, lang);
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/category/{cateId}")
     public ResponseEntity<ResponseMessage> findByCategory(@PathVariable("cateId") Long cateId) {
         ResponseEntity<ResponseMessage> message = null;
         List<ProductDto> productDtoList = this.iProductService.findByCategory(cateId);
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/pco/{pcoId}")
     public ResponseEntity<ResponseMessage> findByPco(@PathVariable("pcoId") Long pcoId) {
-        ResponseEntity<ResponseMessage> message = null;
         List<ProductDto> productDtoList = this.iProductService.findByProdPco(pcoId);
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/find-by-name")
-    public ResponseEntity<ResponseMessage> findByProdName(@RequestBody ProductDto productDto) {
-        ResponseEntity<ResponseMessage> message = null;
-        List<ProductDto> productDtoList = this.iProductService.findByProdName(productDto.getProdName());
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+    public ResponseEntity<ResponseMessage> findByProdName(@RequestParam("prodName") String prodName) {
+        List<ProductDto> productDtoList = this.iProductService.findByProdName(prodName);
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 }
 

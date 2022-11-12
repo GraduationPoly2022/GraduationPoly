@@ -14,7 +14,8 @@ public class OrderDetail {
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     private Products prodOdde;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Order odde;
 
     public OrderDetail() {

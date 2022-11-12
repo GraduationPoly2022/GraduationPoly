@@ -152,7 +152,7 @@ public class CheckMail {
         return valid;
     }
 
-    public static synchronized Map<String, Boolean> emailExists(List<String> data) {
+    public static Map<String, Boolean> emailExists(List<String> data) {
         Map<String, Boolean> booleanMap = new HashMap<>();
         List<String> distinctArray = new ArrayList<>();
         for (String datum : data) {

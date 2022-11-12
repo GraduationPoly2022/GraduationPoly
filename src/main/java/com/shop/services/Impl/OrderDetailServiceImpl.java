@@ -41,17 +41,21 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
 
 
     @Override
-    public Double totalPrice(Long odId, Long userId, double transportFee) {
-        double total = this.orderDetailRepository
+    public Double totalPrice(Long odId, Long userId) {
+        return this.orderDetailRepository
                 .findByOdde_odIdAndOdde_usersOd_userIdAndOdde_status(odId, userId, OrderStatus.CART)
-                .stream().mapToDouble(item ->
-                        item.getQty() * item.getPrice() + (item.getQty() * item.getPrice() * 0.1)
-                ).sum();
-        return total + transportFee;
+                .stream().mapToDouble(item -> item.getQty() * item.getPrice()).sum();
     }
+
 
     @Override
     public List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status) {
         return this.orderDetailRepository.findByOdde_odIdAndOdde_status(odId, status);
+    }
+
+    @Override
+    public Integer countProductOrderCart(Long userId) {
+        return this.orderDetailRepository.countByOdde_statusAndOdde_usersOd_userId(OrderStatus.CART, userId)
+                .orElse(0);
     }
 }
