@@ -1,5 +1,6 @@
 package com.shop.services;
 
+import com.shop.dto.OrderDto;
 import com.shop.entity.Order;
 import com.shop.entity.User;
 import com.shop.enumEntity.OrderStatus;
@@ -22,4 +23,6 @@ public interface IOrderService {
     List<Object[]> revenueStatisticsByYear(int year);
 
     List<Object[]> statisticsShipperOrder(Long userShipperId, int years);
+
+    List<OrderDto> transfer(List<Order> orders);
 }

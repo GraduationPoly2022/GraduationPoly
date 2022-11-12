@@ -54,9 +54,4 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     public List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status) {
         return this.orderDetailRepository.findByOdde_odIdAndOdde_status(odId, status);
     }
-
-    @Override
-    public Integer countProductInCart(Long userId, OrderStatus status) {
-        return this.orderDetailRepository.countByOdde_usersOd_userIdAndOdde_status(userId, status);
-    }
 }
