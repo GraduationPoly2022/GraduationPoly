@@ -8,4 +8,6 @@ public interface ICategoryService {
     Category createCategory(Category category);
 
     List<Category> findAll();
+
+    Category findBycatId(Long catId);
 }

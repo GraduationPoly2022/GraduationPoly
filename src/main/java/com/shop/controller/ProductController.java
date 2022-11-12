@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     @Autowired
+    ICategoryService iCategoryService;
+    @Autowired
     private IProductService iProductService;
     @Autowired
     private ILapTopService iLapTopService;
@@ -226,6 +228,13 @@ public class ProductController {
             message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
         }
         return message;
+    }
+
+    //view 4 product by category
+    @GetMapping("/find-4-product-by-catId/{catId}")
+    public ResponseEntity<ResponseMessage> find4Product(@PathVariable("catId") Long catId) {
+        List<ProductDto> productDtoList = this.iProductService.findTop4Products(catId);
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get data", productDtoList));
     }
 }
 

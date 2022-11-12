@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-
 @Entity
 public class Comment {
     @Id
@@ -28,6 +27,11 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User userComments;
+
+
+    @OneToMany(mappedBy = "cmtLk", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<LikeComment> likeComment;
 
     public Comment() {
     }
@@ -98,5 +102,13 @@ public class Comment {
 
     public void setHidden(Boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public Set<LikeComment> getLikeComment() {
+        return likeComment;
+    }
+
+    public void setLikeComment(Set<LikeComment> likeComment) {
+        this.likeComment = likeComment;
     }
 }

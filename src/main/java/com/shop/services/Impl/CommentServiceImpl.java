@@ -30,6 +30,8 @@ public class CommentServiceImpl implements com.shop.services.ICommentService {
     public Comment findByCommentId(Long commentId) {
         return this.commentRepository.findById(commentId).orElse(null);
     }
+
+
 }
 
 

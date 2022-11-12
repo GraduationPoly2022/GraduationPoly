@@ -1,8 +1,11 @@
 package com.shop.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class CommentDetail {
@@ -19,7 +22,13 @@ public class CommentDetail {
     private User userCmde;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private User userReply;
+
+    @OneToMany(mappedBy = "cmtRep", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<LikeReply> likeRep;
+
 
     public CommentDetail() {
     }
@@ -81,5 +90,13 @@ public class CommentDetail {
 
     public void setUserReply(User userReply) {
         this.userReply = userReply;
+    }
+
+    public Set<LikeReply> getLikeRep() {
+        return likeRep;
+    }
+
+    public void setLikeRep(Set<LikeReply> likeRep) {
+        this.likeRep = likeRep;
     }
 }

@@ -14,4 +14,5 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
 
     List<Products> findByProdNameContaining(String values);
 
+    List<Products> findTop4ByCatProd_CatIdOrderByProdId(Long catId);
 }

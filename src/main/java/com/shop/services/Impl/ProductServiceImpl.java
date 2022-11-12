@@ -101,4 +101,16 @@ public class ProductServiceImpl implements IProductService {
     public Products findByProducts(Long prodId) {
         return this.productRepository.findById(prodId).orElse(null);
     }
+
+    @Override
+    public List<ProductDto> findTop4Products(Long catId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> productsFind = this.productRepository.findTop4ByCatProd_CatIdOrderByProdId(catId);
+        if (!productsFind.isEmpty()) {
+            getProductFind(productDtoList, productsFind);
+        }
+        return productDtoList;
+    }
+
+
 }

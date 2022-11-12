@@ -14,10 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentDto {
-    List<CommentDetail> commentDetails;
+    List<CommentDetailDto> commentDetails;
     private Long commentId;
     private String content;
+    private Boolean hidden;
     private Date commentDate;
+    private Integer likeComment;
+    private Integer disLikeComment;
     private Products prodComment;
     private User userComments;
     private CommentDetail commentDt;
