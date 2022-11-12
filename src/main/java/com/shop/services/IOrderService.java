@@ -20,6 +20,10 @@ public interface IOrderService {
 
     List<Order> findAllAdmin();
 
+    List<Object[]> revenueStatisticsByYear(int year);
+
+    List<Object[]> statisticsShipperOrder(Long userShipperId, int years);
+
     List<User> findAllShipperse();
 
     Integer countOrderConfirmation();

@@ -13,6 +13,7 @@ import com.shop.services.IOrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,4 +103,50 @@ public class OrderServiceImpl implements IOrderService {
         }
         return orderDtoList;
     }
+    @Transactional
+    @Override
+    public List<Object[]> revenueStatisticsByYear(int year) {
+        return this.orderRepository.revenueStatisticsByYear(year);
+    }
+
+    @Transactional
+    @Override
+    public List<Object[]> statisticsShipperOrder(Long userShipperId, int years) {
+        return this.orderRepository.statisticsShipperOrder(userShipperId, years);
+    }
+
+    @Override
+    public List<OrderDto> transfer(List<Order> orders) {
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for (Order order : orders) {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setOdId(order.getOdId());
+            orderDto.setOrderDate(order.getOrderDate());
+            orderDto.setDeliveryDate(order.getDeliveryDate());
+            orderDto.setRecipientDate(order.getRecipientDate());
+            orderDto.setReceiver(order.getReceiver());
+            orderDto.setPhoneReceiver(order.getPhoneReceiver());
+            orderDto.setAddressReceiver(order.getAddressReceiver());
+            orderDto.setStatus(order.getStatus());
+            orderDto.setAmount(order.getAmount());
+            orderDto.setPaymentReceived(order.getPaymentReceived());
+            orderDto.setUsersOd(order.getUsersOd());
+            List<OrderDetailDto> orderDetailDtos = new ArrayList<>();
+            order.getOrderDetails().forEach(ls -> {
+                OrderDetailDto orderDetailDto = new OrderDetailDto();
+                orderDetailDto.setOddeId(ls.getOddeId());
+                orderDetailDto.setQty(ls.getQty());
+                orderDetailDto.setPrice(ls.getProdOdde().getPriceProd());
+                ProductDto productDto = new ProductDto();
+                BeanUtils.copyProperties(ls.getProdOdde(), productDto);
+                orderDetailDto.setProdOdde(productDto);
+                orderDetailDtos.add(orderDetailDto);
+            });
+            orderDto.setLsOrderDetails(orderDetailDtos);
+            orderDtoList.add(orderDto);
+        }
+        return orderDtoList;
+    }
+
+
 }

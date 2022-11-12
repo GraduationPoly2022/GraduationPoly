@@ -18,7 +18,7 @@ public interface IOrderDetailService {
 
     void deleteOrders(OrderDetail orderDetail);
 
-    Double totalPrice(Long odId, Long userId);
+    Double totalPrice(Long odId, Long userId, double transportFee);
 
     List<OrderDetail> checkOrderDetails(Long odId, OrderStatus status);
 
