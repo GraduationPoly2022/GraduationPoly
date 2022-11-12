@@ -2,21 +2,13 @@ package com.shop.controller;
 
 import com.shop.dto.ResponseMessage;
 import com.shop.dto.StatisticalRevenue;
-import com.shop.enumEntity.StatusMessage;
-import com.shop.services.IOrderService;
-import com.shop.utils.Convert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import com.shop.dto.Statistical_Top10Dto;
 import com.shop.enumEntity.StatusMessage;
+import com.shop.services.IOrderService;
 import com.shop.services.IStatisticalService;
 import com.shop.utils.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +21,8 @@ public class StatisticalController {
 
     @Autowired
     private IOrderService orderService;
+    @Autowired
+    private IStatisticalService iStatisticalService;
 
     //Statistics Revenue Admin
     @GetMapping("/revenue-admin")
@@ -57,10 +51,6 @@ public class StatisticalController {
                 .body(new ResponseMessage(StatusMessage.OK, "Revenue statistics by year", listStatistical));
         return message;
     }
-@RequestMapping("/api/statistical")
-public class StatisticalController {
-    @Autowired
-    private IStatisticalService iStatisticalService;
 
     @GetMapping("/top-by-month-and-year")
     //Statistics of 10 best-selling products by month and year
@@ -83,5 +73,4 @@ public class StatisticalController {
         }
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", list_top10));
     }
-
 }
