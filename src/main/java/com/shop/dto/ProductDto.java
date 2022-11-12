@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -18,6 +19,7 @@ public class ProductDto {
     private Boolean available;
     private String warranty;
     private Double priceProd;
+    private Date dateAdded = new Date();
     private String notes;
     private Laptop laptop;
     private SmartPhone smartPhone;
@@ -27,5 +29,5 @@ public class ProductDto {
     private List<ImageDetail> imageDetails;
     private ProductsEnum productsEnum;
     private Integer rating;
-    private Double prodPrice;
+    private Boolean yourFavorite;
 }

@@ -3,6 +3,7 @@ package com.shop.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -16,6 +17,9 @@ public class Products {
     private Boolean available;
     private String warranty;
     private Double priceProd;
+
+    @Temporal(TemporalType.DATE)
+    private Date dateAdded = new Date();
     @Column(columnDefinition = "varchar(8000)")
     private String notes;
     @OneToMany(mappedBy = "prodImde")
@@ -27,6 +31,10 @@ public class Products {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private ProductionCompany prodPco;
+
+    @OneToMany(mappedBy = "favProd", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Favorites> prodFav;
 
     @OneToOne(mappedBy = "spProd")
     private SmartPhone smartPhone;
@@ -40,11 +48,12 @@ public class Products {
     @OneToMany(mappedBy = "prodOdde")
     @JsonIgnore
     private Set<OrderDetail> OrderDetails;
+
     @OneToMany(mappedBy = "prodComment")
     @JsonIgnore
     private Set<Comment> commentProd;
 
-    @OneToMany(mappedBy = "prodReview")
+    @OneToMany(mappedBy = "prodReview", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<Reviews> prodReviewsSet = new LinkedHashSet<>();
 
@@ -53,17 +62,19 @@ public class Products {
 
     public Products(Long prodId, String prodName, String imageUrlMain,
                     Boolean available, String warranty,
-                    Double priceProd, String notes, Category catProd, ProductionCompany prodPco,
-                    SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
+                    Double priceProd, Date dateAdded, String notes, Category catProd, ProductionCompany prodPco,
+                    Set<Favorites> prodFav, SmartPhone smartPhone, Accessory accessoryProd, Laptop laptop) {
         this.prodId = prodId;
         this.prodName = prodName;
         this.imageUrlMain = imageUrlMain;
         this.available = available;
         this.warranty = warranty;
         this.priceProd = priceProd;
+        this.dateAdded = dateAdded;
         this.notes = notes;
         this.catProd = catProd;
         this.prodPco = prodPco;
+        this.prodFav = prodFav;
         this.smartPhone = smartPhone;
         this.accessoryProd = accessoryProd;
         this.laptop = laptop;
@@ -195,5 +206,21 @@ public class Products {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Set<Favorites> getProdFav() {
+        return prodFav;
+    }
+
+    public void setProdFav(Set<Favorites> prodFav) {
+        this.prodFav = prodFav;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 }

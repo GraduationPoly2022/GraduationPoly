@@ -6,12 +6,15 @@ import com.shop.entity.Products;
 import com.shop.entity.User;
 import com.shop.enumEntity.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
     Optional<OrderDetail> findByOddeAndProdOddeAndOdde_usersOdAndOdde_status(Order order, Products products, User user, OrderStatus status);
 
@@ -21,5 +24,11 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
     List<OrderDetail> findByOdde_odIdAndOdde_status(Long odId, OrderStatus status);
 
+    @Transactional
+    @Procedure(procedureName = "ThongKe_Top10_Product")
+    List<Object[]> ThongKe_Top10_Product(Integer month, Integer year);
 
+    @Transactional
+    @Procedure(procedureName = "ThongKe_Top10_ProductByYear")
+    List<Object[]> ThongKe_Top10_ProductByYear(Integer year);
 }

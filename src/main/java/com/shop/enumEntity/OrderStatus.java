@@ -1,7 +1,7 @@
 package com.shop.enumEntity;
 
 public enum OrderStatus {
-    CART, WAIT_FOR_CONFIRM, WAIT_FOR_PRODUCT, DELIVERING, DELIVERED, RETURNS_OF_PRODUCTS, CANCEL_ORDER;
+    CART, WAITING_FOR_CONFIRM, WAITING_FOR_PRODUCT, DELIVERING, DELIVERED, RETURNS_OF_PRODUCTS, CANCEL_ORDER;
 
     private String getStatus() {
         String status;
@@ -9,10 +9,10 @@ public enum OrderStatus {
             case CART -> {
                 status = "Giỏ Hàng";
             }
-            case WAIT_FOR_CONFIRM -> {
+            case WAITING_FOR_CONFIRM -> {
                 status = "Chờ xác nhận";
             }
-            case WAIT_FOR_PRODUCT -> {
+            case WAITING_FOR_PRODUCT -> {
                 status = "Đang chuẩn bị sản phẩm";
             }
             case DELIVERING -> {

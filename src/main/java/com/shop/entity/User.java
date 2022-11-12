@@ -40,6 +40,10 @@ public class User implements UserDetails {
     private Set<CommentDetail> userCmdt;
 
 
+    @OneToMany(mappedBy = "userFavorite", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Favorites> userFav;
+
     @Enumerated(EnumType.STRING)
     private AuthenticationProvider authProvider;
 
@@ -65,7 +69,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<CommentDetail> commentDetails;
 
-    @OneToMany(mappedBy = "userReview")
+    @OneToMany(mappedBy = "userReview", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<Reviews> reviewsSet = new LinkedHashSet<>();
 
@@ -74,7 +78,7 @@ public class User implements UserDetails {
 
     public User(Long userId, String email, String password, String fullName,
                 String phoneNumber, String address, String imageUrl,
-                AuthenticationProvider authProvider) {
+                Set<Favorites> userFav, AuthenticationProvider authProvider) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -82,6 +86,7 @@ public class User implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.imageUrl = imageUrl;
+        this.userFav = userFav;
         this.authProvider = authProvider;
     }
 
@@ -235,5 +240,13 @@ public class User implements UserDetails {
 
     public void setUserCmdt(Set<CommentDetail> userCmdt) {
         this.userCmdt = userCmdt;
+    }
+
+    public Set<Favorites> getUserFav() {
+        return userFav;
+    }
+
+    public void setUserFav(Set<Favorites> userFav) {
+        this.userFav = userFav;
     }
 }

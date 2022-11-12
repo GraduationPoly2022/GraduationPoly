@@ -10,14 +10,15 @@ public interface IProductService {
 
     List<ProductDto> findAllProducts();
 
-
     ProductDto findAcSpLtByProduct(Long prodId);
 
     List<ProductDto> findByCategory(Long catId);
 
     List<ProductDto> findByProdPco(Long pcoId);
 
-    List<ProductDto> findByProdName(String value);
-
+    List<ProductDto> findByProdName(String prodName);
+    
     Products findByProducts(Long prodId);
+
+    List<ProductDto> findTop3Products();
 }

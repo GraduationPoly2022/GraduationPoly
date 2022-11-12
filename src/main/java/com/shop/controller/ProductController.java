@@ -32,6 +32,7 @@ public class ProductController {
     private IImageDetailService imageDetailService;
 
     @PostMapping("/")
+    //Add products to product table
     public ResponseEntity<ResponseMessage> createProduct(@RequestBody ProductDto productDto) {
         ResponseEntity<ResponseMessage> message;
         if (!productDto.getProductsEnum().equals(ProductsEnum.ACCESSORY)
@@ -43,12 +44,12 @@ public class ProductController {
         try {
             Products products = new Products();
             BeanUtils.copyProperties(productDto, products, "prodId", "accessoryProd",
-                    "smartPhone", "laptop", "imageDetails", "productsEnum");
+                    "smartPhone", "laptop", "imageDetails", "productsEnum", "rating", "yourFavorite");
             Products productsSave = this.iProductService.createProducts(products);
             // Create product
             ProductDto productDtoReturn = new ProductDto();
             BeanUtils.copyProperties(productsSave, productDtoReturn, "accessoryProd",
-                    "smartPhone", "laptop", "imageDetails", "productsEnum");
+                    "smartPhone", "laptop", "imageDetails", "productsEnum", "rating", "yourFavorite");
             productDtoReturn.setAvailable(productDto.getAvailable());
             //Create Image
             List<ImageDetail> imageDetails = new ArrayList<>();
@@ -92,6 +93,7 @@ public class ProductController {
     }
 
     @PutMapping("/")
+    //Update products to product table
     public ResponseEntity<ResponseMessage> updateProduct(@RequestBody ProductDto productDto) {
         ResponseEntity<ResponseMessage> message;
         if (!productDto.getProductsEnum().equals(ProductsEnum.ACCESSORY)
@@ -103,12 +105,12 @@ public class ProductController {
         try {
             Products products = new Products();
             BeanUtils.copyProperties(productDto, products, "accessoryProd",
-                    "smartPhone", "laptop", "imageDetails", "productsEnum");
+                    "smartPhone", "laptop", "imageDetails", "productsEnum", "rating", "yourFavorite");
             Products productsSave = this.iProductService.createProducts(products);
-            // create product
+            // Update products
             ProductDto productDtoReturn = new ProductDto();
             BeanUtils.copyProperties(productsSave, productDtoReturn,
-                    "accessoryProd", "smartPhone", "laptop", "imageDetails", "productsEnum");
+                    "accessoryProd", "smartPhone", "laptop", "imageDetails", "productsEnum", "rating", "yourFavorite");
             productDtoReturn.setAvailable(productDto.getAvailable());
             // create image
             List<ImageDetail> imageDetailFind = this.imageDetailService.findByProductId(productDto.getProdId());
@@ -132,7 +134,7 @@ public class ProductController {
                 List<ImageDetail> imageDetailSave = this.imageDetailService.creImageDetail(imageDetailList);
                 productDtoReturn.setImageDetails(imageDetailSave);
             }
-            //Create Accessory,LapTop,SmartPhone
+            //Update Accessory,LapTop,SmartPhone
             switch (productDto.getProductsEnum().toString()) {
                 case "LAPTOP" -> {
                     Laptop laptop = productDto.getLaptop();
@@ -166,6 +168,7 @@ public class ProductController {
     }
 
     @PatchMapping("/set-available/{prodId}")
+    //Update variable column in product table
     public ResponseEntity<ResponseMessage> unAvailable(@PathVariable("prodId") Long prodId) {
         ResponseEntity<ResponseMessage> message;
         Products productFindById = this.iProductService.findByProducts(prodId);
@@ -179,53 +182,46 @@ public class ProductController {
     }
 
     @GetMapping("/")
+    //Find all products
     public ResponseEntity<ResponseMessage> findAllProduct() {
-        ResponseEntity<ResponseMessage> message = null;
         List<ProductDto> productDtoList = this.iProductService.findAllProducts();
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/product-id/{prodId}")
+    //Find products by product id
     public ResponseEntity<ResponseMessage> findProductByProdId(@PathVariable("prodId") Long prodId) {
-        ResponseEntity<ResponseMessage> message = null;
         ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId);
-        if (productDtoList != null) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
+
     }
 
     @GetMapping("/category/{cateId}")
+    //Find products by category id
     public ResponseEntity<ResponseMessage> findByCategory(@PathVariable("cateId") Long cateId) {
-        ResponseEntity<ResponseMessage> message = null;
         List<ProductDto> productDtoList = this.iProductService.findByCategory(cateId);
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/pco/{pcoId}")
+    //Find products by pco id
     public ResponseEntity<ResponseMessage> findByPco(@PathVariable("pcoId") Long pcoId) {
-        ResponseEntity<ResponseMessage> message = null;
         List<ProductDto> productDtoList = this.iProductService.findByProdPco(pcoId);
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/find-by-name")
-    public ResponseEntity<ResponseMessage> findByProdName(@RequestBody ProductDto productDto) {
-        ResponseEntity<ResponseMessage> message = null;
-        List<ProductDto> productDtoList = this.iProductService.findByProdName(productDto.getProdName());
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
-        }
-        return message;
+    //Find products by product name
+    public ResponseEntity<ResponseMessage> findByProdName(@RequestParam("prodName") String prodName) {
+        List<ProductDto> productDtoList = this.iProductService.findByProdName(prodName);
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
-}
 
+    @GetMapping("/find-top3")
+    //Find Top 3 products
+    public ResponseEntity<ResponseMessage> findTop3Products() {
+        List<ProductDto> productDtoList = this.iProductService.findTop3Products();
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
+    }
+
+}

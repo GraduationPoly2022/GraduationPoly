@@ -105,7 +105,7 @@ public class OrderController {
                 BeanUtils.copyProperties(orderDto.getProduct(), products);
                 orderDetail.setProdOdde(products);
                 orderDetail.setQty(orderDto.getQty());
-                orderDetail.setPrice(orderDto.getProduct().getProdPrice());
+                orderDetail.setPrice(orderDto.getProduct().getPriceProd());
                 OrderDetail saveOrderDetail = this.orderDetailService.saveOrUpdate(orderDetail);
                 if (saveOrder != null && saveOrderDetail != null) {
                     message = ResponseEntity.status(HttpStatus.OK)
@@ -127,7 +127,7 @@ public class OrderController {
                     orderDetail.setOdde(checkUserAndStatus);
                     orderDetail.setQty(orderDto.getQty());
                     orderDetail.setProdOdde(products);
-                    orderDetail.setPrice(orderDto.getProduct().getProdPrice());
+                    orderDetail.setPrice(orderDto.getProduct().getPriceProd());
                     saveOrderDetail = this.orderDetailService.saveOrUpdate(orderDetail);
                 } else {
                     checkOrderDetail.setQty(checkOrderDetail.getQty() + orderDto.getQty());
@@ -151,7 +151,7 @@ public class OrderController {
         ResponseEntity<ResponseMessage> message = null;
         Order order = this.orderService.checkOrders(orderDto.getOdId());
         try {
-            if (order != null && order.getStatus().equals(OrderStatus.WAIT_FOR_PRODUCT)) {
+            if (order != null && order.getStatus().equals(OrderStatus.WAITING_FOR_PRODUCT)) {
                 Shipper shipper = new Shipper();
                 BeanUtils.copyProperties(orderDto.getShippers(), shipper,
                         "total", "shipperId", "orderShipper");
@@ -244,18 +244,18 @@ public class OrderController {
                         order.setPhoneReceiver(orderDto.getPhoneReceiver());
                         double amount = this.orderDetailService
                                 .totalPrice(orderDto.getOdId(), order.getUsersOd().getUserId(),
-                                        this.transportFee(orderDto.getProduct().getProdPrice()));
+                                        this.transportFee(orderDto.getProduct().getPriceProd()));
                         order.setAmount(amount);
-                        order.setStatus(OrderStatus.WAIT_FOR_CONFIRM);
+                        order.setStatus(OrderStatus.WAITING_FOR_CONFIRM);
                         break;
-                    case WAIT_FOR_CONFIRM:
+                    case WAITING_FOR_CONFIRM:
                         if (orderDto.getStatus().equals(OrderStatus.CANCEL_ORDER)) {
                             order.setStatus(OrderStatus.CANCEL_ORDER);
                         } else {
-                            order.setStatus(OrderStatus.WAIT_FOR_PRODUCT);
+                            order.setStatus(OrderStatus.WAITING_FOR_PRODUCT);
                         }
                         break;
-                    case WAIT_FOR_PRODUCT:
+                    case WAITING_FOR_PRODUCT:
                         order.setDeliveryDate(new Date());
                         order.setStatus(OrderStatus.DELIVERING);
                         break;
