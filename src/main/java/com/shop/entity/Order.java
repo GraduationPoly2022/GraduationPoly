@@ -38,7 +38,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.EAGER)
     private User usersOd;
 
-    @OneToMany(mappedBy = "odde")
+    @OneToMany(mappedBy = "odde", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<OrderDetail> orderDetails;
 

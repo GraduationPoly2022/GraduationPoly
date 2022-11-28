@@ -24,18 +24,22 @@ public class FavoriteController {
     //Add favorites to favorites
     public ResponseEntity<ResponseMessage> createFavorite(@RequestBody FavoriteDto favoriteDto) {
         ResponseEntity<ResponseMessage> message = null;
-        Favorites checked =
-                this.iFavoriteService.findByUserAndProd(favoriteDto.getUserFavorite().getUserId(), favoriteDto.getFavProd().getProdId());
+        Favorites checked = this.iFavoriteService.findByUserAndProd(favoriteDto.getUserFavorite().getUserId(),
+                favoriteDto.getFavProd().getProdId());
         try {
             if (checked == null) {
                 Favorites favorites = new Favorites();
                 BeanUtils.copyProperties(favoriteDto, favorites, "favId", "countFavorite");
                 Favorites favoriteSaved = this.iFavoriteService.createFavorite(favorites);
-                message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK, "Added to favorites!", favoriteSaved));
+                message = ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseMessage(StatusMessage.OK, "Added to favorites!", favoriteSaved)
+                );
             } else if (checked.getYourFavorite()) {
-                Optional<Favorites> delete =
-                        this.iFavoriteService.deleteFavorites(favoriteDto.getUserFavorite().getUserId(), favoriteDto.getFavProd().getProdId());
-                message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK, "deleted is successfully!", delete));
+                Optional<Favorites> delete = this.iFavoriteService.deleteFavorites(favoriteDto.getUserFavorite().getUserId(),
+                        favoriteDto.getFavProd().getProdId());
+                message = ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseMessage(StatusMessage.OK, "deleted is successfully!", delete)
+                );
             }
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR, e.getMessage(), null));
@@ -45,7 +49,7 @@ public class FavoriteController {
 
 
     @GetMapping("/find-count-fav/{userId}")
-    //Find total number of user favorites by user id
+    //Find total number of user favorites by user id => not used so realtime
     public ResponseEntity<ResponseMessage> findCountFav(@PathVariable("userId") Long userId) {
         Integer countFav = this.iFavoriteService.countFavorites(userId);
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get data", countFav));

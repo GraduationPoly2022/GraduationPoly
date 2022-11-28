@@ -14,14 +14,14 @@ public class Reviews {
     private Integer rating;
     @Temporal(TemporalType.DATE)
     private Date dateReview = new Date();
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User userReview;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("prodId")
     @JsonIgnore
     @JoinColumn(name = "prod_id")

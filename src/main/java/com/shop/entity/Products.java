@@ -13,6 +13,7 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long prodId;
     private String prodName;
+    @Column(columnDefinition = "varchar(1000)")
     private String imageUrlMain;
     private Boolean available;
     private String warranty;
@@ -47,7 +48,7 @@ public class Products {
 
     @OneToMany(mappedBy = "prodOdde")
     @JsonIgnore
-    private Set<OrderDetail> OrderDetails;
+    private Set<OrderDetail> orderDetails;
 
     @OneToMany(mappedBy = "prodComment")
     @JsonIgnore
@@ -128,11 +129,11 @@ public class Products {
     }
 
     public Set<OrderDetail> getOrderDetails() {
-        return OrderDetails;
+        return orderDetails;
     }
 
     public void setOrderDetails(Set<OrderDetail> orderDetails) {
-        OrderDetails = orderDetails;
+        this.orderDetails = orderDetails;
     }
 
     public Set<Comment> getCommentProd() {
@@ -215,11 +216,11 @@ public class Products {
         this.prodFav = prodFav;
     }
 
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
-    }
-
     public Date getDateAdded() {
         return dateAdded;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 }

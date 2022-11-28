@@ -30,4 +30,14 @@ public class ImageDetailServiceImpl implements IImageDetailService {
     public List<ImageDetail> findByProductId(Long prodId) {
         return this.imageDetailRepository.findByProdImde_prodId(prodId);
     }
+
+    @Override
+    public void deleteById(Long imageID) {
+        this.imageDetailRepository.deleteById(imageID);
+    }
+
+    @Override
+    public ImageDetail findByImageName(String imageName) {
+        return this.imageDetailRepository.findByImageNameEndingWith(imageName).orElse(null);
+    }
 }

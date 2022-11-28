@@ -23,7 +23,7 @@ diff Show changes between commits, commit and working tree, etc
 grep Print lines matching a pattern
 log Show commit logs
 show Show various types of objects
-status Show the working tree status
+isApply Show the working tree isApply
 
 grow, mark and tweak your common history
 branch List, create, or delete branches

@@ -11,5 +11,10 @@ public interface ICommentDetailService {
     CommentDetail addCommentDetail(CommentDetail commentDetail);
 
 
+    //convert count like,dislike reply Admin
     List<CommentDetailDto> findCommentDtById(Long commentId);
+
+    List<CommentDetailDto> findCommentDtById(Long commentId, Long userId);
+
+
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,6 +94,17 @@ public class ProductController {
                     e.getMessage(), null));
         }
         return message;
+    }
+
+    @DeleteMapping("/delete-image-by")
+    public ResponseEntity<ResponseMessage> delectImage(@RequestParam("imageName") String imageName) {
+        String nameImage = new String(Base64.getDecoder().decode(imageName));
+        ImageDetail imageDetail = this.imageDetailService.findByImageName(nameImage);
+        if (imageDetail != null) {
+            this.imageDetailService.deleteById(imageDetail.getImdeId());
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK, "delete is success", imageDetail));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage(StatusMessage.ERROR, "delete is failed", null));
     }
 
     @PutMapping("/")
@@ -191,25 +203,28 @@ public class ProductController {
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
-    @GetMapping("/product-id/{prodId}")
+    @GetMapping("/product-id/{prodId}/{userId}")
     //Find products by product id
     public ResponseEntity<ResponseMessage> findProductByProdId(@PathVariable("prodId") Long prodId,
-                                                               @RequestParam("lang") String lang) throws IOException {
-        ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId, lang);
+                                                               @RequestParam("lang") String lang,
+                                                               @PathVariable Long userId) throws IOException {
+        ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId, lang, userId);
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
-    @GetMapping("/category/{cateId}")
+    @GetMapping("/category/{cateId}/{userId}")
     //Find products by category id
-    public ResponseEntity<ResponseMessage> findByCategory(@PathVariable("cateId") Long cateId) {
-        List<ProductDto> productDtoList = this.iProductService.findByCategory(cateId);
+    public ResponseEntity<ResponseMessage> findByCategory(@PathVariable("cateId") Long cateId,
+                                                          @PathVariable Long userId) {
+        List<ProductDto> productDtoList = this.iProductService.findByCategory(cateId, userId);
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
-    @GetMapping("/pco/{pcoId}")
+    @GetMapping("/pco/{pcoId}/{userId}")
     //Find products by pco id
-    public ResponseEntity<ResponseMessage> findByPco(@PathVariable("pcoId") Long pcoId) {
-        List<ProductDto> productDtoList = this.iProductService.findByProdPco(pcoId);
+    public ResponseEntity<ResponseMessage> findByPco(@PathVariable("pcoId") Long pcoId,
+                                                     @PathVariable Long userId) {
+        List<ProductDto> productDtoList = this.iProductService.findByProdPco(pcoId, userId);
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
@@ -225,6 +240,13 @@ public class ProductController {
     public ResponseEntity<ResponseMessage> findTop3Products() {
         List<ProductDto> productDtoList = this.iProductService.findTop3Products();
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
+    }
+
+    //view 4 product by category
+    @GetMapping("/find-4-product-by/{catId}/{userId}")
+    public ResponseEntity<ResponseMessage> find4Product(@PathVariable("catId") Long catId, @PathVariable Long userId) {
+        List<ProductDto> productDtoList = this.iProductService.findTop4Products(catId, userId);
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get data", productDtoList));
     }
 }
 

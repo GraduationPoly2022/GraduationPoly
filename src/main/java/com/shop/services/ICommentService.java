@@ -14,5 +14,10 @@ public interface ICommentService {
 
     Comment findByCommentId(Long commentId);
 
+    //  List all comment and Like DisLike Comment,CommentReply Admin
     List<CommentDto> listComment(List<Comment> comments);
+
+    List<CommentDto> listComment(List<Comment> comments, Long userId);
+
+    Integer countCommentByProductId(Long productId);
 }

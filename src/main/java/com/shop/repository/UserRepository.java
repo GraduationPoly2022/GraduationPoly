@@ -16,5 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByRoleSet_RoleName(@NonNull RoleName roleName);
 
-
+    Integer countByRoleSet_RoleName(RoleName roleName);
 }

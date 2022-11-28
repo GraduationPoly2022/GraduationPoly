@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,17 +22,19 @@ public class ReviewController {
 
     @PostMapping("/")
     //Add a review to the review table
-    public ResponseEntity<ResponseMessage> createReview(@RequestBody ReviewDto reviewDto) {
+    public ResponseEntity<ResponseMessage> createReview(@RequestBody List<ReviewDto> reviewDtoList) {
         ResponseEntity<ResponseMessage> message = null;
         try {
-            if (reviewDto.getProdReview().getProdId() != null) {
+            List<Reviews> listReviewSave = new ArrayList<>();
+            for (ReviewDto reviewDto : reviewDtoList) {
                 Reviews reviews = new Reviews();
                 BeanUtils.copyProperties(reviewDto, reviews, "reviewId");
                 Reviews reviewSave = this.iReviewService.createReview(reviews);
-                if (reviewSave != null) {
-                    message = ResponseEntity.status(HttpStatus.OK)
-                            .body(new ResponseMessage(StatusMessage.OK, "Created review is successfully!", reviewSave));
-                }
+                listReviewSave.add(reviewSave);
+            }
+            if (listReviewSave.size() > 0 && listReviewSave.size() == reviewDtoList.size()) {
+                message = ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseMessage(StatusMessage.OK, "Created review is successfully!", listReviewSave));
             }
         } catch (Exception e) {
             message = ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -65,21 +68,21 @@ public class ReviewController {
     @GetMapping("/")
     //Find all reviews
     public ResponseEntity<ResponseMessage> findAll() {
-        List<Reviews> reviews = this.iReviewService.findAllReviews();
+        List<ReviewDto> reviews = this.iReviewService.findAllReviews();
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", reviews));
     }
 
     @GetMapping("/find-by-user/{userId}")
     //Find reviews by user id
     public ResponseEntity<ResponseMessage> findByUser(@PathVariable("userId") Long userId) {
-        List<Reviews> reviews = this.iReviewService.findByUser(userId);
+        List<ReviewDto> reviews = this.iReviewService.findByUser(userId);
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", reviews));
     }
 
     @GetMapping("/find-by-prod/{prodId}")
     //Find reviews by product id
     public ResponseEntity<ResponseMessage> findByProduct(@PathVariable("prodId") Long prodId) {
-        List<Reviews> reviews = this.iReviewService.findByProduct(prodId);
+        List<ReviewDto> reviews = this.iReviewService.findByProduct(prodId);
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", reviews));
     }
 

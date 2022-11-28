@@ -1,8 +1,10 @@
 package com.shop.services.Impl;
 
+import com.shop.dto.ReviewDto;
 import com.shop.entity.Reviews;
 import com.shop.repository.ReviewRepository;
 import com.shop.services.IReviewService;
+import com.shop.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +18,20 @@ public class ReviewServiceImpl implements IReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private IUserService userService;
+
+    @Override
+    public Boolean isExistByOrderIdAndUserId(Long odId, String email) {
+        return this.reviewRepository.existsByProdReview_orderDetails_odde_odIdAndUserReview_email(odId, email);
+    }
 
     @SafeVarargs
-    public final void getModelFind(List<Reviews> reviewsList, List<Reviews>... reviewFind) {
+    public final void getModelFind(List<ReviewDto> reviewsList, List<Reviews>... reviewFind) {
         if (reviewFind.length > 0) {
-            for (List<Reviews> list : reviewFind
-            ) {
+            for (List<Reviews> list : reviewFind) {
                 for (Reviews reviews : list) {
-                    Reviews review = new Reviews();
+                    ReviewDto review = new ReviewDto();
                     review.setReviewId(reviews.getReviewId());
                     review.setUserReview(reviews.getUserReview());
                     review.setProdReview(reviews.getProdReview());
@@ -49,8 +57,10 @@ public class ReviewServiceImpl implements IReviewService {
     }
 
     @Override
-    public List<Reviews> findAllReviews() {
-        return this.reviewRepository.findAll();
+    public List<ReviewDto> findAllReviews() {
+        List<ReviewDto> reviewDtoList = new ArrayList<>();
+        this.getModelFind(reviewDtoList, this.reviewRepository.findAll());
+        return reviewDtoList;
     }
 
     @Override
@@ -62,12 +72,12 @@ public class ReviewServiceImpl implements IReviewService {
     }
 
     @Override
-    public List<Reviews> findByUser(Long userId) {
+    public List<ReviewDto> findByUser(Long userId) {
         return this.getModelByUser(userId);
     }
 
     @Override
-    public List<Reviews> findByProduct(Long prodId) {
+    public List<ReviewDto> findByProduct(Long prodId) {
         return this.getModelByProd(prodId);
     }
 
@@ -76,17 +86,17 @@ public class ReviewServiceImpl implements IReviewService {
         return reviewRepository.countByProdReview_prodId(prodId).orElse(null);
     }
 
-    private List<Reviews> getModelByUser(Long userId) {
+    private List<ReviewDto> getModelByUser(Long userId) {
         //get review by user
-        List<Reviews> reviewList = new ArrayList<>();
+        List<ReviewDto> reviewList = new ArrayList<>();
         List<Reviews> reviewFind = this.reviewRepository.findByUserReview_userId(userId);
         getModelFind(reviewList, reviewFind);
         return reviewList;
     }
 
-    private List<Reviews> getModelByProd(Long prodId) {
+    private List<ReviewDto> getModelByProd(Long prodId) {
         //get review by product
-        List<Reviews> reviewList = new ArrayList<>();
+        List<ReviewDto> reviewList = new ArrayList<>();
         List<Reviews> reviewFind = this.reviewRepository.findByProdReview_prodId(prodId);
         getModelFind(reviewList, reviewFind);
         return reviewList;

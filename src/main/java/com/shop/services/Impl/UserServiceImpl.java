@@ -47,4 +47,9 @@ public class UserServiceImpl implements IUserService {
     public User findById(Long id) {
         return this.userRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public Integer totalUserOfClient() {
+        return this.userRepository.countByRoleSet_RoleName(RoleName.CLIENT);
+    }
 }

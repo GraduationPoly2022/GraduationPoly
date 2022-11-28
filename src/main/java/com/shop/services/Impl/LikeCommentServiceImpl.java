@@ -40,4 +40,9 @@ public class LikeCommentServiceImpl implements com.shop.services.ILikeCommentSer
     public Optional<LikeComment> deleteComment(Comment commentId, User userId) {
         return this.likeRepository.deleteByCmtLkAndUserLk(commentId, userId);
     }
+
+    @Override
+    public LikeComment getLikeOrDislike(Long userid, Long commentId) {
+        return this.likeRepository.findByUserLk_userIdAndCmtLk_commentId(userid, commentId).orElse(null);
+    }
 }

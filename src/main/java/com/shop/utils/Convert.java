@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Convert {
@@ -85,5 +88,63 @@ public class Convert {
         String str = new String(decode);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(str, clazz);
+    }
+
+    public static Date firstDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            Calendar cal = Calendar.getInstance();
+            String str = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMinimum(Calendar.DATE);
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return date;
+    }
+
+    public static Date lastDate() {
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            Calendar cal = Calendar.getInstance();
+            String str = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMaximum(Calendar.DATE);
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return date;
+    }
+
+    public static Date firstDate(int months) {
+        Calendar c = Calendar.getInstance();
+        String dateStr = c.get(Calendar.YEAR) + "-" + months + "-01";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(dateStr));
+            String str = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMinimum(Calendar.DATE);
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return date;
+    }
+
+    public static Date lastDate(int months) {
+        Calendar c = Calendar.getInstance();
+        String dateStr = c.get(Calendar.YEAR) + "-" + months + "-01";
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(dateStr));
+            String str = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMaximum(Calendar.DATE);
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return date;
     }
 }

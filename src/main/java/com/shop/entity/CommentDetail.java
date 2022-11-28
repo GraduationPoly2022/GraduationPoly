@@ -19,11 +19,11 @@ public class CommentDetail {
     private Comment cmde;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private User userCmde;
+    private User userCmde; // user tra loi
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    private User userReply;
+//    @JsonIgnore
+    private User userReply; // user duoc tra loi
 
     @OneToMany(mappedBy = "cmtRep", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

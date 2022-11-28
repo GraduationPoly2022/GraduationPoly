@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +27,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Object[]> statisticsShipperOrder(Long userShipperId, int years);
 
     Optional<Integer> countByStatus(OrderStatus status);
+
+    List<Order> findByShippers_UserShippers_UserId(Long userId);
+
+    List<Order> findByStatus(OrderStatus status);
+
+    List<Order> findByUsersOd_userIdAndStatus(Long usersOd_userId, OrderStatus status);
+
+    Integer countByRecipientDateBetweenAndStatus(Date recipientDate, Date recipientDate2, OrderStatus status);
+
+    Integer countByOrderDateBetweenAndStatus(Date recipientDateStart, Date recipientDateEnd, OrderStatus status);
+
+    List<Order> findDistincByRecipientDateBetweenAndStatus(Date recipientDateStart, Date recipientDateEnd, OrderStatus status);
+
+
 }

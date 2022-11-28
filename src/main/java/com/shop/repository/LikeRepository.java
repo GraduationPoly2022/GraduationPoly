@@ -22,5 +22,7 @@ public interface LikeRepository extends JpaRepository<LikeComment, Long> {
     @Transactional
     Optional<LikeComment> deleteByCmtLkAndUserLk(Comment commentId, User userId);
 
+    Optional<LikeComment> findByUserLk_userIdAndCmtLk_commentId(Long userLk_userId, Long commentId);
+
 
 }

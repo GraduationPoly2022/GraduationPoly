@@ -12,4 +12,8 @@ public interface IImageDetailService {
     List<ImageDetail> findByProd(Products products);
 
     List<ImageDetail> findByProductId(Long prodId);
+
+    void deleteById(Long imageID);
+
+    ImageDetail findByImageName(String name);
 }

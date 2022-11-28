@@ -44,8 +44,10 @@ public class StatisticalController {
     private ResponseEntity<ResponseMessage> getStatisticalRevenue(List<Object[]> list) {
         ResponseEntity<ResponseMessage> message;
         List<StatisticalRevenue> listStatistical = new ArrayList<>();
-        for (Object[] objects : list) {
-            listStatistical.add(Convert.objectToClass(objects, StatisticalRevenue.class));
+        if (list != null && list.size() > 0) {
+            for (Object[] objects : list) {
+                listStatistical.add(Convert.objectToClass(objects, StatisticalRevenue.class));
+            }
         }
         message = ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseMessage(StatusMessage.OK, "Revenue statistics by year", listStatistical));
@@ -68,8 +70,10 @@ public class StatisticalController {
 
     public ResponseEntity<ResponseMessage> getStatisticalRevenueTop10(List<Object[]> list) {
         List<Statistical_Top10Dto> list_top10 = new ArrayList<>();
-        for (Object[] objects : list) {
-            list_top10.add(Convert.objectToClass(objects, Statistical_Top10Dto.class));
+        if (list != null && list.size() > 0) {
+            for (Object[] objects : list) {
+                list_top10.add(Convert.objectToClass(objects, Statistical_Top10Dto.class));
+            }
         }
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", list_top10));
     }

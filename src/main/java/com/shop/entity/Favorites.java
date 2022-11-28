@@ -9,13 +9,13 @@ public class Favorites {
     @EmbeddedId
     private ProductUser favId = new ProductUser();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User userFavorite;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("prodId")
     @JsonIgnore
     @JoinColumn(name = "prod_id")

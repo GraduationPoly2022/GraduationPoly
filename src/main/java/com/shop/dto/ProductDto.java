@@ -30,4 +30,5 @@ public class ProductDto {
     private ProductsEnum productsEnum;
     private Integer rating;
     private Boolean yourFavorite;
+    private List<ReviewDto> reviewsList;
 }

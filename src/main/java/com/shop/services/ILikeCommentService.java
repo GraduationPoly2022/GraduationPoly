@@ -16,4 +16,6 @@ public interface ILikeCommentService {
     Integer countDislike(Long commentId);
 
     Optional<LikeComment> deleteComment(Comment commentId, User userId);
+
+    LikeComment getLikeOrDislike(Long userid, Long commentId);
 }

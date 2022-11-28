@@ -67,7 +67,7 @@ public class LikeController {
 
 
     //    Like Reply comment
-    @PostMapping("/likeReply")
+    @PostMapping("/like-reply")
     public ResponseEntity<ResponseMessage> createLikeRep(@RequestBody LikeRepDto likeRepDto) {
         ResponseEntity<ResponseMessage> message;
         LikeReply checkUserReply = this.iLikeReplyService.findCommentUserReply(likeRepDto.getCmtRep(), likeRepDto.getUserRep());

@@ -131,19 +131,27 @@ public class CookieController {
     }
 
     @GetMapping("/find-product-all")
-    public ResponseEntity<ResponseMessage> findAllProduct() {
-        List<ProductDto> productDtoList = this.iProductService.findAllProducts();
+    public ResponseEntity<ResponseMessage> findAllProduct(@RequestParam("userId") Long userId) {
+        List<ProductDto> productDtoList;
+        if (userId != 0) {
+            productDtoList = this.iProductService.findAllProducts(userId);
+        } else {
+            productDtoList = this.iProductService.findAllProducts();
+        }
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
     }
 
     @GetMapping("/find-product-by-cateID/{cateId}")
-    public ResponseEntity<ResponseMessage> findByCategory(@PathVariable("cateId") Long cateId) {
-        ResponseEntity<ResponseMessage> message = null;
-        List<ProductDto> productDtoList = this.iProductService.findByCategory(cateId);
-        if (!productDtoList.isEmpty()) {
-            message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
+    public ResponseEntity<ResponseMessage> findByCategory(@PathVariable("cateId") Long cateId,
+                                                          @RequestParam("userId") Long userId) {
+        List<ProductDto> productDtoList;
+        if (userId != 0) {
+            productDtoList = this.iProductService.findByCategory(cateId, userId);
+        } else {
+            productDtoList = this.iProductService.findByCategory(cateId);
         }
-        return message;
+        return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
+
     }
 
     //Add Quantity
@@ -178,11 +186,12 @@ public class CookieController {
         return this.delete(orderDetails);
     }
 
-    @GetMapping("/find-product-id/{prodId}")
+    @GetMapping("/find-product-id/{prodId}/{userId}")
     public ResponseEntity<ResponseMessage> findProductByProdId(@PathVariable("prodId") Long prodId,
-                                                               @RequestParam("lang") String lang) throws IOException {
+                                                               @RequestParam("lang") String lang,
+                                                               @PathVariable Long userId) throws IOException {
         ResponseEntity<ResponseMessage> message = null;
-        ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId, lang);
+        ProductDto productDtoList = this.iProductService.findAcSpLtByProduct(prodId, lang, userId);
         if (productDtoList != null) {
             message = ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get Data", productDtoList));
         }

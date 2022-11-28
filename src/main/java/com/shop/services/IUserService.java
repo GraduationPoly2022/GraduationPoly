@@ -13,4 +13,6 @@ public interface IUserService {
     List<UserDto> findAlUsers();
 
     User findById(Long id);
+
+    Integer totalUserOfClient();
 }

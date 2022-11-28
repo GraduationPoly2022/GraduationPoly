@@ -22,6 +22,7 @@ public class SmartPhone {
     private String video;
     private String gpu;
     private String connector;
+    @Column(columnDefinition = "varchar(2000)")
     private String utils;
     @OneToOne
     @JoinColumn(name = "sp_id")

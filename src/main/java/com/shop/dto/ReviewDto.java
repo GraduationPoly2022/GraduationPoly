@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,5 +18,6 @@ public class ReviewDto {
     private Integer rating;
     private User userReview;
     private Products prodReview;
-    private Boolean hidden;
+    private Boolean hidden = false;
+    private Date dateReview = new Date();
 }

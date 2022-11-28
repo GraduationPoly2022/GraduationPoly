@@ -81,6 +81,14 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<LikeReply> likeReps;
 
+    @OneToMany(mappedBy = "userCustomer")
+    @JsonIgnore
+    private Set<Chat> chatCustomer = new HashSet<>();
+
+    @OneToMany(mappedBy = "userAdmin")
+    @JsonIgnore
+    private Set<Chat> chatAdmin = new HashSet<>();
+
     public User() {
     }
 
@@ -271,5 +279,21 @@ public class User implements UserDetails {
 
     public void setUserFav(Set<Favorites> userFav) {
         this.userFav = userFav;
+    }
+
+    public Set<Chat> getChatCustomer() {
+        return chatCustomer;
+    }
+
+    public void setChatCustomer(Set<Chat> chatCustomer) {
+        this.chatCustomer = chatCustomer;
+    }
+
+    public Set<Chat> getChatAdmin() {
+        return chatAdmin;
+    }
+
+    public void setChatAdmin(Set<Chat> chatAdmin) {
+        this.chatAdmin = chatAdmin;
     }
 }

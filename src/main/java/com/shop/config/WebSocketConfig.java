@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/smart-choose");
+        registry.enableSimpleBroker("/smart-choose", "private-chat");
         registry.setApplicationDestinationPrefixes("/app");
     }
 }

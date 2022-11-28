@@ -126,4 +126,9 @@ public class UserController {
                         StatusMessage.OK, "Get data from db successfully", this.userService.findAlUsers())
                 );
     }
+
+    @GetMapping("/total-user-of-client")
+    public Integer totalUsersOfClient() {
+        return this.userService.totalUserOfClient();
+    }
 }

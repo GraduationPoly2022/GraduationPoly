@@ -9,6 +9,7 @@ public class ImageDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long imdeId;
+    @Column(columnDefinition = "varchar(2000)")
     private String imageName;
 
     @ManyToOne(fetch = FetchType.EAGER)

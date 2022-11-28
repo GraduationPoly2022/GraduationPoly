@@ -17,12 +17,13 @@ public class CommentDto {
     List<CommentDetailDto> commentDetails;
     private Long commentId;
     private String content;
-    private Boolean hidden;
+    private Boolean hidden = false;
     private Date commentDate;
     private Integer likeComment;
     private Integer disLikeComment;
     private Products prodComment;
     private User userComments;
     private CommentDetail commentDt;
+    private Boolean likeOrDislike;
 
 }

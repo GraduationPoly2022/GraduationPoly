@@ -41,4 +41,9 @@ public class LikeReplyServiceImpl implements com.shop.services.ILikeReplyService
     public Optional<LikeReply> deleteCommentReply(CommentDetail cmdeId, User userCmde) {
         return this.likeReplyRepository.deleteByCmtRepAndUserRep(cmdeId, userCmde);
     }
+
+    @Override
+    public LikeReply getLikeOrDislike(Long userid, Long cmdeId) {
+        return this.likeReplyRepository.findByUserRep_userIdAndCmtRep_cmdeId(userid, cmdeId).orElse(null);
+    }
 }

@@ -36,6 +36,14 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public List<ProductDto> findAllProducts(Long userId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> productsList = this.productRepository.findAll();
+        getProductFind(productDtoList, userId, productsList);
+        return productDtoList;
+    }
+
+    @Override
     public List<ProductDto> findAllProducts() {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productsList = this.productRepository.findAll();
@@ -44,7 +52,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDto findAcSpLtByProduct(Long prodId, String lang) throws IOException {
+    public ProductDto findAcSpLtByProduct(Long prodId, String lang, Long userId) throws IOException {
         Products prodFindById = this.productRepository.findById(prodId).orElse(null);
         ProductDto productDto = null;
         if (prodFindById != null) {
@@ -73,19 +81,19 @@ public class ProductServiceImpl implements IProductService {
                 }
                 default -> productDto.setNotes(prodFindById.getNotes());
             }
-
-            getProductImage(prodFindById, productDto);
+            productDto.setReviewsList(this.iReviewService.findByProduct(prodId));
+            getProductImage(prodFindById, productDto, userId);
         }
         return productDto;
     }
 
-    private void getProductImage(Products prodFindById, ProductDto productDto) {
+    private void getProductImage(Products prodFindById, ProductDto productDto, Long userId) {
         List<ImageDetail> imageDetails = this.imageDetailService.findByProd(prodFindById);
         if (!imageDetails.isEmpty()) {
             productDto.setImageDetails(imageDetails);
         }
         Integer rating = this.iReviewService.HandleRating(prodFindById.getProdId());
-        Favorites yourFav = this.iFavoriteService.findYourFavorite(prodFindById.getProdId());
+        Favorites yourFav = this.iFavoriteService.findByUserAndProd(userId, prodFindById.getProdId());
         if (yourFav != null) {
             productDto.setYourFavorite(yourFav.getYourFavorite());
         }
@@ -94,19 +102,38 @@ public class ProductServiceImpl implements IProductService {
         }
     }
 
+    private void getProductImage(Products prodFindById, ProductDto productDto) {
+        List<ImageDetail> imageDetails = this.imageDetailService.findByProd(prodFindById);
+        if (!imageDetails.isEmpty()) {
+            productDto.setImageDetails(imageDetails);
+        }
+        Integer rating = this.iReviewService.HandleRating(prodFindById.getProdId());
+        if (rating != null) {
+            productDto.setRating(rating);
+        }
+    }
+
     @Override
-    public List<ProductDto> findByCategory(Long catId) {
+    public List<ProductDto> findByCategory(Long catId, Long userId) {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productFindByCatId = this.productRepository.findByCatProd_catId(catId);
-        getProductFind(productDtoList, productFindByCatId);
+        getProductFind(productDtoList, userId, productFindByCatId);
         return productDtoList;
     }
 
     @Override
-    public List<ProductDto> findByProdPco(Long pcoId) {
+    public List<ProductDto> findByCategory(Long catId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> productFindByCatId = this.productRepository.findByCatProd_catId(catId);
+//        getProductFind(productDtoList, productFindByCatId);
+        return productDtoList;
+    }
+
+    @Override
+    public List<ProductDto> findByProdPco(Long pcoId, Long userId) {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productFind = this.productRepository.findByProdPco_pcoId(pcoId);
-        getProductFind(productDtoList, productFind);
+        getProductFind(productDtoList, userId, productFind);
         return productDtoList;
     }
 
@@ -128,13 +155,28 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public List<ProductDto> findTop3Products() {
         List<ProductDto> productDtoList = new ArrayList<>();
-        List<Products> productLapTop = this.productRepository.findLapTop();
-        List<Products> productSmartPhone = this.productRepository.findSmartPhone();
-        List<Products> productAccessory = this.productRepository.findAccessory();
+        List<Products> productLapTop = this.productRepository.findTop3ByCatProd_NameOrderByDateAddedDesc("Laptop");
+        List<Products> productSmartPhone = this.productRepository.findTop3ByCatProd_NameOrderByDateAddedDesc("Smartphone");
+        List<Products> productAccessory = this.productRepository.findTop3ByCatProd_NameOrderByDateAddedDesc("Accessory");
         if (!productLapTop.isEmpty()) {
             getProductFind(productDtoList, productAccessory, productLapTop, productSmartPhone);
         }
         return productDtoList;
+    }
+
+    @SafeVarargs
+    public final void getProductFind(List<ProductDto> productDtoList, Long userId, List<Products>... productFind) {
+        if (productFind.length > 0) {
+            for (List<Products> productsList : productFind) {
+                for (Products products : productsList) {
+                    ProductDto productDto = new ProductDto();
+                    BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
+                    productDto.setAvailable(products.isAvailable());
+                    getProductImage(products, productDto, userId);
+                    productDtoList.add(productDto);
+                }
+            }
+        }
     }
 
     @SafeVarargs
@@ -144,10 +186,22 @@ public class ProductServiceImpl implements IProductService {
                 for (Products products : productsList) {
                     ProductDto productDto = new ProductDto();
                     BeanUtils.copyProperties(products, productDto, "imageDetails", "productsEnum");
+                    productDto.setAvailable(products.isAvailable());
                     getProductImage(products, productDto);
                     productDtoList.add(productDto);
                 }
             }
         }
+    }
+
+
+    @Override
+    public List<ProductDto> findTop4Products(Long catId, Long userId) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        List<Products> productsFind = this.productRepository.findTop4ByCatProd_catIdOrderByProdId(catId);
+        if (!productsFind.isEmpty()) {
+            getProductFind(productDtoList, userId, productsFind);
+        }
+        return productDtoList;
     }
 }

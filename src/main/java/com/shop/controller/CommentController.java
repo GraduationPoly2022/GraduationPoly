@@ -7,8 +7,6 @@ import com.shop.entity.CommentDetail;
 import com.shop.enumEntity.StatusMessage;
 import com.shop.services.ICommentDetailService;
 import com.shop.services.ICommentService;
-import com.shop.services.ILikeCommentService;
-import com.shop.services.ILikeReplyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,16 +20,9 @@ import java.util.List;
 public class CommentController {
 
     @Autowired
-    private ICommentService commentService;
+    private ICommentService iCommentService;
     @Autowired
     private ICommentDetailService commentDTService;
-
-    @Autowired
-    private ILikeCommentService iLikeCommentService;
-
-    @Autowired
-    private ILikeReplyService iLikeReplyService;
-
 
     //add comment
     @PostMapping("/")
@@ -39,7 +30,7 @@ public class CommentController {
         ResponseEntity<ResponseMessage> message = null;
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentDto, comment);
-        Comment commentSave = this.commentService.createComment(comment);
+        Comment commentSave = this.iCommentService.createComment(comment);
         try {
             if (commentSave != null) {
                 message = ResponseEntity.status(HttpStatus.OK)
@@ -91,42 +82,53 @@ public class CommentController {
         return message;
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<ResponseMessage> getAllComment(@PathVariable("productId") Long productId) {
-        List<Comment> list = this.commentService.findCommentByProducts(productId);
-        return transferList(list);
+    @GetMapping("/{productId}/{userId}")
+    public ResponseEntity<ResponseMessage> getAllComment(@PathVariable("productId") Long productId,
+                                                         @PathVariable Long userId) {
+        List<Comment> list = this.iCommentService.findCommentByProducts(productId);
+        List<CommentDto> orderDtoList = this.iCommentService.listComment(list, userId);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseMessage(StatusMessage.OK, "Get all data successful!", orderDtoList)
+        );
 
     }
 
     //list all comment admin
     @GetMapping("/get-data")
     public ResponseEntity<ResponseMessage> AllCommentAdmin() {
-        List<Comment> list = this.commentService.findAllComment();
+        List<Comment> list = this.iCommentService.findAllComment();
         return transferList(list);
     }
 
 
-    //     delete
+    // delete
     @PatchMapping("/hidden/{commentId}")
     public ResponseEntity<ResponseMessage> unHidden(@PathVariable("commentId") Long commentId) {
         ResponseEntity<ResponseMessage> message;
-        Comment commentFindById = this.commentService.findByCommentId(commentId);
+        Comment commentFindById = this.iCommentService.findByCommentId(commentId);
         if (commentFindById != null) {
             commentFindById.setHidden(!commentFindById.isHidden());
         }
-        Comment commentSave = this.commentService.createComment(commentFindById);
+        Comment commentSave = this.iCommentService.createComment(commentFindById);
         message = ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(StatusMessage.OK,
                 "Deleted comment is successful!", commentSave));
         return message;
     }
 
 
-    //     method chung
+    // method commons
     private ResponseEntity<ResponseMessage> transferList(List<Comment> list) {
-        List<CommentDto> orderDtoList = this.commentService.listComment(list);
+        List<CommentDto> orderDtoList = this.iCommentService.listComment(list);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseMessage(StatusMessage.OK, "Get all data successful!", orderDtoList)
         );
     }
+
+    // count comment
+    @GetMapping("/count/{prodId}")
+    private Integer countCommentByProductId(@PathVariable("prodId") Long prodId) {
+        return this.iCommentService.countCommentByProductId(prodId);
+    }
+
 
 }

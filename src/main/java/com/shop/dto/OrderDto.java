@@ -33,4 +33,5 @@ public class OrderDto {
     private ReturnDto returns;
     private ShipperDto shippers;
     private String notes;
+    private Boolean isReviewed;
 }

@@ -17,4 +17,6 @@ public interface ILikeReplyService {
     Integer countDislikeRep(Long cmdeId);
 
     Optional<LikeReply> deleteCommentReply(CommentDetail cmdeId, User userCmde);
+
+    LikeReply getLikeOrDislike(Long userid, Long cmdeId);
 }

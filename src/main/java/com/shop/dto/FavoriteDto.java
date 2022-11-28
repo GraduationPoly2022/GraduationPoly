@@ -13,6 +13,6 @@ public class FavoriteDto {
     private Long favId;
     private User userFavorite;
     private Products favProd;
-    private Boolean yourFavorite;
+    private Boolean yourFavorite = true;
     private Integer countFavorite;
 }

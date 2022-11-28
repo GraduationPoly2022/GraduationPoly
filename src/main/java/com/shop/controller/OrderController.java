@@ -44,7 +44,7 @@ public class OrderController {
             @PathVariable("email") String email,
             @PathVariable("status") OrderStatus status) {
         List<Order> list = this.orderService.findAll(email, status);
-        return this.transferList(list);
+        return this.transferList(list, email);
     }
 
     //GetAll Order and Order Detail Admin
@@ -150,8 +150,7 @@ public class OrderController {
         if (order != null && order.getStatus().equals(OrderStatus.DELIVERING)) {
             Return returns = new Return();
             BeanUtils.copyProperties(orderDto.getReturns(), returns,
-                    "returnDate", "reason", "orderReturn", "shippersReturn");
-            returns.setReturnDate(new Date());
+                    "reason", "orderReturn", "shippersReturn");
             returns.setOrderReturn(order);
             Shipper shipper = this.shipperRepository.findByOrderShipper_odId(orderDto.getOdId()).orElse(null);
             returns.setShippersReturn(shipper);
@@ -230,6 +229,7 @@ public class OrderController {
                         order.setStatus(OrderStatus.WAITING_FOR_CONFIRM);
                         order.setDeviceUse(orderDto.getDeviceUse());
                         order.setPaymentReceived(orderDto.getPaymentReceived());
+                        order.setOrderDate(new Date());
                         break;
                     case WAITING_FOR_CONFIRM:
                         if (orderDto.getStatus() != null && orderDto.getStatus().equals(OrderStatus.CANCEL_ORDER)) {
@@ -269,7 +269,6 @@ public class OrderController {
         return message;
     }
 
-
     //General method FindAll
     private ResponseEntity<ResponseMessage> transferList(List<Order> list) {
         List<OrderDto> orderDtoList = this.orderService.transfer(list);
@@ -277,8 +276,50 @@ public class OrderController {
                 .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
     }
 
-    @GetMapping("/count-ta/{userId}")
-    public Integer abc(@PathVariable("userId") Long userId) {
-        return this.orderService.countOrderConfirmation();
+    private ResponseEntity<ResponseMessage> transferList(List<Order> list, String email) {
+        List<OrderDto> orderDtoList = this.orderService.transfer(list, email);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList));
+    }
+
+    @GetMapping("/find-by/{userId}")
+    public ResponseEntity<ResponseMessage> findByUserId(@PathVariable("userId") Long userId) {
+        List<OrderDto> orderDtoList = this.orderService.findByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList)
+        );
+    }
+
+    @GetMapping("/purchased/{userId}")
+    public ResponseEntity<ResponseMessage> findAllByPurchased(@PathVariable("userId") Long userId) {
+        List<OrderDto> orderDtoList = this.orderService.findAllByPurchased(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseMessage(StatusMessage.OK, "Get all data successfully", orderDtoList)
+        );
+    }
+
+    @GetMapping("/total-statistic-order")
+    public Long getTotalStatisticOrder() {
+        return this.orderService.totalAmountOrderOfMonths(Convert.firstDate(), Convert.lastDate());
+    }
+
+    @GetMapping("/total-statistic-order/{months}")
+    public Long getTotalStatisticOrder(@PathVariable int months) {
+        return this.orderService.totalAmountOrderOfMonths(Convert.firstDate(months), Convert.lastDate(months));
+    }
+
+    @GetMapping("/total-cancalled-order")
+    public Integer getTotalCancelledOrder() {
+        return this.orderService.totalCancelledOrderInMonths();
+    }
+
+    @GetMapping("/total-recipient-order")
+    public Integer getTotalRecipientOrder() {
+        return this.orderService.totalOrderInMonths(Convert.firstDate(), Convert.lastDate());
+    }
+
+    @GetMapping("/total-recipient-order-months/{months}")
+    public Integer getTotalRecipientOrder(@PathVariable("months") int months) {
+        return this.orderService.totalOrderInMonths(Convert.firstDate(months), Convert.lastDate(months));
     }
 }

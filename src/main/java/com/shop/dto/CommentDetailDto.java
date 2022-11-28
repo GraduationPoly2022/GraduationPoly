@@ -20,5 +20,6 @@ public class CommentDetailDto {
     private Comment cmde;
     private User userCmde;
     private User userReply;
+    private Boolean likeOrDislikeReply;
 
 }

@@ -21,4 +21,6 @@ public interface LikeReplyRepository extends JpaRepository<LikeReply, Long> {
 
     @Transactional
     Optional<LikeReply> deleteByCmtRepAndUserRep(CommentDetail cmdeId, User userCmde);
+
+    Optional<LikeReply> findByUserRep_userIdAndCmtRep_cmdeId(Long userRep_userId, Long cmdeId);
 }
