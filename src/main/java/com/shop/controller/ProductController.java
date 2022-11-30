@@ -183,6 +183,7 @@ public class ProductController {
     }
 
     @PatchMapping("/set-available/{prodId}")
+//    @SneakyThrows
     //Update variable column in product table
     public ResponseEntity<ResponseMessage> unAvailable(@PathVariable("prodId") Long prodId) {
         ResponseEntity<ResponseMessage> message;
@@ -247,6 +248,11 @@ public class ProductController {
     public ResponseEntity<ResponseMessage> find4Product(@PathVariable("catId") Long catId, @PathVariable Long userId) {
         List<ProductDto> productDtoList = this.iProductService.findTop4Products(catId, userId);
         return ResponseEntity.ok(new ResponseMessage(StatusMessage.OK, "Get data", productDtoList));
+    }
+
+    @GetMapping("/count-all")
+    public Integer countAll() {
+        return this.iProductService.countAllProduct();
     }
 }
 

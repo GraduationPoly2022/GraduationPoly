@@ -23,4 +23,9 @@ public class ProductionCompanyServiceImpl implements IProductionCompanyService {
     public List<ProductionCompany> findAll() {
         return this.productionCompanyRepository.findAll();
     }
+
+    @Override
+    public List<ProductionCompany> findAllByCategory(Long categoryId) {
+        return this.productionCompanyRepository.findDistinctAllByPcoPod_catProd_catId(categoryId);
+    }
 }

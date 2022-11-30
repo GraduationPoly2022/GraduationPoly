@@ -8,4 +8,6 @@ public interface IProductionCompanyService {
     ProductionCompany createProductionCompany(ProductionCompany productionCompany);
 
     List<ProductionCompany> findAll();
+
+    List<ProductionCompany> findAllByCategory(Long categoryId);
 }

@@ -38,6 +38,14 @@ public class ProductionCompanyController {
         );
     }
 
+    @GetMapping("/find-all-by-category/{catId}")
+    public ResponseEntity<ResponseMessage> findAllByCategory(@PathVariable Long catId) {
+        List<ProductionCompany> productionCompanies = this.productionCompanyService.findAllByCategory(catId);
+        return ResponseEntity.ok(
+                new ResponseMessage(StatusMessage.OK, "Get Data production company successful", productionCompanies)
+        );
+    }
+
     private ResponseEntity<ResponseMessage> getMessageResponseEntity(@RequestBody ProductionCompany production, String name) {
         ResponseEntity<ResponseMessage> message = null;
         production.setName(CapitalOfFirst(production.getName()));

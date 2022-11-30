@@ -28,4 +28,6 @@ public interface IProductService {
     List<ProductDto> findTop3Products();
 
     List<ProductDto> findTop4Products(Long catId, Long userId);
+
+    Integer countAllProduct();
 }

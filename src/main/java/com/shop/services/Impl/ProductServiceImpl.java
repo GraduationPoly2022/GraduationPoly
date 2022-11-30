@@ -32,6 +32,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public Products createProducts(Products products) {
+//        products.setProdName(GoogleTranslate.translate("en", products.getProdName()));
         return this.productRepository.save(products);
     }
 
@@ -73,6 +74,19 @@ public class ProductServiceImpl implements IProductService {
                         productDto.getLaptop().setSizeAndWeight(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getSizeAndWeight()));
                         productDto.getLaptop().setSpecial(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getSpecial()));
                         productDto.getLaptop().setGateway(GoogleTranslate.translate("vi", lang, prodFindById.getLaptop().getGateway()));
+                    }
+                    if (prodFindById.getSmartPhone() != null) {
+                        productDto.getSmartPhone().setConnector(GoogleTranslate.translate("vi", lang, prodFindById.getSmartPhone().getConnector()));
+                        productDto.getSmartPhone().setUtils(GoogleTranslate.translate("vi", lang, prodFindById.getSmartPhone().getUtils()));
+                    }
+                    if (prodFindById.getAccessoryProd() != null) {
+                        productDto.getAccessoryProd().setSizeKeyboard(GoogleTranslate.translate("vi", lang, prodFindById.getAccessoryProd().getSizeKeyboard()));
+                        productDto.getAccessoryProd().setCharging(GoogleTranslate.translate("vi", lang, prodFindById.getAccessoryProd().getCharging()));
+                        productDto.getAccessoryProd().setSizeKey(GoogleTranslate.translate("vi", lang, prodFindById.getAccessoryProd().getSizeKey()));
+                        productDto.getAccessoryProd().setConnector(GoogleTranslate.translate("vi", lang, prodFindById.getAccessoryProd().getConnector()));
+                        productDto.getAccessoryProd().setSwitches(GoogleTranslate.translate("vi", lang, prodFindById.getAccessoryProd().getSwitches()));
+                        productDto.getAccessoryProd().setSpecial(GoogleTranslate.translate("vi", lang, prodFindById.getAccessoryProd().getSpecial()));
+                        productDto.getAccessoryProd().setTypeKeyboard(GoogleTranslate.translate("vi", lang, prodFindById.getAccessoryProd().getTypeKeyboard()));
                     }
                     productDto.setWarranty(GoogleTranslate.translate("vi", lang, prodFindById.getWarranty()));
                     if (prodFindById.getSmartPhone() != null) {
@@ -125,7 +139,7 @@ public class ProductServiceImpl implements IProductService {
     public List<ProductDto> findByCategory(Long catId) {
         List<ProductDto> productDtoList = new ArrayList<>();
         List<Products> productFindByCatId = this.productRepository.findByCatProd_catId(catId);
-//        getProductFind(productDtoList, productFindByCatId);
+        getProductFind(productDtoList, productFindByCatId);
         return productDtoList;
     }
 
@@ -203,5 +217,10 @@ public class ProductServiceImpl implements IProductService {
             getProductFind(productDtoList, userId, productsFind);
         }
         return productDtoList;
+    }
+
+    @Override
+    public Integer countAllProduct() {
+        return Math.toIntExact(this.productRepository.count());
     }
 }
